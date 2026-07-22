@@ -82,6 +82,16 @@ def test_csv_export_merges_existing_community_results_without_duplicates(tmp_pat
     assert all(row["model_id"] != "stale/catalog-entry" for row in rows)
 
 
+def test_csv_export_keeps_multiple_files_from_one_quant_repository(tmp_path):
+    destination, _ = export_csv(tmp_path)
+    rows = list(csv.DictReader(destination.open()))
+    unsloth = [row for row in rows if row["model_id"] == "unsloth/Laguna-S-2.1-GGUF"]
+
+    assert len(unsloth) == 1
+    assert unsloth[0]["model_file"] == "Laguna-S-2.1-UD-IQ1_M.gguf"
+    assert unsloth[0]["engine"] == "llama.cpp"
+
+
 def test_csv_export_refreshes_existing_row_from_local_artifact(tmp_path):
     run = tmp_path / "run-a"
     run.mkdir()

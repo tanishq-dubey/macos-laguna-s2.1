@@ -12,6 +12,7 @@ FIELDS = [
     "record_type",
     "timestamp",
     "model_id",
+    "model_file",
     "engine",
     "revision",
     "model_bytes",
@@ -165,6 +166,8 @@ def _catalog_rows() -> Iterable[dict[str, Any]]:
         yield {
             "record_type": "variant",
             "model_id": quant["model"],
+            "model_file": quant.get("file"),
+            "engine": quant.get("engine"),
             "model_bytes": int(quant["size_gib"] * 1024**3) if quant["size_gib"] else None,
             "quantization": quant["bits"],
             "status": quant["status"],
@@ -207,7 +210,7 @@ def _row_key(row: dict[str, Any]) -> tuple[str, ...]:
 
     record_type = value("record_type")
     if record_type == "variant":
-        return record_type, value("model_id")
+        return record_type, value("model_id"), value("model_file"), value("quantization")
     if value("artifact"):
         return record_type, value("artifact"), value("case_id")
     return tuple(value(field) for field in FIELDS)

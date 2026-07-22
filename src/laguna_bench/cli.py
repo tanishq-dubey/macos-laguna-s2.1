@@ -66,7 +66,11 @@ def main(argv: list[str] | None = None) -> int:
         print("\nQuant ladder:")
         for quant in QUANTS:
             marker = "*" if quant["recommended"] else " "
-            print(f" {marker} {quant['size_gib']:6.2f} GiB  {quant['model']}  ({quant['status']})")
+            model = quant["model"]
+            if quant.get("file"):
+                model = f"{model} :: {quant['file']}"
+            engine = f" [{quant['engine']}]" if quant.get("engine") else ""
+            print(f" {marker} {quant['size_gib']:6.2f} GiB  {model}{engine}  ({quant['status']})")
         return 0
     if args.command == "compare":
         path, rows = build_comparison(args.output)

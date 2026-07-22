@@ -3,6 +3,7 @@ set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LAGUNA_MODEL="${LAGUNA_MODEL:-mlx-community/Laguna-S-2.1-oQ2e}"
+LAGUNA_FILE="${LAGUNA_FILE:-}"
 LAGUNA_HOST="${LAGUNA_HOST:-127.0.0.1}"
 LAGUNA_PORT="${LAGUNA_PORT:-8080}"
 
@@ -19,7 +20,8 @@ usage() {
     "  bench       Run the six quality tasks and short quant performance profile" \
     "  community   Run the full context/hyperparameter sweep and export the CSV" \
     "" \
-    "Override the model with LAGUNA_MODEL, or server binding with LAGUNA_HOST/LAGUNA_PORT."
+    "Override the model with LAGUNA_MODEL. Set LAGUNA_FILE for one file in a multi-quant repository." \
+    "Override server binding with LAGUNA_HOST or LAGUNA_PORT."
 }
 
 setup() {
@@ -38,7 +40,11 @@ ensure_setup() {
 download() {
   ensure_setup
   cd "${PROJECT_DIR}"
-  uv run --frozen hf download "${LAGUNA_MODEL}"
+  if [[ -n "${LAGUNA_FILE}" ]]; then
+    uv run --frozen hf download "${LAGUNA_MODEL}" "${LAGUNA_FILE}"
+  else
+    uv run --frozen hf download "${LAGUNA_MODEL}"
+  fi
 }
 
 command_name="${1:-}"
