@@ -37,6 +37,14 @@ QUANTS = [
         "recommended": False,
     },
     {
+        "model": "JANGQ-AI/Laguna-S-2.1-JANG_2L",
+        "size_gib": 41.26,
+        "bits": "mixed 2/3/6/8-bit",
+        "engine": "jang-mlx",
+        "status": "tested: 0.417 quality; pinned runtime adapter required",
+        "recommended": False,
+    },
+    {
         "model": "mlx-community/Laguna-S-2.1-oQ3e",
         "size_gib": 45.86,
         "bits": "3.59 effective",

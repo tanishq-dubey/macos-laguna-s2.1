@@ -7,6 +7,7 @@ license = "MIT"
 requires-python = ">=3.11"
 dependencies = [
   "huggingface-hub>=1.0",
+  "jang[mlx]>=2.5.31",
   "mlx-lm>=0.31.3",
   "mlx-vlm>=0.6.3",
   "psutil>=7.0",
@@ -30,3 +31,6 @@ testpaths = ["tests"]
 
 [tool.uv]
 package = true
+
+[tool.uv.sources]
+jang = { git = "https://github.com/jjang-ai/jangq", rev = "ca75f0cb6622673f79009f82d25cbedb205931ce", subdirectory = "jang-tools" }

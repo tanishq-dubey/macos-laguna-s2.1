@@ -674,6 +674,25 @@ wheels = [
 ]
 
 [[package]]
+name = "jang"
+version = "2.5.31"
+source = { git = "https://github.com/jjang-ai/jangq?subdirectory=jang-tools&rev=ca75f0cb6622673f79009f82d25cbedb205931ce#ca75f0cb6622673f79009f82d25cbedb205931ce" }
+dependencies = [
+    { name = "huggingface-hub" },
+    { name = "jinja2" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "numpy", version = "2.5.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "safetensors" },
+    { name = "tqdm" },
+]
+
+[package.optional-dependencies]
+mlx = [
+    { name = "mlx" },
+    { name = "mlx-lm" },
+]
+
+[[package]]
 name = "jinja2"
 version = "3.1.6"
 source = { registry = "https://pypi.org/simple" }
@@ -691,6 +710,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "huggingface-hub" },
+    { name = "jang", extra = ["mlx"] },
     { name = "mlx-lm" },
     { name = "mlx-vlm" },
     { name = "psutil" },
@@ -704,6 +724,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "huggingface-hub", specifier = ">=1.0" },
+    { name = "jang", extras = ["mlx"], git = "https://github.com/jjang-ai/jangq?subdirectory=jang-tools&rev=ca75f0cb6622673f79009f82d25cbedb205931ce" },
     { name = "mlx-lm", specifier = ">=0.31.3" },
     { name = "mlx-vlm", specifier = ">=0.6.3" },
     { name = "psutil", specifier = ">=7.0" },

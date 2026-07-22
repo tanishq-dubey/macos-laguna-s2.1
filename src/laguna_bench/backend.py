@@ -279,6 +279,187 @@ def _register_custom_mlx_model(snapshot: Path, loader_file: str) -> Path:
     return loader
 
 
+class JANGBackend:
+    """Native MLX backend for JANG mixed-precision Laguna bundles."""
+
+    def __init__(
+        self,
+        model_id: str,
+        revision: str | None = None,
+        seed: int = 20260721,
+        temperature: float = 0.0,
+        top_p: float = 1.0,
+    ):
+        import mlx.core as mx
+        from huggingface_hub import snapshot_download
+        from transformers import AutoTokenizer
+
+        local_model = Path(model_id)
+        if not local_model.is_dir() and revision is None:
+            raise ValueError("jang requires --revision for a Hugging Face model")
+        self.model_id = model_id
+        self.revision = revision
+        self.seed = seed
+        self.temperature = temperature
+        self.top_p = top_p
+        self.model_path = local_model if local_model.is_dir() else Path(snapshot_download(model_id, revision=revision))
+        self.snapshot = _snapshot_metadata(model_id, revision)
+        model_bytes = self.snapshot.get("model_bytes") or sum(
+            item.stat().st_size for item in self.model_path.rglob("*") if item.is_file()
+        )
+        self.wired_limit_bytes = min(int(model_bytes * 1.2 + 8e9), int(118e9))
+        mx.set_wired_limit(self.wired_limit_bytes)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            str(self.model_path),
+            trust_remote_code=True,
+            fix_mistral_regex=True,
+        )
+        generation_config_path = self.model_path / "generation_config.json"
+        generation_config = json.loads(generation_config_path.read_text()) if generation_config_path.is_file() else {}
+        configured_eos = generation_config.get("eos_token_id", getattr(self.tokenizer, "eos_token_id", None))
+        self.eos_token_ids = {configured_eos} if isinstance(configured_eos, int) else set(configured_eos or [])
+        started = time.perf_counter()
+        self.model, self.config, self.format = _load_jang_bundle(self.model_path)
+        self.load_seconds = time.perf_counter() - started
+
+    def generate(
+        self,
+        messages: list[dict[str, Any]],
+        *,
+        max_tokens: int,
+        tools: list[dict[str, Any]] | None = None,
+        prompt_cache_state: Any | None = None,
+        generation_options: dict[str, Any] | None = None,
+    ) -> Generation:
+        import mlx.core as mx
+
+        options = dict(generation_options or {})
+        temperature = options.pop("temperature", self.temperature)
+        top_p = options.pop("top_p", self.top_p)
+        if temperature != 0.0 or top_p != 1.0:
+            raise ValueError("JANGBackend currently supports deterministic greedy decoding only")
+        prefill_step_size = int(options.pop("prefill_step_size", 2048))
+        if options:
+            raise ValueError(f"Unsupported JANG generation options: {', '.join(sorted(options))}")
+        if prompt_cache_state is not None:
+            raise ValueError("JANGBackend prompt-cache reuse is not implemented")
+        template_args: dict[str, Any] = {
+            "tokenize": False,
+            "add_generation_prompt": True,
+            "enable_thinking": False,
+        }
+        if tools:
+            template_args["tools"] = tools
+        prompt = self.tokenizer.apply_chat_template(messages, **template_args)
+        ids = self.tokenizer.encode(prompt, add_special_tokens=False)
+        mx.random.seed(self.seed)
+        mx.reset_peak_memory()
+        started = time.perf_counter()
+        prefill_started = time.perf_counter()
+        caches = None
+        logits = None
+        for offset in range(0, len(ids), prefill_step_size):
+            chunk = mx.array([ids[offset : offset + prefill_step_size]], dtype=mx.uint32)
+            logits, caches = self.model(chunk, caches=caches)
+            mx.eval(logits)
+        prefill_seconds = time.perf_counter() - prefill_started
+        generated: list[int] = []
+        finish_reason = "length"
+        generation_started = time.perf_counter()
+        eos_ids = set(self.eos_token_ids)
+        tokenizer_eos_ids = getattr(self.tokenizer, "eos_token_ids", None)
+        if isinstance(tokenizer_eos_ids, int):
+            eos_ids.add(tokenizer_eos_ids)
+        elif tokenizer_eos_ids:
+            eos_ids.update(tokenizer_eos_ids)
+        eos_token_id = getattr(self.tokenizer, "eos_token_id", None)
+        if isinstance(eos_token_id, int):
+            eos_ids.add(eos_token_id)
+        config_eos = getattr(self.config, "eos_token_id", None)
+        if isinstance(config_eos, int):
+            eos_ids.add(config_eos)
+        elif config_eos:
+            eos_ids.update(config_eos)
+        for index in range(max_tokens):
+            token = int(mx.argmax(logits[0, -1]).item())
+            if token in eos_ids:
+                finish_reason = "stop"
+                break
+            generated.append(token)
+            if index + 1 == max_tokens:
+                break
+            logits, caches = self.model(mx.array([[token]], dtype=mx.uint32), caches=caches)
+            mx.eval(logits)
+        generation_seconds = time.perf_counter() - generation_started
+        return Generation(
+            text=self.tokenizer.decode(generated, skip_special_tokens=False),
+            prompt_tokens=len(ids),
+            generation_tokens=len(generated),
+            prompt_tps=len(ids) / prefill_seconds if prefill_seconds else 0.0,
+            generation_tps=len(generated) / generation_seconds if generation_seconds else 0.0,
+            peak_memory_gb=mx.get_peak_memory() / 1e9,
+            finish_reason=finish_reason,
+            elapsed_seconds=time.perf_counter() - started,
+        )
+
+    @staticmethod
+    def new_prompt_cache():
+        return None
+
+    def metadata(self) -> dict[str, Any]:
+        return {
+            "model_id": self.model_id,
+            "engine": "jang-mlx",
+            "requested_revision": self.revision,
+            "temperature": self.temperature,
+            "top_p": self.top_p,
+            **self.snapshot,
+            "load_seconds": self.load_seconds,
+            "model_type": "laguna",
+            "max_position_embeddings": getattr(self.config, "max_position_embeddings", None),
+            "quantization": self.format,
+            "wired_limit_bytes": self.wired_limit_bytes,
+            "fix_mistral_regex": True,
+            "jang_version": _version("jang"),
+            "jang_revision": "ca75f0cb6622673f79009f82d25cbedb205931ce",
+            "mlx_version": _version("mlx"),
+            "mlx_lm_version": _version("mlx-lm"),
+            "transformers_version": _version("transformers"),
+        }
+
+
+def _jang_quantization_override(quantization: dict[str, Any], module_name: str) -> dict[str, Any] | None:
+    value = quantization.get(module_name) or quantization.get(f"model.{module_name}")
+    return value if isinstance(value, dict) else None
+
+
+def _load_jang_bundle(model_path: Path):
+    """Apply JANG's per-module bit widths while its pinned loader initializes."""
+    import mlx.nn as nn
+    from jang_tools.laguna.runtime import load
+
+    quantization = json.loads((model_path / "config.json").read_text()).get("quantization", {})
+    original_quantize = nn.quantize
+
+    def mixed_quantize(model, group_size=None, bits=None, **kwargs):
+        predicate = kwargs.get("class_predicate")
+
+        def mixed_predicate(name, module):
+            selected = predicate(name, module) if predicate else hasattr(module, "to_quantized")
+            if not selected:
+                return False
+            return _jang_quantization_override(quantization, name) or selected
+
+        kwargs["class_predicate"] = mixed_predicate
+        return original_quantize(model, group_size=group_size, bits=bits, **kwargs)
+
+    nn.quantize = mixed_quantize
+    try:
+        return load(str(model_path))
+    finally:
+        nn.quantize = original_quantize
+
+
 def _version(package: str) -> str | None:
     try:
         return importlib.metadata.version(package)

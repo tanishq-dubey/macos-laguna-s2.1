@@ -18,12 +18,13 @@ TASK_IDS = {
 }
 
 LOCAL_MODELS = {
-    "unsloth/Laguna-S-2.1-GGUF:UD-IQ1_M": "IQ1_M GGUF",
-    "mlx-community/Laguna-S-2.1-oQ2e": "oQ2e (2.7-bit)",
-    "pipenetwork/Laguna-S-2.1-MLX-2bit": "PIPE 2-BIT",
+    "unsloth/Laguna-S-2.1-GGUF:UD-IQ1_M": "IQ1_M",
+    "mlx-community/Laguna-S-2.1-oQ2e": "oQ2e",
+    "pipenetwork/Laguna-S-2.1-MLX-2bit": "PIPE 2B",
     "unsloth/Laguna-S-2.1-GGUF:UD-Q2_K_XL": "Q2_K_XL",
+    "JANGQ-AI/Laguna-S-2.1-JANG_2L": "JANG 2L",
     "mlx-community/Laguna-S-2.1-oQ3e": "oQ3e",
-    "poolside/Laguna-S-2.1-NVFP4-mlx": "NVFP4 MLX",
+    "poolside/Laguna-S-2.1-NVFP4-mlx": "NVFP4",
 }
 
 REFERENCE_CHIP = "Apple M5 Max"
@@ -211,10 +212,11 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
     # Right panels: local decode throughput and memory in the reference style.
     local_left, local_right = 1025.0, 1548.0
     local_slot = (local_right - local_left) / len(local)
+    local_bar_width = min(84.0, local_slot * 0.72)
 
     _line(parts, 985, 177, 1576, 177, stroke=rule, width=1.5)
     _text(parts, 985, 220, "FIXED 256-TOKEN DECODE TOK/S", size=22, weight=500, fill=foreground)
-    _text(parts, 985, 249, "MLX-VLM, MLX-LM, OR LLAMA.CPP; GREEDY", size=14, fill=muted)
+    _text(parts, 985, 249, "MLX-VLM, MLX-LM, JANG, OR LLAMA.CPP; GREEDY", size=14, fill=muted)
     decode_base, decode_height = 474.0, 175.0
     _line(parts, local_left - 25, decode_base, local_right + 20, decode_base, stroke=rule)
     for index, point in enumerate(local):
@@ -224,9 +226,9 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
         primary = point.model == fastest.model
         color = purple if primary else bar_gray
         text_color = purple if primary else foreground
-        parts.append(f'<rect x="{center - 42:.1f}" y="{y:.1f}" width="84" height="{height:.1f}" rx="3" fill="{color}" />')
+        parts.append(f'<rect x="{center - local_bar_width / 2:.1f}" y="{y:.1f}" width="{local_bar_width:.1f}" height="{height:.1f}" rx="3" fill="{color}" />')
         _text(parts, center, y - 13, f"{point.decode_tps:.2f}", size=18, weight=500, fill=text_color, anchor="middle")
-        _text(parts, center, 505, point.label.upper(), size=12, weight=700 if primary else 500, fill=text_color, anchor="middle")
+        _text(parts, center, 505, point.label.upper(), size=10, weight=700 if primary else 500, fill=text_color, anchor="middle")
         _text(parts, center, 525, f"{point.suite_score * 100:.1f}% SUITE", size=10, fill="#85847f", anchor="middle")
 
     _line(parts, 985, 575, 1576, 575, stroke=rule, width=1.5)
@@ -241,9 +243,9 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
         primary = point.model == fastest.model
         color = purple if primary else bar_gray
         text_color = purple if primary else foreground
-        parts.append(f'<rect x="{center - 42:.1f}" y="{y:.1f}" width="84" height="{height:.1f}" rx="3" fill="{color}" />')
+        parts.append(f'<rect x="{center - local_bar_width / 2:.1f}" y="{y:.1f}" width="{local_bar_width:.1f}" height="{height:.1f}" rx="3" fill="{color}" />')
         _text(parts, center, y - 13, f"{point.peak_memory_gb:.2f}", size=18, weight=500, fill=text_color, anchor="middle")
-        _text(parts, center, 901, point.label.upper(), size=12, weight=700 if primary else 500, fill=text_color, anchor="middle")
+        _text(parts, center, 901, point.label.upper(), size=10, weight=700 if primary else 500, fill=text_color, anchor="middle")
 
     _text(parts, 24, 934, "POOLSIDE: MODEL CARD, 21 JULY 2026    LOCAL: COMMITTED CSV, FIXED 256-TOKEN DECODE PROFILE", size=13, fill="#969590")
     _text(parts, 24, 965, "oQ2e CONTEXT: 64K 32.03 TOK/S, 41.19 GB    |    256K 12.16 TOK/S, 52.87 GB    |    RETRIEVAL PASSED", size=13, weight=500, fill=purple)

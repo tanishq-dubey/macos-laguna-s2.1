@@ -1,6 +1,12 @@
 from pathlib import Path
 
-from laguna_bench.backend import _native_tool_call, _openai_messages, _register_custom_mlx_model, _snapshot_metadata
+from laguna_bench.backend import (
+    _jang_quantization_override,
+    _native_tool_call,
+    _openai_messages,
+    _register_custom_mlx_model,
+    _snapshot_metadata,
+)
 
 
 def test_openai_messages_stringify_tool_arguments():
@@ -46,3 +52,14 @@ def test_register_custom_mlx_model_uses_model_namespace(tmp_path: Path):
         assert sys.modules[module_name].Model.__module__ == module_name
     finally:
         sys.modules.pop(module_name, None)
+
+
+def test_jang_quantization_override_maps_flat_runtime_names():
+    quantization = {
+        "bits": 8,
+        "model.layers.1.mlp.switch_mlp.gate_proj": {"bits": 2, "group_size": 64, "mode": "affine"},
+        "lm_head": {"bits": 8, "group_size": 64, "mode": "affine"},
+    }
+    assert _jang_quantization_override(quantization, "layers.1.mlp.switch_mlp.gate_proj")["bits"] == 2
+    assert _jang_quantization_override(quantization, "lm_head")["bits"] == 8
+    assert _jang_quantization_override(quantization, "layers.1.input_layernorm") is None

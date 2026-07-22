@@ -5,7 +5,7 @@ import json
 import sys
 from pathlib import Path
 
-from .backend import MLXBackend, MLXLMCustomBackend, OpenAIBackend
+from .backend import JANGBackend, MLXBackend, MLXLMCustomBackend, OpenAIBackend
 from .catalog import QUANTS
 from .chart import render_results_chart
 from .csv_export import export_csv
@@ -39,7 +39,7 @@ def build_parser() -> argparse.ArgumentParser:
     llama.add_argument("--output", type=Path, default=Path("results"))
     sweep = sub.add_parser("sweep", help="run context, decode, sampling, and KV-cache performance cases")
     sweep.add_argument("--model", required=True, help="Hugging Face model ID or local snapshot path")
-    sweep.add_argument("--engine", choices=["mlx-vlm", "mlx-lm-custom"], default="mlx-vlm")
+    sweep.add_argument("--engine", choices=["mlx-vlm", "mlx-lm-custom", "jang"], default="mlx-vlm")
     sweep.add_argument("--loader-file", default="laguna.py", help="reviewed loader in the model repository")
     sweep.add_argument("--revision")
     sweep.add_argument("--profile", choices=["full", "context", "decode", "sampling", "cache", "quant"], default="full")
@@ -49,7 +49,7 @@ def build_parser() -> argparse.ArgumentParser:
     sweep.add_argument("--seed", type=int, default=20260721)
     run = sub.add_parser("run", help="run benchmark tasks")
     run.add_argument("--model", required=True, help="Hugging Face model ID or local snapshot path")
-    run.add_argument("--engine", choices=["mlx-vlm", "mlx-lm-custom", "openai"], default="mlx-vlm")
+    run.add_argument("--engine", choices=["mlx-vlm", "mlx-lm-custom", "jang", "openai"], default="mlx-vlm")
     run.add_argument("--loader-file", default="laguna.py", help="reviewed loader in the model repository")
     run.add_argument("--base-url", default="http://127.0.0.1:8080/v1", help="OpenAI endpoint when --engine=openai")
     run.add_argument("--api-key", help="API key for a local OpenAI-compatible endpoint")
@@ -126,6 +126,8 @@ def main(argv: list[str] | None = None) -> int:
                     loader_file=args.loader_file,
                     seed=args.seed,
                 )
+            elif args.engine == "jang":
+                backend = JANGBackend(args.model, revision=args.revision, seed=args.seed)
             else:
                 backend = MLXBackend(args.model, revision=args.revision, seed=args.seed)
             cases = None
@@ -163,6 +165,15 @@ def main(argv: list[str] | None = None) -> int:
                 args.model,
                 revision=args.revision,
                 loader_file=args.loader_file,
+                seed=args.seed,
+                temperature=args.temperature,
+                top_p=args.top_p,
+            )
+            print(f"Loaded in {backend.load_seconds:.2f}s; running {len(tasks)} task(s) ...", flush=True)
+        elif args.engine == "jang":
+            backend = JANGBackend(
+                args.model,
+                revision=args.revision,
                 seed=args.seed,
                 temperature=args.temperature,
                 top_p=args.top_p,
