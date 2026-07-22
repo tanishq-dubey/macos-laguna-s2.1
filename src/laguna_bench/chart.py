@@ -21,6 +21,7 @@ LOCAL_MODELS = {
     "unsloth/Laguna-S-2.1-GGUF:UD-IQ1_S": "IQ1_S",
     "unsloth/Laguna-S-2.1-GGUF:UD-IQ1_M": "IQ1_M",
     "mlx-community/Laguna-S-2.1-oQ2e": "oQ2e",
+    "unsloth/Laguna-S-2.1-GGUF:UD-IQ2_XXS": "IQ2_XXS",
     "pipenetwork/Laguna-S-2.1-MLX-2bit": "PIPE 2B",
     "unsloth/Laguna-S-2.1-GGUF:UD-Q2_K_XL": "Q2_K_XL",
     "JANGQ-AI/Laguna-S-2.1-JANG_2L": "JANG 2L",

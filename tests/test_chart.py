@@ -16,6 +16,7 @@ def test_chart_sources_have_expected_laguna_results():
     oq2e = next(item for item in local if item.label.startswith("oQ2e"))
     assert laguna.score == 70.2
     iq1s = next(item for item in local if item.label == "IQ1_S")
+    iq2xxs = next(item for item in local if item.label == "IQ2_XXS")
     iq1 = next(item for item in local if item.label == "IQ1_M")
     pipe2 = next(item for item in local if item.label == "PIPE 2B")
     q2xl = next(item for item in local if item.label == "Q2_K_XL")
@@ -31,6 +32,9 @@ def test_chart_sources_have_expected_laguna_results():
     assert iq1s.decode_tps == pytest.approx(55.85, abs=0.005)
     assert iq1s.peak_memory_gb == pytest.approx(32.48, abs=0.005)
     assert iq1s.suite_score == pytest.approx(0.658, abs=0.001)
+    assert iq2xxs.decode_tps == pytest.approx(57.35, abs=0.005)
+    assert iq2xxs.peak_memory_gb == pytest.approx(35.66, abs=0.005)
+    assert iq2xxs.suite_score == pytest.approx(0.646, abs=0.001)
     assert pipe2.decode_tps == pytest.approx(68.49, abs=0.005)
     assert pipe2.peak_memory_gb == pytest.approx(38.65, abs=0.005)
     assert pipe2.suite_score == 1.0
