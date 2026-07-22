@@ -25,6 +25,7 @@ LOCAL_MODELS = {
     "unsloth/Laguna-S-2.1-GGUF:UD-IQ2_M": "IQ2_M",
     "pipenetwork/Laguna-S-2.1-MLX-2bit": "PIPE2B",
     "unsloth/Laguna-S-2.1-GGUF:UD-Q2_K_XL": "Q2XL",
+    "unsloth/Laguna-S-2.1-GGUF:UD-IQ3_XXS": "IQ3XXS",
     "JANGQ-AI/Laguna-S-2.1-JANG_2L": "JANG2L",
     "mlx-community/Laguna-S-2.1-oQ3e": "oQ3e",
     "pipenetwork/Laguna-S-2.1-MLX-3bit": "PIPE3B",
@@ -218,7 +219,7 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
     local_left, local_right = 1025.0, 1548.0
     local_slot = (local_right - local_left) / len(local)
     local_bar_width = min(84.0, local_slot * 0.72)
-    local_value_size = 18 if len(local) <= 11 else 16
+    local_value_size = 18 if len(local) <= 11 else 16 if len(local) <= 12 else 15
 
     _line(parts, 985, 177, 1576, 177, stroke=rule, width=1.5)
     _text(parts, 985, 220, "FIXED 256-TOKEN DECODE TOK/S", size=22, weight=500, fill=foreground)

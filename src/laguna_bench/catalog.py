@@ -67,6 +67,16 @@ QUANTS = [
         "recommended": False,
     },
     {
+        "model": "unsloth/Laguna-S-2.1-GGUF:UD-IQ3_XXS",
+        "repo": "unsloth/Laguna-S-2.1-GGUF",
+        "file": "Laguna-S-2.1-UD-IQ3_XXS.gguf",
+        "size_gib": 41.24,
+        "bits": "UD-IQ3_XXS",
+        "engine": "llama.cpp",
+        "status": "tested: 0.708 quality; dominated by IQ1_M",
+        "recommended": False,
+    },
+    {
         "model": "JANGQ-AI/Laguna-S-2.1-JANG_2L",
         "size_gib": 41.26,
         "bits": "mixed 2/3/6/8-bit",
