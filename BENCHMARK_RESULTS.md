@@ -9,6 +9,7 @@ These results were measured on July 21 and 22, 2026, using a 128 GB Apple M5 Max
 | `pipenetwork/Laguna-S-2.1-MLX-2bit` | `5a67ae47cdc38ec7d16a09f9efb7add1bb631131` | 1.000 | 1.000 | 1.000 | 63.86 | 39.31 | 87.47s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-Q2_K_XL` | `8615cd7d1f90a4e83e13c0954ef6ed543b66f54a` | 0.875 | 0.750 | 1.000 | 60.37 | 37.99 RSS | 40.17s |
 | `JANGQ-AI/Laguna-S-2.1-JANG_2L` | `47e1ba4eef24807751ed229ceeaff293a2bc53d2` | 0.417 | 0.417 | 0.417 | 47.79 | 45.75 | 60.53s |
+| `pipenetwork/Laguna-S-2.1-MLX-3bit` | `b9f60ba0d0f8ac14a3d638fecdaaa267ddb8f243` | 0.875 | 0.750 | 1.000 | 58.63 | 52.88 | 65.82s |
 | `mlx-community/Laguna-S-2.1-oQ2e` | `777afdcd509a4a2ac9007bb405ea1f97d6b60912` | 1.000 | 1.000 | 1.000 | 40.85 | 37.77 | 87.38s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_M` | `17bf31a6d627ed136f7d1f403cb692ae643debe4` | 0.792 | 0.750 | 0.833 | 57.34 | 34.22 RSS | 78.41s |
 | `mlx-community/Laguna-S-2.1-oQ3e` | `b0a05345ef4ee549a2c1e7b27dbbf8aec8c1b0b3` | 0.625 | 0.417 | 0.833 | 48.58 | 50.69 | 84.79s |
@@ -20,6 +21,8 @@ Pipenetwork's repository ships `laguna.py` because MLX-LM 0.31.3 does not includ
 
 JANG_2L's first forward pass failed in the pinned upstream runtime because its quantization predicate applied the top-level 8-bit width to every layer. The checkpoint defines 527 per-module overrides ranging from 2 to 8 bits. The harness wraps that one initialization call so MLX receives each module's config dictionary, then restores the original MLX function. With that adapter, the model runs at the expected speed, but its 0.417 suite score does not support recommending it for this workload.
 
+Pipenetwork's 3-bit conversion uses a separate loader file at SHA-256 `0a9c99d894daf32d7324694acd9b29fc2b68bdd76ba6a6946564ccc507065c3a`. Compared with the 2-bit build, it used 13.7 GB more peak profile memory, decoded 3.18 tok/s slower, and lost the medium-generation checks. It offers no measured advantage on this machine and suite.
+
 During testing, the Hub advanced the oQ2e repository from the canonical run's `777afd...` revision to `830f68...`. The identities of all seven safetensor blobs are unchanged, as are the inference files. The newer revision completes the repository metadata files. The 256K result records that revision.
 
 Both conventional community MLX 4-bit conversions failed before inference in mlx-vlm 0.6.6. Vontra's checkpoint has a gate quantization shape mismatch. Pipenetwork's checkpoint supplies 141 router parameters that the runtime does not instantiate. The export records the exact exceptions as failure rows. The official Q4_K_M GGUF loads through Poolside's llama.cpp branch.
@@ -30,6 +33,7 @@ Canonical artifacts:
 - `results/20260722T033304Z-pipenetwork--Laguna-S-2.1-MLX-2bit/`
 - `results/20260722T034647Z-unsloth--Laguna-S-2.1-GGUF:UD-Q2_K_XL/`
 - `results/20260722T035828Z-JANGQ-AI--Laguna-S-2.1-JANG_2L/`
+- `results/20260722T040629Z-pipenetwork--Laguna-S-2.1-MLX-3bit/`
 - `results/20260722T032111Z-unsloth--Laguna-S-2.1-GGUF:UD-IQ1_M/`
 - `results/20260722T013118Z-mlx-community--Laguna-S-2.1-oQ3e/`
 - `results/20260722T005530Z-poolside--Laguna-S-2.1-NVFP4-mlx/`
@@ -43,6 +47,7 @@ Canonical artifacts:
 | Pipenetwork mixed 2-bit | 1247.17 | 68.49 | 39.90 MLX |
 | Q2_K_XL GGUF | 618.25 | 55.93 | 37.99 RSS |
 | JANG_2L | 1259.03 | 49.29 | 46.62 MLX |
+| Pipenetwork 3-bit | 1183.43 | 65.31 | 53.60 MLX |
 | IQ1_M GGUF | 754.54 | 62.68 | 34.22 RSS |
 | oQ2e | 1613.07 | 55.06 | 38.46 MLX |
 | oQ3e | 1275.11 | 60.83 | 51.47 MLX |
