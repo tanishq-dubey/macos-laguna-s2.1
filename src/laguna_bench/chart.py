@@ -18,13 +18,13 @@ TASK_IDS = {
 }
 
 LOCAL_MODELS = {
+    "vcruz305/Laguna-S-2.1-GGUF:IQ1_S": "V1S",
     "unsloth/Laguna-S-2.1-GGUF:UD-IQ1_S": "IQ1_S",
     "unsloth/Laguna-S-2.1-GGUF:UD-IQ1_M": "IQ1_M",
     "mlx-community/Laguna-S-2.1-oQ2e": "oQ2e",
     "pipenetwork/Laguna-S-2.1-MLX-2bit": "P2B",
     "unsloth/Laguna-S-2.1-GGUF:UD-Q2_K_XL": "Q2XL",
     "unsloth/Laguna-S-2.1-GGUF:UD-IQ3_XXS": "I3XX",
-    "JANGQ-AI/Laguna-S-2.1-JANG_2L": "J2L",
     "mlx-community/Laguna-S-2.1-oQ3e": "oQ3e",
     "pipenetwork/Laguna-S-2.1-MLX-3bit": "P3B",
     "unsloth/Laguna-S-2.1-GGUF:UD-Q3_K_M": "Q3KM",
@@ -156,7 +156,8 @@ def _line(parts: list[str], x1: float, y1: float, x2: float, y2: float, *, strok
 def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Path) -> Path:
     published = load_published_scores(poolside_csv)
     local = load_local_points(results_csv)
-    fastest = max(local, key=lambda point: point.decode_tps)
+    best_score = max(point.suite_score for point in local)
+    leader = max((point for point in local if point.suite_score == best_score), key=lambda point: point.decode_tps)
     destination.parent.mkdir(parents=True, exist_ok=True)
 
     parts = [
@@ -174,7 +175,7 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
 
     _text(parts, 32, 57, "LAGUNA S 2.1", size=34, weight=700, fill=purple)
     _text(parts, 322, 57, "ON APPLE SILICON", size=34, weight=700, fill=foreground)
-    _text(parts, 32, 98, f"FASTEST FIXED DECODE: {fastest.decode_tps:.2f} TOK/S, {fastest.peak_memory_gb:.2f} GB ({fastest.label})", size=23, weight=500, fill=muted)
+    _text(parts, 32, 98, f"FASTEST PERFECT-SCORE DECODE: {leader.decode_tps:.2f} TOK/S, {leader.peak_memory_gb:.2f} GB ({leader.label})", size=23, weight=500, fill=muted)
     _text(parts, 32, 132, "PUBLISHED CAPABILITY AND LOCAL INFERENCE USE DIFFERENT SOURCES AND SCALES", size=15, fill="#8f8e8a")
 
     # Left panel: Poolside's published Terminal-Bench comparison.
@@ -233,7 +234,7 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
         center = local_left + local_slot * (index + 0.5)
         height = decode_height * point.decode_tps / 72
         y = decode_base - height
-        primary = point.model == fastest.model
+        primary = point.model == leader.model
         color = purple if primary else bar_gray
         text_color = purple if primary else foreground
         parts.append(f'<rect x="{center - local_bar_width / 2:.1f}" y="{y:.1f}" width="{local_bar_width:.1f}" height="{height:.1f}" rx="3" fill="{color}" />')
@@ -251,7 +252,7 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
         center = local_left + local_slot * (index + 0.5)
         height = memory_height * point.peak_memory_gb / 80
         y = memory_base - height
-        primary = point.model == fastest.model
+        primary = point.model == leader.model
         color = purple if primary else bar_gray
         text_color = purple if primary else foreground
         parts.append(f'<rect x="{center - local_bar_width / 2:.1f}" y="{y:.1f}" width="{local_bar_width:.1f}" height="{height:.1f}" rx="3" fill="{color}" />')

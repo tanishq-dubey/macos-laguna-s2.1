@@ -20,6 +20,7 @@ uv run --frozen laguna-bench chart
 
 | Quant | Overall score | Generation | Agentic | Generation tok/s | Peak GB | Suite time |
 |---|---:|---:|---:|---:|---:|---:|
+| `vcruz305/Laguna-S-2.1-GGUF` `IQ1_S` | 0.042 | 0.000 | 0.083 | 75.14 | 23.16 RSS | 316.68s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_S` | 0.658 | 0.317 | 1.000 | 63.00 | 32.48 RSS | 65.24s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ2_XXS` | 0.646 | 0.417 | 0.875 | 62.76 | 35.66 RSS | 67.94s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ2_M` | 0.625 | 0.417 | 0.833 | 61.15 | 35.74 RSS | 53.91s |
@@ -64,6 +65,8 @@ At almost the same on-disk size, Q4_K_S also scored 0.875 but reached 51.87 tok/
 Q4_K_XL did not improve the task scores. Its 68.35 GiB payload decoded at 48.18 tok/s and peaked at 69.38 GB RSS, making it slower, larger, and more memory-hungry than Q4_K_S. It remains in the table and CSV but is omitted from the selected-quant chart to keep that comparison readable.
 
 Q5_K_XL repeated the same scores again while growing to 82.02 GiB. Fixed decode fell to 47.01 tok/s and peak RSS climbed to 83.05 GB. That leaves Q4_K_S strictly ahead on storage, speed, and memory, with no quality loss in these tests.
+
+Vcruz's IQ1_S lowers the hardware floor to a 22.13 GiB payload and reached 78.98 tok/s fixed decode at 23.16 GB peak RSS. The speed is real, but the model failed every generation assertion and 17 of 19 agentic assertions, often running to the 900-token turn cap. It is a fit experiment for 24 GB machines, not a usable coding recommendation. The chart includes it to show the speed/quality cliff while keeping the perfect-score 2-bit build highlighted.
 
 Long-context retrieval also passed at every tested size through 256K tokens on oQ2e:
 
@@ -202,29 +205,30 @@ uv run --frozen laguna-bench run \
 
 Sizes are repository payloads observed on 2026-07-21 and 2026-07-22 and should be refreshed before downloading:
 
-1. `unsloth/Laguna-S-2.1-GGUF` UD-IQ1_S: 31.45 GiB, smallest tested build, with substantial quality loss
-2. `unsloth/Laguna-S-2.1-GGUF` UD-IQ1_M: 33.19 GiB, better low-memory tradeoff than IQ1_S
-3. `mlx-community/Laguna-S-2.1-oQ2e`: 33.74 GiB, calibrated 2.70 bpw and the stock-loader quality default
-4. `unsloth/Laguna-S-2.1-GGUF` UD-IQ2_XXS: 34.64 GiB, tested and dominated
-5. `unsloth/Laguna-S-2.1-GGUF` UD-IQ2_M: 34.71 GiB, tested and dominated by IQ1_M
-6. `pipenetwork/Laguna-S-2.1-MLX-2bit`: 35.17 GiB, mixed 2/4/8-bit and the fastest perfect-score result so far
-7. `unsloth/Laguna-S-2.1-GGUF` UD-Q2_K_XL: 36.96 GiB, perfect agentic score but weaker medium generation
-8. `unsloth/Laguna-S-2.1-GGUF` UD-IQ3_XXS: 41.24 GiB, perfect agentic score but dominated overall
-9. `JANGQ-AI/Laguna-S-2.1-JANG_2L`: 41.26 GiB, native MLX speed but poor suite quality
-10. `unsloth/Laguna-S-2.1-GGUF` UD-IQ3_S: 45.10 GiB, same quality as IQ3_XXS but slower and larger
-11. `mlx-community/Laguna-S-2.1-oQ3e`: 45.86 GiB, lower quality in this suite
-12. `pipenetwork/Laguna-S-2.1-MLX-3bit`: 47.93 GiB, slower and lower-scoring than its 2-bit sibling
-13. `unsloth/Laguna-S-2.1-GGUF` UD-Q3_K_M: 50.31 GiB across three shards, dominated by Q2_K_XL
-14. `unsloth/Laguna-S-2.1-GGUF` UD-Q3_K_XL: 50.38 GiB across three shards, lower quality than Q3_K_M
-15. `unsloth/Laguna-S-2.1-GGUF` UD-IQ4_XS: 53.61 GiB across three shards, dominated by Q2_K_XL
-16. `unsloth/Laguna-S-2.1-GGUF` UD-IQ4_NL: 54.71 GiB across three shards, dominated by IQ4_XS
-17. `mlx-community/Laguna-S-2.1-oQ4e`: 59.73 GiB, tested and dominated by the smaller 2-bit build
-18. `JANGQ-AI/Laguna-S-2.1-JANG_4M`: 63.42 GiB, valid only with the pinned BF16 activation-stream fix
-19. `unsloth/Laguna-S-2.1-GGUF` UD-Q4_K_S: 63.88 GiB across three shards, faster than JANG_4M but dominated by Q2_K_XL
-20. `poolside/Laguna-S-2.1-NVFP4-mlx`: 66.97 GiB, official testing-only build; functional but slow on this runtime
-21. `unsloth/Laguna-S-2.1-GGUF` UD-Q4_K_XL: 68.35 GiB across three shards, same task score as Q4_K_S but slower and larger
-22. `poolside/Laguna-S-2.1-GGUF` Q4_K_M: 70.01 GiB, functional through Poolside's llama.cpp branch
-23. `unsloth/Laguna-S-2.1-GGUF` UD-Q5_K_XL: 82.02 GiB across three shards, tested and dominated by Q4_K_S
+1. `vcruz305/Laguna-S-2.1-GGUF` IQ1_S: 22.13 GiB, fits a 24 GB machine but failed nearly the entire suite
+2. `unsloth/Laguna-S-2.1-GGUF` UD-IQ1_S: 31.45 GiB, substantial quality loss
+3. `unsloth/Laguna-S-2.1-GGUF` UD-IQ1_M: 33.19 GiB, better low-memory tradeoff than IQ1_S
+4. `mlx-community/Laguna-S-2.1-oQ2e`: 33.74 GiB, calibrated 2.70 bpw and the stock-loader quality default
+5. `unsloth/Laguna-S-2.1-GGUF` UD-IQ2_XXS: 34.64 GiB, tested and dominated
+6. `unsloth/Laguna-S-2.1-GGUF` UD-IQ2_M: 34.71 GiB, tested and dominated by IQ1_M
+7. `pipenetwork/Laguna-S-2.1-MLX-2bit`: 35.17 GiB, mixed 2/4/8-bit and the fastest perfect-score result so far
+8. `unsloth/Laguna-S-2.1-GGUF` UD-Q2_K_XL: 36.96 GiB, perfect agentic score but weaker medium generation
+9. `unsloth/Laguna-S-2.1-GGUF` UD-IQ3_XXS: 41.24 GiB, perfect agentic score but dominated overall
+10. `JANGQ-AI/Laguna-S-2.1-JANG_2L`: 41.26 GiB, native MLX speed but poor suite quality
+11. `unsloth/Laguna-S-2.1-GGUF` UD-IQ3_S: 45.10 GiB, same quality as IQ3_XXS but slower and larger
+12. `mlx-community/Laguna-S-2.1-oQ3e`: 45.86 GiB, lower quality in this suite
+13. `pipenetwork/Laguna-S-2.1-MLX-3bit`: 47.93 GiB, slower and lower-scoring than its 2-bit sibling
+14. `unsloth/Laguna-S-2.1-GGUF` UD-Q3_K_M: 50.31 GiB across three shards, dominated by Q2_K_XL
+15. `unsloth/Laguna-S-2.1-GGUF` UD-Q3_K_XL: 50.38 GiB across three shards, lower quality than Q3_K_M
+16. `unsloth/Laguna-S-2.1-GGUF` UD-IQ4_XS: 53.61 GiB across three shards, dominated by Q2_K_XL
+17. `unsloth/Laguna-S-2.1-GGUF` UD-IQ4_NL: 54.71 GiB across three shards, dominated by IQ4_XS
+18. `mlx-community/Laguna-S-2.1-oQ4e`: 59.73 GiB, tested and dominated by the smaller 2-bit build
+19. `JANGQ-AI/Laguna-S-2.1-JANG_4M`: 63.42 GiB, valid only with the pinned BF16 activation-stream fix
+20. `unsloth/Laguna-S-2.1-GGUF` UD-Q4_K_S: 63.88 GiB across three shards, faster than JANG_4M but dominated by Q2_K_XL
+21. `poolside/Laguna-S-2.1-NVFP4-mlx`: 66.97 GiB, official testing-only build; functional but slow on this runtime
+22. `unsloth/Laguna-S-2.1-GGUF` UD-Q4_K_XL: 68.35 GiB across three shards, same task score as Q4_K_S but slower and larger
+23. `poolside/Laguna-S-2.1-GGUF` Q4_K_M: 70.01 GiB, functional through Poolside's llama.cpp branch
+24. `unsloth/Laguna-S-2.1-GGUF` UD-Q5_K_XL: 82.02 GiB across three shards, tested and dominated by Q4_K_S
 
 The Vontra and pipenetwork 4-bit MLX conversions both fail to load in mlx-vlm 0.6.6, each because of a different router or quantization incompatibility. We did not download their 6-bit derivatives after those failures. The 116.34 GiB 8-bit conversions leave too little headroom for weights, the KV cache, and macOS on a 128 GB machine. The CSV still includes every variant and records each failure or omission explicitly.
 

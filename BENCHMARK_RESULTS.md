@@ -6,6 +6,7 @@ These results were measured on July 21 and 22, 2026, using a 128 GB Apple M5 Max
 
 | Quant | Revision | Score | Generation | Agentic | Weighted generation tok/s | Peak GB | Suite wall time |
 |---|---|---:|---:|---:|---:|---:|---:|
+| `vcruz305/Laguna-S-2.1-GGUF` `IQ1_S` | `b1146eb0d85d047666277f5f258e53867feec611` | 0.042 | 0.000 | 0.083 | 75.14 | 23.16 RSS | 316.68s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_S` | `9b53347e47996dd757a9904fe8bf4db3c54d2224` | 0.658 | 0.317 | 1.000 | 63.00 | 32.48 RSS | 65.24s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ2_XXS` | `9b53347e47996dd757a9904fe8bf4db3c54d2224` | 0.646 | 0.417 | 0.875 | 62.76 | 35.66 RSS | 67.94s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ2_M` | `9b53347e47996dd757a9904fe8bf4db3c54d2224` | 0.625 | 0.417 | 0.833 | 61.15 | 35.74 RSS | 53.91s |
@@ -42,6 +43,8 @@ Q4_K_S totals 68,589,335,232 bytes across three shards. It matched JANG_4M's six
 Q4_K_XL totals 73,395,172,000 bytes across three shards. It repeated Q4_K_S's task scores, but fixed decode fell from 51.87 to 48.18 tok/s and peak RSS rose from 64.91 to 69.38 GB. Q4_K_S therefore strictly dominates it in this harness.
 
 Q5_K_XL totals 88,073,138,848 bytes across three shards and again reproduced the Q4_K_S task scores. Its 47.01 tok/s fixed decode and 83.05 GB peak RSS are both worse, so the extra 18.15 GiB delivered no measured benefit.
+
+Vcruz IQ1_S is 23,759,603,552 bytes and establishes the lowest Mac memory floor measured here: 78.98 tok/s fixed decode at 23.16 GB peak RSS. It is not a usable agent quant in this harness. All 19 generation assertions failed, only 2 of 19 agentic assertions passed, and repeated malformed turns made the suite take 316.68 seconds despite high raw throughput.
 
 Pipenetwork's 3-bit conversion uses a separate loader file at SHA-256 `0a9c99d894daf32d7324694acd9b29fc2b68bdd76ba6a6946564ccc507065c3a`. Compared with the 2-bit build, it used 13.7 GB more peak profile memory, decoded 3.18 tok/s slower, and lost the medium-generation checks. It offers no measured advantage on this machine and suite.
 
@@ -87,6 +90,7 @@ Canonical artifacts:
 - `results/20260722T060942Z-unsloth--Laguna-S-2.1-GGUF:UD-Q4_K_S/`
 - `results/20260722T062043Z-unsloth--Laguna-S-2.1-GGUF:UD-Q4_K_XL/`
 - `results/20260722T063040Z-unsloth--Laguna-S-2.1-GGUF:UD-Q5_K_XL/`
+- `results/20260722T063658Z-vcruz305--Laguna-S-2.1-GGUF:IQ1_S/`
 - `results/20260722T042148Z-unsloth--Laguna-S-2.1-GGUF:UD-IQ1_S/`
 - `results/20260722T042913Z-unsloth--Laguna-S-2.1-GGUF:UD-IQ2_XXS/`
 - `results/20260722T044203Z-unsloth--Laguna-S-2.1-GGUF:UD-IQ2_M/`
@@ -100,6 +104,7 @@ Canonical artifacts:
 
 | Quant | 16K prefill tok/s | Fixed 256-token decode tok/s | Profile peak GB |
 |---|---:|---:|---:|
+| Vcruz IQ1_S GGUF | 779.35 | 78.98 | 23.16 RSS |
 | IQ1_S GGUF | 585.94 | 55.85 | 32.48 RSS |
 | IQ2_XXS GGUF | 606.72 | 57.35 | 35.66 RSS |
 | IQ2_M GGUF | 676.27 | 60.29 | 35.74 RSS |

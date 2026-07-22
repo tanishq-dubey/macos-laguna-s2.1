@@ -15,12 +15,12 @@ def test_chart_sources_have_expected_laguna_results():
     laguna = next(item for item in published if item.model == "Laguna S 2.1")
     oq2e = next(item for item in local if item.label.startswith("oQ2e"))
     assert laguna.score == 70.2
+    vcruz_iq1s = next(item for item in local if item.label == "V1S")
     iq1s = next(item for item in local if item.label == "IQ1_S")
     iq1 = next(item for item in local if item.label == "IQ1_M")
     pipe2 = next(item for item in local if item.label == "P2B")
     q2xl = next(item for item in local if item.label == "Q2XL")
     iq3xxs = next(item for item in local if item.label == "I3XX")
-    jang = next(item for item in local if item.label == "J2L")
     pipe3 = next(item for item in local if item.label == "P3B")
     q3km = next(item for item in local if item.label == "Q3KM")
     iq4xs = next(item for item in local if item.label == "I4XS")
@@ -45,9 +45,6 @@ def test_chart_sources_have_expected_laguna_results():
     assert iq3xxs.decode_tps == pytest.approx(55.13, abs=0.005)
     assert iq3xxs.peak_memory_gb == pytest.approx(42.27, abs=0.005)
     assert iq3xxs.suite_score == pytest.approx(0.708, abs=0.001)
-    assert jang.decode_tps == pytest.approx(49.29, abs=0.005)
-    assert jang.peak_memory_gb == pytest.approx(45.29, abs=0.005)
-    assert jang.suite_score == pytest.approx(0.417, abs=0.001)
     assert pipe3.decode_tps == pytest.approx(65.31, abs=0.005)
     assert pipe3.peak_memory_gb == pytest.approx(52.34, abs=0.005)
     assert pipe3.suite_score == 0.875
@@ -66,6 +63,9 @@ def test_chart_sources_have_expected_laguna_results():
     assert q4ks.decode_tps == pytest.approx(51.87, abs=0.005)
     assert q4ks.peak_memory_gb == pytest.approx(64.91, abs=0.005)
     assert q4ks.suite_score == 0.875
+    assert vcruz_iq1s.decode_tps == pytest.approx(78.98, abs=0.005)
+    assert vcruz_iq1s.peak_memory_gb == pytest.approx(23.16, abs=0.005)
+    assert vcruz_iq1s.suite_score == pytest.approx(0.042, abs=0.001)
 
 
 def test_chart_renders_standalone_svg(tmp_path):
@@ -79,3 +79,4 @@ def test_chart_renders_standalone_svg(tmp_path):
     assert svg.startswith("<svg")
     assert "Laguna S 2.1" in svg
     assert "68.49 TOK/S" in svg
+    assert "FASTEST PERFECT-SCORE DECODE" in svg

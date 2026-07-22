@@ -2,6 +2,16 @@ from __future__ import annotations
 
 QUANTS = [
     {
+        "model": "vcruz305/Laguna-S-2.1-GGUF:IQ1_S",
+        "repo": "vcruz305/Laguna-S-2.1-GGUF",
+        "file": "Laguna-S-2.1-IQ1_S.gguf",
+        "size_gib": 22.13,
+        "bits": "IQ1_S",
+        "engine": "llama.cpp",
+        "status": "tested: 0.042 quality; fastest and smallest, but unusable for agents",
+        "recommended": False,
+    },
+    {
         "model": "unsloth/Laguna-S-2.1-GGUF:UD-IQ1_S",
         "repo": "unsloth/Laguna-S-2.1-GGUF",
         "file": "Laguna-S-2.1-UD-IQ1_S.gguf",

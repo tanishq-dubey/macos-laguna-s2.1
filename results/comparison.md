@@ -26,3 +26,4 @@ Latest complete six-task run per model.
 | unsloth/Laguna-S-2.1-GGUF:UD-Q4_K_S | openai-compatible | 0.875 | 0.750 | 1.000 | 48.17 | 64.91 | process_max_rss | 0.00 |
 | unsloth/Laguna-S-2.1-GGUF:UD-Q4_K_XL | openai-compatible | 0.875 | 0.750 | 1.000 | 45.95 | 69.38 | process_max_rss | 0.00 |
 | unsloth/Laguna-S-2.1-GGUF:UD-Q5_K_XL | openai-compatible | 0.875 | 0.750 | 1.000 | 45.62 | 83.05 | process_max_rss | 0.00 |
+| vcruz305/Laguna-S-2.1-GGUF:IQ1_S | openai-compatible | 0.042 | 0.000 | 0.083 | 75.14 | 23.16 | process_max_rss | 0.00 |
