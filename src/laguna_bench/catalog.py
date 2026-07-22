@@ -165,6 +165,16 @@ QUANTS = [
         "recommended": False,
     },
     {
+        "model": "unsloth/Laguna-S-2.1-GGUF:UD-Q4_K_S",
+        "repo": "unsloth/Laguna-S-2.1-GGUF",
+        "file": "UD-Q4_K_S/Laguna-S-2.1-UD-Q4_K_S-00001-of-00003.gguf",
+        "size_gib": 63.88,
+        "bits": "UD-Q4_K_S",
+        "engine": "llama.cpp",
+        "status": "tested: 0.875 quality; dominated by Q2_K_XL",
+        "recommended": False,
+    },
+    {
         "model": "Vontra/Laguna-S-2.1-MLX-4bit",
         "size_gib": 61.61,
         "bits": "4",
