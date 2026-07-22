@@ -147,95 +147,103 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
     destination.parent.mkdir(parents=True, exist_ok=True)
 
     parts = [
-        '<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">',
+        '<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">',
         '<title id="title">Laguna S 2.1 published capability and local Apple Silicon performance</title>',
-        '<desc id="desc">Poolside published Terminal-Bench 2.1 scores beside locally measured MLX decode speed and peak memory for three Laguna S 2.1 quantizations.</desc>',
-        '<rect width="1600" height="900" fill="#090e1a" />',
-        '<style>text { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }</style>',
+        '<desc id="desc">Poolside published Terminal-Bench 2.1 scores beside locally measured MLX decode speed and peak memory for three Laguna S 2.1 quantizations on an M5 Max.</desc>',
+        '<rect width="1600" height="1000" fill="#191919" />',
+        '<style>text { font-family: "SFMono-Regular", Consolas, "Liberation Mono", ui-monospace, monospace; }</style>',
     ]
-    _text(parts, 64, 70, "Laguna S 2.1: published capability, measured Mac performance", size=34, weight=700, fill="#f6f8ff")
-    _text(parts, 64, 105, "Separate sources and scales. The local suite is not Terminal-Bench.", size=18, fill="#8fa2c9")
+    purple = "#b17ce8"
+    foreground = "#f0efed"
+    muted = "#b9b8b4"
+    bar_gray = "#74736e"
+    rule = "#666561"
+
+    _text(parts, 32, 57, "LAGUNA S 2.1", size=34, weight=700, fill=purple)
+    _text(parts, 322, 57, "ON APPLE SILICON", size=34, weight=700, fill=foreground)
+    _text(parts, 32, 98, "52.48 TOK/S AT 38.46 GB PEAK ON AN M5 MAX", size=23, weight=500, fill=muted)
+    _text(parts, 32, 132, "PUBLISHED CAPABILITY AND LOCAL INFERENCE USE DIFFERENT SOURCES AND SCALES", size=15, fill="#8f8e8a")
 
     # Left panel: Poolside's published Terminal-Bench comparison.
-    parts.append('<rect x="50" y="135" width="760" height="650" rx="20" fill="#111a2d" stroke="#263554" />')
-    _text(parts, 82, 182, "Poolside published", size=15, weight=700, fill="#62d6b3")
-    _text(parts, 82, 215, "Terminal-Bench 2.1", size=25, weight=700, fill="#f6f8ff")
-    _text(parts, 82, 242, "Resolved tasks (%)", size=15, fill="#8fa2c9")
+    _line(parts, 24, 177, 950, 177, stroke=rule, width=1.5)
+    _text(parts, 24, 220, "TERMINAL-BENCH 2.1", size=24, weight=500, fill=foreground)
+    _text(parts, 24, 249, "POOLSIDE PUBLISHED, RESOLVED TASKS (%)", size=14, fill=muted)
 
-    bar_x = 360.0
-    bar_width = 390.0
-    plot_top = 280.0
-    row_height = 49.0
-    for tick in (0, 25, 50, 75, 100):
-        x = bar_x + bar_width * tick / 100
-        _line(parts, x, plot_top - 18, x, plot_top + row_height * len(published) - 8, stroke="#263554")
-        _text(parts, x, plot_top - 28, str(tick), size=13, fill="#7183a7", anchor="middle")
-
+    plot_left = 86.0
+    plot_right = 918.0
+    baseline = 760.0
+    plot_height = 430.0
+    slot = (plot_right - plot_left) / len(published)
+    bar_width = 60.0
+    label_lines = {
+        "Claude Fable 5": ("CLAUDE", "FABLE 5"),
+        "Muse Spark 1.1": ("MUSE", "SPARK 1.1"),
+        "Qwen 3.7 Max": ("QWEN", "3.7 MAX"),
+        "Tencent HY3": ("TENCENT", "HY3"),
+        "Laguna S 2.1": ("LAGUNA", "S 2.1"),
+        "DeepSeek-V4-Pro Max": ("DEEPSEEK", "V4 PRO MAX"),
+        "Nemotron 3 Ultra": ("NEMOTRON", "3 ULTRA"),
+    }
+    _line(parts, plot_left - 18, baseline, plot_right + 10, baseline, stroke=rule)
     for index, item in enumerate(published):
-        y = plot_top + index * row_height
+        center = plot_left + slot * (index + 0.5)
+        height = plot_height * item.score / 100
+        y = baseline - height
         is_laguna = item.model == "Laguna S 2.1"
-        color = "#62d6b3" if is_laguna else "#5774b8"
-        label_color = "#f6f8ff" if is_laguna else "#dbe6ff"
+        color = purple if is_laguna else bar_gray
+        label_color = purple if is_laguna else foreground
         suffix = "*" if item.third_party else ""
-        _text(parts, 82, y + 20, item.model, size=16, weight=700 if is_laguna else 500, fill=label_color)
+        parts.append(f'<rect x="{center - bar_width / 2:.1f}" y="{y:.1f}" width="{bar_width:.1f}" height="{height:.1f}" rx="3" fill="{color}" />')
+        _text(parts, center, y - 13, f"{item.score:g}{suffix}", size=18, weight=500, fill=label_color, anchor="middle")
+        lines = label_lines.get(item.model, (item.model.upper(), ""))
+        _text(parts, center, 793, lines[0], size=12, weight=700 if is_laguna else 500, fill=label_color, anchor="middle")
+        if lines[1]:
+            _text(parts, center, 811, lines[1], size=11, fill=label_color, anchor="middle")
         if item.size:
-            _text(parts, 82, y + 39, item.size, size=12, fill="#7183a7")
-        parts.append(
-            f'<rect x="{bar_x:.1f}" y="{y:.1f}" width="{bar_width * item.score / 100:.1f}" '
-            f'height="28" rx="6" fill="{color}" />'
-        )
-        _text(parts, bar_x + bar_width * item.score / 100 - 9, y + 20, f"{item.score:g}{suffix}", size=14, weight=700, fill="#09111d", anchor="end")
+            _text(parts, center, 834, item.size, size=10, fill="#85847f", anchor="middle")
 
-    _text(parts, 82, 756, "* Poolside marks this Terminal-Bench score as third-party reported.", size=13, fill="#7183a7")
+    _text(parts, 24, 872, "* POOLSIDE MARKS THIS TERMINAL-BENCH SCORE AS THIRD-PARTY REPORTED", size=12, fill="#85847f")
 
-    # Right panel: local 16K quant scatter plot.
-    parts.append('<rect x="835" y="135" width="715" height="650" rx="20" fill="#111a2d" stroke="#263554" />')
-    _text(parts, 867, 182, "Measured locally", size=15, weight=700, fill="#7bb8ff")
-    _text(parts, 867, 215, "MLX quant profile at 16K", size=25, weight=700, fill="#f6f8ff")
-    _text(parts, 867, 242, "128 GB M5 Max, mlx-vlm 0.6.6, greedy decoding", size=15, fill="#8fa2c9")
+    # Right panels: local decode throughput and memory in the reference style.
+    local_left, local_right = 1025.0, 1548.0
+    local_slot = (local_right - local_left) / len(local)
 
-    plot_left, plot_right = 930.0, 1490.0
-    plot_bottom, plot_top_y = 600.0, 300.0
-    memory_min, memory_max = 30.0, 80.0
-    speed_min, speed_max = 25.0, 65.0
-    for tick in (30, 40, 50, 60, 70, 80):
-        x = plot_left + (tick - memory_min) / (memory_max - memory_min) * (plot_right - plot_left)
-        _line(parts, x, plot_top_y, x, plot_bottom, stroke="#263554")
-        _text(parts, x, plot_bottom + 27, str(tick), size=13, fill="#7183a7", anchor="middle")
-    for tick in (30, 40, 50, 60):
-        y = plot_bottom - (tick - speed_min) / (speed_max - speed_min) * (plot_bottom - plot_top_y)
-        _line(parts, plot_left, y, plot_right, y, stroke="#263554")
-        _text(parts, plot_left - 14, y + 5, str(tick), size=13, fill="#7183a7", anchor="end")
-    _text(parts, (plot_left + plot_right) / 2, 647, "Peak MLX memory (GB)", size=15, fill="#8fa2c9", anchor="middle")
-    _text(parts, 870, 455, "Decode tok/s", size=15, fill="#8fa2c9")
-
-    offsets = {"oQ2e (2.7-bit)": (14, -18), "oQ3e": (14, 31), "NVFP4 MLX": (-14, -18)}
-    for point in local:
-        x = plot_left + (point.peak_memory_gb - memory_min) / (memory_max - memory_min) * (plot_right - plot_left)
-        y = plot_bottom - (point.decode_tps - speed_min) / (speed_max - speed_min) * (plot_bottom - plot_top_y)
+    _line(parts, 985, 177, 1576, 177, stroke=rule, width=1.5)
+    _text(parts, 985, 220, "16K DECODE TOK/S", size=24, weight=500, fill=foreground)
+    _text(parts, 985, 249, "MLX-VLM 0.6.6, GREEDY", size=14, fill=muted)
+    decode_base, decode_height = 474.0, 175.0
+    _line(parts, local_left - 25, decode_base, local_right + 20, decode_base, stroke=rule)
+    for index, point in enumerate(local):
+        center = local_left + local_slot * (index + 0.5)
+        height = decode_height * point.decode_tps / 65
+        y = decode_base - height
         primary = point.label.startswith("oQ2e")
-        color = "#62d6b3" if primary else "#7bb8ff"
-        parts.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="11" fill="{color}" stroke="#f6f8ff" stroke-width="2" />')
-        dx, dy = offsets[point.label]
-        anchor = "end" if dx < 0 else "start"
-        _text(parts, x + dx, y + dy, point.label, size=16, weight=700, fill="#f6f8ff", anchor=anchor)
-        _text(
-            parts,
-            x + dx,
-            y + dy + 20,
-            f"{point.decode_tps:.2f} tok/s, {point.peak_memory_gb:.2f} GB, {point.suite_score * 100:.1f}% suite",
-            size=12,
-            fill="#8fa2c9",
-            anchor=anchor,
-        )
+        color = purple if primary else bar_gray
+        text_color = purple if primary else foreground
+        parts.append(f'<rect x="{center - 42:.1f}" y="{y:.1f}" width="84" height="{height:.1f}" rx="3" fill="{color}" />')
+        _text(parts, center, y - 13, f"{point.decode_tps:.2f}", size=18, weight=500, fill=text_color, anchor="middle")
+        _text(parts, center, 505, point.label.upper(), size=12, weight=700 if primary else 500, fill=text_color, anchor="middle")
+        _text(parts, center, 525, f"{point.suite_score * 100:.1f}% SUITE", size=10, fill="#85847f", anchor="middle")
 
-    parts.append('<rect x="867" y="680" width="651" height="74" rx="12" fill="#17243c" />')
-    _text(parts, 891, 709, "oQ2e context scaling", size=15, weight=700, fill="#62d6b3")
-    _text(parts, 891, 737, "64K: 32.03 tok/s, 41.19 GB    |    256K: 12.16 tok/s, 52.87 GB    |    retrieval passed", size=14, fill="#dbe6ff")
+    _line(parts, 985, 575, 1576, 575, stroke=rule, width=1.5)
+    _text(parts, 985, 618, "PEAK MLX MEMORY (GB)", size=24, weight=500, fill=foreground)
+    _text(parts, 985, 647, "128 GB M5 MAX, 16K PROFILE", size=14, fill=muted)
+    memory_base, memory_height = 870.0, 175.0
+    _line(parts, local_left - 25, memory_base, local_right + 20, memory_base, stroke=rule)
+    for index, point in enumerate(local):
+        center = local_left + local_slot * (index + 0.5)
+        height = memory_height * point.peak_memory_gb / 80
+        y = memory_base - height
+        primary = point.label.startswith("oQ2e")
+        color = purple if primary else bar_gray
+        text_color = purple if primary else foreground
+        parts.append(f'<rect x="{center - 42:.1f}" y="{y:.1f}" width="84" height="{height:.1f}" rx="3" fill="{color}" />')
+        _text(parts, center, y - 13, f"{point.peak_memory_gb:.2f}", size=18, weight=500, fill=text_color, anchor="middle")
+        _text(parts, center, 901, point.label.upper(), size=12, weight=700 if primary else 500, fill=text_color, anchor="middle")
 
-    _text(parts, 64, 835, "Published scores: Poolside Laguna S 2.1 model card, benchmark table dated 21 July 2026.", size=15, fill="#8fa2c9")
-    _text(parts, 64, 866, "Local results: committed CSV. 16K points use fixed-length generation; suite scores cover six coding tasks.", size=15, fill="#8fa2c9")
-    _text(parts, 1536, 866, "macos-laguna-s2.1", size=14, weight=700, fill="#62d6b3", anchor="end")
+    _text(parts, 24, 934, "POOLSIDE: MODEL CARD, 21 JULY 2026    LOCAL: COMMITTED CSV, FIXED-LENGTH 16K PROFILE", size=13, fill="#969590")
+    _text(parts, 24, 965, "oQ2e CONTEXT: 64K 32.03 TOK/S, 41.19 GB    |    256K 12.16 TOK/S, 52.87 GB    |    RETRIEVAL PASSED", size=13, weight=500, fill=purple)
+    _text(parts, 1576, 965, "MACOS-LAGUNA-S2.1", size=13, weight=700, fill=foreground, anchor="end")
     parts.append("</svg>\n")
     destination.write_text("\n".join(parts))
     return destination

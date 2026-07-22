@@ -30,4 +30,4 @@ def test_chart_renders_standalone_svg(tmp_path):
     svg = destination.read_text()
     assert svg.startswith("<svg")
     assert "Laguna S 2.1" in svg
-    assert "52.48 tok/s" in svg
+    assert "52.48 TOK/S" in svg

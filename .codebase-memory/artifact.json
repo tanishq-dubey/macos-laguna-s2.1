@@ -1,11 +1,11 @@
 {
     "schema_version": 2,
-    "commit": "5d2a1d4d0917f5de03f4d1334a0c53362c9cff66",
-    "indexed_at": "2026-07-22T02:38:30Z",
+    "commit": "469a6cf6b9d75c96572890440e7407b52a48a069",
+    "indexed_at": "2026-07-22T02:54:15Z",
     "project": "lagunas2.1test",
     "nodes": 228,
-    "edges": 881,
+    "edges": 882,
     "original_size": 2621440,
-    "compressed_size": 338758,
+    "compressed_size": 341560,
     "compression_level": 3
 }
