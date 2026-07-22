@@ -18,6 +18,10 @@ FIELDS = [
     "quantization",
     "mlx_version",
     "mlx_vlm_version",
+    "transformers_version",
+    "platform",
+    "macos_version",
+    "python_version",
     "chip",
     "memory_bytes",
     "artifact",
@@ -71,6 +75,10 @@ def _backend_fields(record: dict[str, Any], path: Path) -> dict[str, Any]:
         "quantization": json.dumps(quantization, sort_keys=True) if isinstance(quantization, (dict, list)) else quantization,
         "mlx_version": backend.get("mlx_version"),
         "mlx_vlm_version": backend.get("mlx_vlm_version"),
+        "transformers_version": backend.get("transformers_version"),
+        "platform": machine.get("platform"),
+        "macos_version": machine.get("macos"),
+        "python_version": machine.get("python"),
         "chip": machine.get("chip"),
         "memory_bytes": machine.get("memory_bytes"),
         "artifact": str(path),
@@ -180,10 +188,46 @@ def _failure_rows(output_root: Path) -> Iterable[dict[str, Any]]:
         }
 
 
+def _existing_result_rows(destination: Path) -> Iterable[dict[str, Any]]:
+    if not destination.exists():
+        return
+    try:
+        with destination.open(newline="") as handle:
+            for row in csv.DictReader(handle):
+                # Catalog entries come from source so stale metadata is replaced.
+                if row.get("record_type") != "variant":
+                    yield row
+    except (OSError, csv.Error):
+        return
+
+
+def _row_key(row: dict[str, Any]) -> tuple[str, ...]:
+    def value(field: str) -> str:
+        return "" if row.get(field) is None else str(row.get(field))
+
+    record_type = value("record_type")
+    if record_type == "variant":
+        return record_type, value("model_id")
+    if value("artifact"):
+        return record_type, value("artifact"), value("case_id")
+    return tuple(value(field) for field in FIELDS)
+
+
 def export_csv(output_root: Path) -> tuple[Path, int]:
     destination = output_root / "laguna_s21_full_results.csv"
     destination.parent.mkdir(parents=True, exist_ok=True)
-    rows = list(_catalog_rows()) + list(_task_rows(output_root)) + list(_sweep_rows(output_root)) + list(_failure_rows(output_root))
+    candidates = (
+        list(_catalog_rows())
+        + list(_existing_result_rows(destination))
+        + list(_task_rows(output_root))
+        + list(_sweep_rows(output_root))
+        + list(_failure_rows(output_root))
+    )
+    merged: dict[tuple[str, ...], dict[str, Any]] = {}
+    for row in candidates:
+        # Locally available artifacts come last and refresh older CSV rows.
+        merged[_row_key(row)] = row
+    rows = list(merged.values())
     with destination.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=FIELDS, extrasaction="ignore", lineterminator="\n")
         writer.writeheader()

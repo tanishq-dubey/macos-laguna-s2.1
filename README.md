@@ -6,12 +6,38 @@ This work was sponsored by [DWS LLC](https://dws.rip).
 
 On the M5 Max used for these tests, the smallest quant, `mlx-community/Laguna-S-2.1-oQ2e`, running in-process through `mlx-vlm` was the fastest option. It passed all six tasks and finished the suite faster than the tested llama.cpp, DFlash, official NVFP4 MLX, and serial oMLX paths. The measurements are in `BENCHMARK_RESULTS.md`.
 
+## Results at a glance
+
+These results were measured on a 128 GB Apple M5 Max using macOS 27.0, Python 3.13.12, MLX 0.32.0, and mlx-vlm 0.6.6. The score combines three generation tasks and three agentic coding tasks. Throughput is weighted across the generation tasks.
+
+| Quant | Overall score | Generation | Agentic | Generation tok/s | Peak MLX GB | Suite time |
+|---|---:|---:|---:|---:|---:|---:|
+| `mlx-community/Laguna-S-2.1-oQ2e` | 1.000 | 1.000 | 1.000 | 40.85 | 37.77 | 87.38s |
+| `mlx-community/Laguna-S-2.1-oQ3e` | 0.625 | 0.417 | 0.833 | 48.58 | 50.69 | 84.79s |
+| `poolside/Laguna-S-2.1-NVFP4-mlx` | 0.875 | 0.750 | 1.000 | 7.25 | 73.47 | 301.77s |
+
+The oQ2e conversion was the clear default for this machine. It passed all 38 hidden assertions while using about 38 GB of peak MLX memory. oQ3e decoded faster in the controlled profile, but its exact-format and implementation errors lowered its task score. The official NVFP4 MLX build was functional but much slower in this runtime.
+
+Long-context retrieval also passed at every tested size through 256K tokens on oQ2e:
+
+| Prompt tokens | Prefill tok/s | Decode tok/s | Peak MLX GB | Retrieval |
+|---:|---:|---:|---:|---:|
+| 1,016 | 1411.42 | 60.86 | 37.23 | pass |
+| 16,376 | 1613.07 | 52.48 | 38.46 | pass |
+| 65,528 | 1088.75 | 32.03 | 41.19 | pass |
+| 131,064 | 771.80 | 23.48 | 45.09 | pass |
+| 262,136 | 566.31 | 12.16 | 52.87 | pass |
+
+For a local coding setup, use oQ2e through in-process mlx-vlm with temperature 0, top-p 1, the default unquantized KV cache, and a prefill step of 2048. Staying at or below 64K gives a much better latency balance. The 128K and 256K cases fit and passed retrieval, but decode speed fell sharply.
+
+The full [benchmark report](BENCHMARK_RESULTS.md) includes the standardized quant profile, sampling search, KV cache and prefill search, engine bake-off, revisions, and compatibility failures. The machine-readable source is [the combined CSV](results/laguna_s21_full_results.csv).
+
 ## Clone and run
 
 The helper creates the environment and uses the fastest quant from our tests by default:
 
 ```bash
-git clone <this-repository-url> laguna-s21-bench
+git clone https://github.com/tanishq-dubey/macos-laguna-s2.1.git laguna-s21-bench
 cd laguna-s21-bench
 scripts/laguna.sh download
 scripts/laguna.sh prompt 'Write a Python LRU cache with tests'
@@ -121,6 +147,60 @@ Sizes are repository payloads observed on 2026-07-21 and should be refreshed bef
 4. `poolside/Laguna-S-2.1-GGUF` Q4_K_M: 70.01 GiB, functional through Poolside's llama.cpp branch
 
 The Vontra and pipenetwork 4-bit MLX conversions both fail to load in mlx-vlm 0.6.6, each because of a different router or quantization incompatibility. We did not download their 6-bit derivatives after those failures. The 116.34 GiB 8-bit conversions leave too little headroom for weights, the KV cache, and macOS on a 128 GB machine. The CSV still includes every variant and records each failure or omission explicitly.
+
+## Contributing results from your Mac
+
+Results from other Apple Silicon machines are welcome. The harness records the chip, memory, macOS version, model revision, and runtime versions, then merges your rows into the committed CSV without removing earlier community results.
+
+First, fork the repository on GitHub and clone your fork. Install [uv](https://docs.astral.sh/uv/) if needed, then create a branch and sync the locked environment:
+
+```bash
+git clone https://github.com/<your-user>/macos-laguna-s2.1.git
+cd macos-laguna-s2.1
+git switch -c results/<model>-<chip>
+uv sync --extra dev --python 3.13 --locked
+```
+
+The reference oQ2e model is a 33.74 GiB download and peaked near 38 GB in the short suite. Make sure your Mac has enough unified memory and free disk space before starting. Download the default model and reproduce the six quality tasks plus the standardized quant profile:
+
+```bash
+scripts/laguna.sh download
+scripts/laguna.sh bench
+```
+
+To test a different conversion, set `LAGUNA_MODEL` for both commands:
+
+```bash
+export LAGUNA_MODEL=mlx-community/Laguna-S-2.1-oQ3e
+scripts/laguna.sh download
+scripts/laguna.sh bench
+```
+
+For the complete context, sampling, KV cache, and prefill matrix, run the community profile. It reaches 256K input tokens and can take several minutes per long case on the reference M5 Max:
+
+```bash
+LAGUNA_MODEL=mlx-community/Laguna-S-2.1-oQ2e scripts/laguna.sh community
+```
+
+Review the comparison, refresh the merged CSV, and run the tests before committing:
+
+```bash
+uv run --frozen laguna-bench compare --output results
+uv run --frozen laguna-bench export --output results
+uv run --frozen pytest -q
+git diff -- results/laguna_s21_full_results.csv
+```
+
+Raw run directories stay local because they are large and can contain machine-specific paths. Add the combined CSV to your pull request. Update `BENCHMARK_RESULTS.md` only when your run adds a finding that needs explanation.
+
+```bash
+git add results/laguna_s21_full_results.csv
+git commit -m "Add <chip> results for <model>"
+git push -u origin HEAD
+gh pr create --fill
+```
+
+In the pull request, briefly mention your Mac model, chip, unified memory, macOS version, and whether the run was plugged in and otherwise idle. Do not edit or delete existing CSV rows by hand. Load failures are useful results too: the harness records them as failure rows so compatibility gaps remain visible.
 
 ## Safety
 
