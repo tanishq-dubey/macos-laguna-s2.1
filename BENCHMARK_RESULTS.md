@@ -22,6 +22,7 @@ These results were measured on July 21 and 22, 2026, using a 128 GB Apple M5 Max
 | `mlx-community/Laguna-S-2.1-oQ4e` | `6202717978eb408c411de3cf3021bdd0bd51e32c` | 0.875 | 0.750 | 1.000 | 44.42 | 65.70 | 67.07s |
 | `JANGQ-AI/Laguna-S-2.1-JANG_4M` | `c44bb2203fc9ff83bf284dab465cde9d276ad9b3` | 0.875 | 0.750 | 1.000 | 44.88 | 69.76 | 74.36s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-Q4_K_S` | `9b53347e47996dd757a9904fe8bf4db3c54d2224` | 0.875 | 0.750 | 1.000 | 48.17 | 64.91 RSS | 55.88s |
+| `unsloth/Laguna-S-2.1-GGUF` `UD-Q4_K_XL` | `9b53347e47996dd757a9904fe8bf4db3c54d2224` | 0.875 | 0.750 | 1.000 | 45.95 | 69.38 RSS | 58.86s |
 | `mlx-community/Laguna-S-2.1-oQ2e` | `777afdcd509a4a2ac9007bb405ea1f97d6b60912` | 1.000 | 1.000 | 1.000 | 40.85 | 37.77 | 87.38s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_M` | `17bf31a6d627ed136f7d1f403cb692ae643debe4` | 0.792 | 0.750 | 0.833 | 57.34 | 34.22 RSS | 78.41s |
 | `mlx-community/Laguna-S-2.1-oQ3e` | `b0a05345ef4ee549a2c1e7b27dbbf8aec8c1b0b3` | 0.625 | 0.417 | 0.833 | 48.58 | 50.69 | 84.79s |
@@ -36,6 +37,8 @@ JANG_2L's first forward pass failed in the pinned upstream runtime because its q
 JANG_4M exposed a second runtime boundary. Commit `ca75f0cb` ran Laguna's residual stream in FP16; late-layer overflow produced only UNK tokens and a 0.042 score. Upstream commit `801209c1` casts the affine sidecars to BF16, eliminating that overflow. The corrected canonical run scored 0.875 and passed 16K retrieval. The CSV retains both runs with their distinct `jang_revision` values so the compatibility failure remains reproducible.
 
 Q4_K_S totals 68,589,335,232 bytes across three shards. It matched JANG_4M's six task scores while decoding 4.82 tok/s faster and using 5.51 GB less peak profile memory. Q2_K_XL remains strictly better than both on the measured quality/performance/storage axes.
+
+Q4_K_XL totals 73,395,172,000 bytes across three shards. It repeated Q4_K_S's task scores, but fixed decode fell from 51.87 to 48.18 tok/s and peak RSS rose from 64.91 to 69.38 GB. Q4_K_S therefore strictly dominates it in this harness.
 
 Pipenetwork's 3-bit conversion uses a separate loader file at SHA-256 `0a9c99d894daf32d7324694acd9b29fc2b68bdd76ba6a6946564ccc507065c3a`. Compared with the 2-bit build, it used 13.7 GB more peak profile memory, decoded 3.18 tok/s slower, and lost the medium-generation checks. It offers no measured advantage on this machine and suite.
 
@@ -79,6 +82,7 @@ Canonical artifacts:
 - `results/20260722T041423Z-mlx-community--Laguna-S-2.1-oQ4e/`
 - `results/20260722T055533Z-JANGQ-AI--Laguna-S-2.1-JANG_4M/`
 - `results/20260722T060942Z-unsloth--Laguna-S-2.1-GGUF:UD-Q4_K_S/`
+- `results/20260722T062043Z-unsloth--Laguna-S-2.1-GGUF:UD-Q4_K_XL/`
 - `results/20260722T042148Z-unsloth--Laguna-S-2.1-GGUF:UD-IQ1_S/`
 - `results/20260722T042913Z-unsloth--Laguna-S-2.1-GGUF:UD-IQ2_XXS/`
 - `results/20260722T044203Z-unsloth--Laguna-S-2.1-GGUF:UD-IQ2_M/`
@@ -108,6 +112,7 @@ Canonical artifacts:
 | oQ4e | 1239.47 | 52.00 | 66.36 MLX |
 | JANG_4M | 1227.43 | 47.05 | 70.42 MLX |
 | Q4_K_S GGUF | 655.31 | 51.87 | 64.91 RSS |
+| Q4_K_XL GGUF | 583.87 | 48.18 | 69.38 RSS |
 | IQ1_M GGUF | 754.54 | 62.68 | 34.22 RSS |
 | oQ2e | 1613.07 | 55.06 | 38.46 MLX |
 | oQ3e | 1275.11 | 60.83 | 51.47 MLX |

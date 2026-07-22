@@ -36,6 +36,7 @@ uv run --frozen laguna-bench chart
 | `mlx-community/Laguna-S-2.1-oQ4e` | 0.875 | 0.750 | 1.000 | 44.42 | 65.70 | 67.07s |
 | `JANGQ-AI/Laguna-S-2.1-JANG_4M` | 0.875 | 0.750 | 1.000 | 44.88 | 69.76 | 74.36s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-Q4_K_S` | 0.875 | 0.750 | 1.000 | 48.17 | 64.91 RSS | 55.88s |
+| `unsloth/Laguna-S-2.1-GGUF` `UD-Q4_K_XL` | 0.875 | 0.750 | 1.000 | 45.95 | 69.38 RSS | 58.86s |
 | `mlx-community/Laguna-S-2.1-oQ2e` | 1.000 | 1.000 | 1.000 | 40.85 | 37.77 | 87.38s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_M` | 0.792 | 0.750 | 0.833 | 57.34 | 34.22 RSS | 78.41s |
 | `mlx-community/Laguna-S-2.1-oQ3e` | 0.625 | 0.417 | 0.833 | 48.58 | 50.69 | 84.79s |
@@ -58,6 +59,8 @@ IQ4_XS returned to 0.875, but reproduced Q2_K_XL's task scores exactly. Its 49.3
 JANG_4M scored 0.875 and passed the 16K retrieval check at 47.05 tok/s fixed decode and 70.42 GB profile peak. Runtime commit `801209c1` is mandatory: the previous pin ran the activation stream in FP16, overflowed late layers, and emitted only UNK tokens. The corrected BF16 path is valid but still dominated by the smaller pipenetwork 2-bit build and Q2_K_XL.
 
 At almost the same on-disk size, Q4_K_S also scored 0.875 but reached 51.87 tok/s fixed decode with 64.91 GB peak RSS. It beats JANG_4M on this fixed profile, although Q2_K_XL still delivers the same task scores with less storage, less memory, and higher decode throughput.
+
+Q4_K_XL did not improve the task scores. Its 68.35 GiB payload decoded at 48.18 tok/s and peaked at 69.38 GB RSS, making it slower, larger, and more memory-hungry than Q4_K_S. It remains in the table and CSV but is omitted from the selected-quant chart to keep that comparison readable.
 
 Long-context retrieval also passed at every tested size through 256K tokens on oQ2e:
 
@@ -216,7 +219,8 @@ Sizes are repository payloads observed on 2026-07-21 and 2026-07-22 and should b
 18. `JANGQ-AI/Laguna-S-2.1-JANG_4M`: 63.42 GiB, valid only with the pinned BF16 activation-stream fix
 19. `unsloth/Laguna-S-2.1-GGUF` UD-Q4_K_S: 63.88 GiB across three shards, faster than JANG_4M but dominated by Q2_K_XL
 20. `poolside/Laguna-S-2.1-NVFP4-mlx`: 66.97 GiB, official testing-only build; functional but slow on this runtime
-21. `poolside/Laguna-S-2.1-GGUF` Q4_K_M: 70.01 GiB, functional through Poolside's llama.cpp branch
+21. `unsloth/Laguna-S-2.1-GGUF` UD-Q4_K_XL: 68.35 GiB across three shards, same task score as Q4_K_S but slower and larger
+22. `poolside/Laguna-S-2.1-GGUF` Q4_K_M: 70.01 GiB, functional through Poolside's llama.cpp branch
 
 The Vontra and pipenetwork 4-bit MLX conversions both fail to load in mlx-vlm 0.6.6, each because of a different router or quantization incompatibility. We did not download their 6-bit derivatives after those failures. The 116.34 GiB 8-bit conversions leave too little headroom for weights, the KV cache, and macOS on a 128 GB machine. The CSV still includes every variant and records each failure or omission explicitly.
 
