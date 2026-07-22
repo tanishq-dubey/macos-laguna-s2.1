@@ -21,17 +21,14 @@ LOCAL_MODELS = {
     "unsloth/Laguna-S-2.1-GGUF:UD-IQ1_S": "IQ1_S",
     "unsloth/Laguna-S-2.1-GGUF:UD-IQ1_M": "IQ1_M",
     "mlx-community/Laguna-S-2.1-oQ2e": "oQ2e",
-    "unsloth/Laguna-S-2.1-GGUF:UD-IQ2_XXS": "I2XX",
-    "unsloth/Laguna-S-2.1-GGUF:UD-IQ2_M": "I2M",
     "pipenetwork/Laguna-S-2.1-MLX-2bit": "P2B",
     "unsloth/Laguna-S-2.1-GGUF:UD-Q2_K_XL": "Q2XL",
     "unsloth/Laguna-S-2.1-GGUF:UD-IQ3_XXS": "I3XX",
     "JANGQ-AI/Laguna-S-2.1-JANG_2L": "J2L",
-    "unsloth/Laguna-S-2.1-GGUF:UD-IQ3_S": "I3S",
     "mlx-community/Laguna-S-2.1-oQ3e": "oQ3e",
     "pipenetwork/Laguna-S-2.1-MLX-3bit": "P3B",
     "unsloth/Laguna-S-2.1-GGUF:UD-Q3_K_M": "Q3KM",
-    "unsloth/Laguna-S-2.1-GGUF:UD-Q3_K_XL": "Q3XL",
+    "unsloth/Laguna-S-2.1-GGUF:UD-IQ4_XS": "I4XS",
     "mlx-community/Laguna-S-2.1-oQ4e": "oQ4e",
     "poolside/Laguna-S-2.1-NVFP4-mlx": "NVFP4",
 }
@@ -227,7 +224,7 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
 
     _line(parts, 985, 177, 1576, 177, stroke=rule, width=1.5)
     _text(parts, 985, 220, "FIXED 256-TOKEN DECODE TOK/S", size=22, weight=500, fill=foreground)
-    _text(parts, 985, 249, "MLX-VLM, MLX-LM, JANG, OR LLAMA.CPP; GREEDY", size=14, fill=muted)
+    _text(parts, 985, 249, "SELECTED QUANTS; MLX-VLM, MLX-LM, JANG, OR LLAMA.CPP; GREEDY", size=13, fill=muted)
     decode_base, decode_height = 474.0, 175.0
     _line(parts, local_left - 25, decode_base, local_right + 20, decode_base, stroke=rule)
     for index, point in enumerate(local):

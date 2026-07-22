@@ -12,7 +12,7 @@ These results were measured on a 128 GB Apple M5 Max using macOS 27.0, Python 3.
 
 ![Poolside published Terminal-Bench results alongside local Apple Silicon measurements](charts/laguna-s21-results.svg)
 
-The left panel reproduces the Terminal-Bench 2.1 figures in [Poolside's model card](https://huggingface.co/poolside/Laguna-S-2.1#benchmark-results). The right panel comes from this repository's committed CSV. They use separate scales and are not the same evaluation. Regenerate the SVG with:
+The left panel reproduces the Terminal-Bench 2.1 figures in [Poolside's model card](https://huggingface.co/poolside/Laguna-S-2.1#benchmark-results). The right panel comes from this repository's committed CSV and selects the frontier plus one useful representative from each quant/runtime family; the table and CSV below contain every measured variant. The panels use separate scales and are not the same evaluation. Regenerate the SVG with:
 
 ```bash
 uv run --frozen laguna-bench chart
@@ -31,6 +31,7 @@ uv run --frozen laguna-bench chart
 | `pipenetwork/Laguna-S-2.1-MLX-3bit` | 0.875 | 0.750 | 1.000 | 58.63 | 52.88 | 65.82s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-Q3_K_M` | 0.875 | 0.750 | 1.000 | 51.27 | 51.34 RSS | 65.19s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-Q3_K_XL` | 0.812 | 0.750 | 0.875 | 50.06 | 51.41 RSS | 63.56s |
+| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ4_XS` | 0.875 | 0.750 | 1.000 | 51.04 | 54.64 RSS | 54.23s |
 | `mlx-community/Laguna-S-2.1-oQ4e` | 0.875 | 0.750 | 1.000 | 44.42 | 65.70 | 67.07s |
 | `mlx-community/Laguna-S-2.1-oQ2e` | 1.000 | 1.000 | 1.000 | 40.85 | 37.77 | 87.38s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_M` | 0.792 | 0.750 | 0.833 | 57.34 | 34.22 RSS | 78.41s |
@@ -48,6 +49,8 @@ The newly completed oQ4e upload is also dominated: 52.00 tok/s fixed decode, 66.
 IQ3_XXS recovered a perfect agentic score, but its generation score remained 0.417. At 55.13 tok/s fixed decode and 42.27 GB peak RSS, the smaller IQ1_M and Q2_K_XL are both better tradeoffs. IQ3_S produced exactly the same task scores while decoding at 53.77 tok/s and using 46.13 GB, so its extra precision is strictly dominated here.
 
 Q3_K_M restored the small generation check and matched Q2_K_XL's 0.875 score, but the extra 13.35 GiB did not improve quality. It decoded at 48.87 tok/s with 51.34 GB peak RSS, leaving Q2_K_XL strictly ahead. Q3_K_XL was 0.27 tok/s faster in the fixed decode but regressed the medium agent task to 5/8; the smaller Q2_K_XL still beats it on quality, speed, and memory.
+
+IQ4_XS returned to 0.875, but reproduced Q2_K_XL's task scores exactly. Its 49.36 tok/s fixed decode and 54.64 GB peak RSS make the 53.61 GiB payload strictly dominated by Q2_K_XL.
 
 Long-context retrieval also passed at every tested size through 256K tokens on oQ2e:
 
@@ -200,9 +203,10 @@ Sizes are repository payloads observed on 2026-07-21 and 2026-07-22 and should b
 12. `pipenetwork/Laguna-S-2.1-MLX-3bit`: 47.93 GiB, slower and lower-scoring than its 2-bit sibling
 13. `unsloth/Laguna-S-2.1-GGUF` UD-Q3_K_M: 50.31 GiB across three shards, dominated by Q2_K_XL
 14. `unsloth/Laguna-S-2.1-GGUF` UD-Q3_K_XL: 50.38 GiB across three shards, lower quality than Q3_K_M
-15. `mlx-community/Laguna-S-2.1-oQ4e`: 59.73 GiB, tested and dominated by the smaller 2-bit build
-16. `poolside/Laguna-S-2.1-NVFP4-mlx`: 66.97 GiB, official testing-only build; functional but slow on this runtime
-17. `poolside/Laguna-S-2.1-GGUF` Q4_K_M: 70.01 GiB, functional through Poolside's llama.cpp branch
+15. `unsloth/Laguna-S-2.1-GGUF` UD-IQ4_XS: 53.61 GiB across three shards, dominated by Q2_K_XL
+16. `mlx-community/Laguna-S-2.1-oQ4e`: 59.73 GiB, tested and dominated by the smaller 2-bit build
+17. `poolside/Laguna-S-2.1-NVFP4-mlx`: 66.97 GiB, official testing-only build; functional but slow on this runtime
+18. `poolside/Laguna-S-2.1-GGUF` Q4_K_M: 70.01 GiB, functional through Poolside's llama.cpp branch
 
 The Vontra and pipenetwork 4-bit MLX conversions both fail to load in mlx-vlm 0.6.6, each because of a different router or quantization incompatibility. We did not download their 6-bit derivatives after those failures. The 116.34 GiB 8-bit conversions leave too little headroom for weights, the KV cache, and macOS on a 128 GB machine. The CSV still includes every variant and records each failure or omission explicitly.
 
