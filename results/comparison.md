@@ -12,4 +12,5 @@ Latest complete six-task run per model.
 | pipenetwork/Laguna-S-2.1-MLX-3bit | mlx-lm-custom | 0.875 | 0.750 | 1.000 | 58.63 | 52.88 | mlx_peak | 2.95 |
 | poolside/Laguna-S-2.1-NVFP4-mlx | mlx-vlm | 0.875 | 0.750 | 1.000 | 7.25 | 73.47 | mlx_peak | 9.18 |
 | unsloth/Laguna-S-2.1-GGUF:UD-IQ1_M | openai-compatible | 0.792 | 0.750 | 0.833 | 57.34 | 34.22 | process_max_rss | 0.00 |
+| unsloth/Laguna-S-2.1-GGUF:UD-IQ1_S | openai-compatible | 0.658 | 0.317 | 1.000 | 63.00 | 32.48 | process_max_rss | 0.00 |
 | unsloth/Laguna-S-2.1-GGUF:UD-Q2_K_XL | openai-compatible | 0.875 | 0.750 | 1.000 | 60.37 | 37.99 | process_max_rss | 0.00 |

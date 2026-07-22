@@ -18,6 +18,7 @@ TASK_IDS = {
 }
 
 LOCAL_MODELS = {
+    "unsloth/Laguna-S-2.1-GGUF:UD-IQ1_S": "IQ1_S",
     "unsloth/Laguna-S-2.1-GGUF:UD-IQ1_M": "IQ1_M",
     "mlx-community/Laguna-S-2.1-oQ2e": "oQ2e",
     "pipenetwork/Laguna-S-2.1-MLX-2bit": "PIPE 2B",

@@ -6,6 +6,7 @@ These results were measured on July 21 and 22, 2026, using a 128 GB Apple M5 Max
 
 | Quant | Revision | Score | Generation | Agentic | Weighted generation tok/s | Peak GB | Suite wall time |
 |---|---|---:|---:|---:|---:|---:|---:|
+| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_S` | `9b53347e47996dd757a9904fe8bf4db3c54d2224` | 0.658 | 0.317 | 1.000 | 63.00 | 32.48 RSS | 65.24s |
 | `pipenetwork/Laguna-S-2.1-MLX-2bit` | `5a67ae47cdc38ec7d16a09f9efb7add1bb631131` | 1.000 | 1.000 | 1.000 | 63.86 | 39.31 | 87.47s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-Q2_K_XL` | `8615cd7d1f90a4e83e13c0954ef6ed543b66f54a` | 0.875 | 0.750 | 1.000 | 60.37 | 37.99 RSS | 40.17s |
 | `JANGQ-AI/Laguna-S-2.1-JANG_2L` | `47e1ba4eef24807751ed229ceeaff293a2bc53d2` | 0.417 | 0.417 | 0.417 | 47.79 | 45.75 | 60.53s |
@@ -26,6 +27,8 @@ Pipenetwork's 3-bit conversion uses a separate loader file at SHA-256 `0a9c99d89
 
 mlx-community's oQ4e upload completed during this test series. It loaded through stock mlx-vlm, passed every agentic task, and repeated the same 2/8 medium-generation result as Q2_K_XL and pipenetwork 3-bit. At 52.00 tok/s fixed decode and 66.36 GB profile peak, it is slower and substantially larger in memory than the 2-bit leader.
 
+IQ1_S appeared after the initial Unsloth inventory. It is the smallest file and lowest-RSS run, but it failed the exact small task, scored 7/10 on large generation, and measured slower than IQ1_M in the fixed decode. Its modest memory savings do not compensate for the quality and speed losses.
+
 During testing, the Hub advanced the oQ2e repository from the canonical run's `777afd...` revision to `830f68...`. The identities of all seven safetensor blobs are unchanged, as are the inference files. The newer revision completes the repository metadata files. The 256K result records that revision.
 
 Both conventional community MLX 4-bit conversions failed before inference in mlx-vlm 0.6.6. Vontra's checkpoint has a gate quantization shape mismatch. Pipenetwork's checkpoint supplies 141 router parameters that the runtime does not instantiate. The export records the exact exceptions as failure rows. The official Q4_K_M GGUF loads through Poolside's llama.cpp branch.
@@ -38,6 +41,7 @@ Canonical artifacts:
 - `results/20260722T035828Z-JANGQ-AI--Laguna-S-2.1-JANG_2L/`
 - `results/20260722T040629Z-pipenetwork--Laguna-S-2.1-MLX-3bit/`
 - `results/20260722T041423Z-mlx-community--Laguna-S-2.1-oQ4e/`
+- `results/20260722T042148Z-unsloth--Laguna-S-2.1-GGUF:UD-IQ1_S/`
 - `results/20260722T032111Z-unsloth--Laguna-S-2.1-GGUF:UD-IQ1_M/`
 - `results/20260722T013118Z-mlx-community--Laguna-S-2.1-oQ3e/`
 - `results/20260722T005530Z-poolside--Laguna-S-2.1-NVFP4-mlx/`
@@ -48,6 +52,7 @@ Canonical artifacts:
 
 | Quant | 16K prefill tok/s | Fixed 256-token decode tok/s | Profile peak GB |
 |---|---:|---:|---:|
+| IQ1_S GGUF | 585.94 | 55.85 | 32.48 RSS |
 | Pipenetwork mixed 2-bit | 1247.17 | 68.49 | 39.90 MLX |
 | Q2_K_XL GGUF | 618.25 | 55.93 | 37.99 RSS |
 | JANG_2L | 1259.03 | 49.29 | 46.62 MLX |

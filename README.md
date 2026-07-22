@@ -20,6 +20,7 @@ uv run --frozen laguna-bench chart
 
 | Quant | Overall score | Generation | Agentic | Generation tok/s | Peak GB | Suite time |
 |---|---:|---:|---:|---:|---:|---:|
+| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_S` | 0.658 | 0.317 | 1.000 | 63.00 | 32.48 RSS | 65.24s |
 | `pipenetwork/Laguna-S-2.1-MLX-2bit` | 1.000 | 1.000 | 1.000 | 63.86 | 39.31 | 87.47s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-Q2_K_XL` | 0.875 | 0.750 | 1.000 | 60.37 | 37.99 RSS | 40.17s |
 | `JANGQ-AI/Laguna-S-2.1-JANG_2L` | 0.417 | 0.417 | 0.417 | 47.79 | 45.75 | 60.53s |
@@ -36,7 +37,7 @@ JANG_2L reproduced its advertised speed class at 49.29 tok/s fixed decode, but s
 
 Pipenetwork's 3-bit conversion is dominated by its 2-bit sibling here: fixed decode fell from 68.49 to 65.31 tok/s, peak profile memory rose from 39.90 to 53.60 GB, and quality fell from 1.000 to 0.875. Both runs use pinned, separately hashed loader files.
 
-The newly completed oQ4e upload is also dominated: 52.00 tok/s fixed decode, 66.36 GB profile peak, and 0.875 quality. Its extra precision did not fix the medium-generation container error.
+The newly completed oQ4e upload is also dominated: 52.00 tok/s fixed decode, 66.36 GB profile peak, and 0.875 quality. Its extra precision did not fix the medium-generation container error. The later IQ1_S upload is now the smallest tested file at 31.45 GiB, but it drops to 0.658 quality and 55.85 tok/s fixed decode; IQ1_M is the better ultra-low-memory choice.
 
 Long-context retrieval also passed at every tested size through 256K tokens on oQ2e:
 
@@ -175,16 +176,17 @@ uv run --frozen laguna-bench run \
 
 Sizes are repository payloads observed on 2026-07-21 and 2026-07-22 and should be refreshed before downloading:
 
-1. `unsloth/Laguna-S-2.1-GGUF` UD-IQ1_M: 33.19 GiB, smallest and lowest-memory tested build, with lower quality
-2. `mlx-community/Laguna-S-2.1-oQ2e`: 33.74 GiB, calibrated 2.70 bpw and the stock-loader quality default
-3. `pipenetwork/Laguna-S-2.1-MLX-2bit`: 35.17 GiB, mixed 2/4/8-bit and the fastest perfect-score result so far
-4. `unsloth/Laguna-S-2.1-GGUF` UD-Q2_K_XL: 36.96 GiB, perfect agentic score but weaker medium generation
-5. `JANGQ-AI/Laguna-S-2.1-JANG_2L`: 41.26 GiB, native MLX speed but poor suite quality
-6. `mlx-community/Laguna-S-2.1-oQ3e`: 45.86 GiB, lower quality in this suite
-7. `pipenetwork/Laguna-S-2.1-MLX-3bit`: 47.93 GiB, slower and lower-scoring than its 2-bit sibling
-8. `mlx-community/Laguna-S-2.1-oQ4e`: 59.73 GiB, tested and dominated by the smaller 2-bit build
-9. `poolside/Laguna-S-2.1-NVFP4-mlx`: 66.97 GiB, official testing-only build; functional but slow on this runtime
-10. `poolside/Laguna-S-2.1-GGUF` Q4_K_M: 70.01 GiB, functional through Poolside's llama.cpp branch
+1. `unsloth/Laguna-S-2.1-GGUF` UD-IQ1_S: 31.45 GiB, smallest tested build, with substantial quality loss
+2. `unsloth/Laguna-S-2.1-GGUF` UD-IQ1_M: 33.19 GiB, better low-memory tradeoff than IQ1_S
+3. `mlx-community/Laguna-S-2.1-oQ2e`: 33.74 GiB, calibrated 2.70 bpw and the stock-loader quality default
+4. `pipenetwork/Laguna-S-2.1-MLX-2bit`: 35.17 GiB, mixed 2/4/8-bit and the fastest perfect-score result so far
+5. `unsloth/Laguna-S-2.1-GGUF` UD-Q2_K_XL: 36.96 GiB, perfect agentic score but weaker medium generation
+6. `JANGQ-AI/Laguna-S-2.1-JANG_2L`: 41.26 GiB, native MLX speed but poor suite quality
+7. `mlx-community/Laguna-S-2.1-oQ3e`: 45.86 GiB, lower quality in this suite
+8. `pipenetwork/Laguna-S-2.1-MLX-3bit`: 47.93 GiB, slower and lower-scoring than its 2-bit sibling
+9. `mlx-community/Laguna-S-2.1-oQ4e`: 59.73 GiB, tested and dominated by the smaller 2-bit build
+10. `poolside/Laguna-S-2.1-NVFP4-mlx`: 66.97 GiB, official testing-only build; functional but slow on this runtime
+11. `poolside/Laguna-S-2.1-GGUF` Q4_K_M: 70.01 GiB, functional through Poolside's llama.cpp branch
 
 The Vontra and pipenetwork 4-bit MLX conversions both fail to load in mlx-vlm 0.6.6, each because of a different router or quantization incompatibility. We did not download their 6-bit derivatives after those failures. The 116.34 GiB 8-bit conversions leave too little headroom for weights, the KV cache, and macOS on a 128 GB machine. The CSV still includes every variant and records each failure or omission explicitly.
 
