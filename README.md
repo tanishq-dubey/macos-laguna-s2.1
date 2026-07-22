@@ -18,31 +18,33 @@ The left panel reproduces the Terminal-Bench 2.1 figures in [Poolside's model ca
 uv run --frozen laguna-bench chart
 ```
 
+Rows are sorted by overall score, then weighted generation throughput.
+
 | Quant | Overall score | Generation | Agentic | Generation tok/s | Peak GB | Suite time |
 |---|---:|---:|---:|---:|---:|---:|
-| `vcruz305/Laguna-S-2.1-GGUF` `IQ1_S` | 0.042 | 0.000 | 0.083 | 75.14 | 23.16 RSS | 316.68s |
-| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_S` | 0.658 | 0.317 | 1.000 | 63.00 | 32.48 RSS | 65.24s |
-| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ2_XXS` | 0.646 | 0.417 | 0.875 | 62.76 | 35.66 RSS | 67.94s |
-| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ2_M` | 0.625 | 0.417 | 0.833 | 61.15 | 35.74 RSS | 53.91s |
 | `pipenetwork/Laguna-S-2.1-MLX-2bit` | 1.000 | 1.000 | 1.000 | 63.86 | 39.31 | 87.47s |
+| `mlx-community/Laguna-S-2.1-oQ2e` | 1.000 | 1.000 | 1.000 | 40.85 | 37.77 | 87.38s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-Q2_K_XL` | 0.875 | 0.750 | 1.000 | 60.37 | 37.99 RSS | 40.17s |
-| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ3_XXS` | 0.708 | 0.417 | 1.000 | 55.90 | 42.27 RSS | 57.46s |
-| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ3_S` | 0.708 | 0.417 | 1.000 | 56.99 | 46.13 RSS | 63.21s |
-| `JANGQ-AI/Laguna-S-2.1-JANG_2L` | 0.417 | 0.417 | 0.417 | 47.79 | 45.75 | 60.53s |
 | `pipenetwork/Laguna-S-2.1-MLX-3bit` | 0.875 | 0.750 | 1.000 | 58.63 | 52.88 | 65.82s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-Q3_K_M` | 0.875 | 0.750 | 1.000 | 51.27 | 51.34 RSS | 65.19s |
-| `unsloth/Laguna-S-2.1-GGUF` `UD-Q3_K_XL` | 0.812 | 0.750 | 0.875 | 50.06 | 51.41 RSS | 63.56s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ4_XS` | 0.875 | 0.750 | 1.000 | 51.04 | 54.64 RSS | 54.23s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ4_NL` | 0.875 | 0.750 | 1.000 | 50.75 | 55.74 RSS | 59.05s |
-| `mlx-community/Laguna-S-2.1-oQ4e` | 0.875 | 0.750 | 1.000 | 44.42 | 65.70 | 67.07s |
-| `JANGQ-AI/Laguna-S-2.1-JANG_4M` | 0.875 | 0.750 | 1.000 | 44.88 | 69.76 | 74.36s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-Q4_K_S` | 0.875 | 0.750 | 1.000 | 48.17 | 64.91 RSS | 55.88s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-Q4_K_XL` | 0.875 | 0.750 | 1.000 | 45.95 | 69.38 RSS | 58.86s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-Q5_K_XL` | 0.875 | 0.750 | 1.000 | 45.62 | 83.05 RSS | 67.19s |
-| `mlx-community/Laguna-S-2.1-oQ2e` | 1.000 | 1.000 | 1.000 | 40.85 | 37.77 | 87.38s |
-| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_M` | 0.792 | 0.750 | 0.833 | 57.34 | 34.22 RSS | 78.41s |
-| `mlx-community/Laguna-S-2.1-oQ3e` | 0.625 | 0.417 | 0.833 | 48.58 | 50.69 | 84.79s |
+| `JANGQ-AI/Laguna-S-2.1-JANG_4M` | 0.875 | 0.750 | 1.000 | 44.88 | 69.76 | 74.36s |
+| `mlx-community/Laguna-S-2.1-oQ4e` | 0.875 | 0.750 | 1.000 | 44.42 | 65.70 | 67.07s |
 | `poolside/Laguna-S-2.1-NVFP4-mlx` | 0.875 | 0.750 | 1.000 | 7.25 | 73.47 | 301.77s |
+| `unsloth/Laguna-S-2.1-GGUF` `UD-Q3_K_XL` | 0.812 | 0.750 | 0.875 | 50.06 | 51.41 RSS | 63.56s |
+| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_M` | 0.792 | 0.750 | 0.833 | 57.34 | 34.22 RSS | 78.41s |
+| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ3_S` | 0.708 | 0.417 | 1.000 | 56.99 | 46.13 RSS | 63.21s |
+| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ3_XXS` | 0.708 | 0.417 | 1.000 | 55.90 | 42.27 RSS | 57.46s |
+| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_S` | 0.658 | 0.317 | 1.000 | 63.00 | 32.48 RSS | 65.24s |
+| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ2_XXS` | 0.646 | 0.417 | 0.875 | 62.76 | 35.66 RSS | 67.94s |
+| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ2_M` | 0.625 | 0.417 | 0.833 | 61.15 | 35.74 RSS | 53.91s |
+| `mlx-community/Laguna-S-2.1-oQ3e` | 0.625 | 0.417 | 0.833 | 48.58 | 50.69 | 84.79s |
+| `JANGQ-AI/Laguna-S-2.1-JANG_2L` | 0.417 | 0.417 | 0.417 | 47.79 | 45.75 | 60.53s |
+| `vcruz305/Laguna-S-2.1-GGUF` `IQ1_S` | 0.042 | 0.000 | 0.083 | 75.14 | 23.16 RSS | 316.68s |
 
 Pipenetwork's mixed-precision 2-bit conversion is the best result so far: it matched oQ2e's 38/38 score while improving the fixed decode from 55.06 to 68.49 tok/s. Its standardized profile peaked at 39.90 GB, about 1.4 GB above oQ2e. Unsloth's Q2_K_XL GGUF passed all agentic checks but only two of eight medium-generation assertions, for 0.875 overall and 55.93 tok/s fixed decode. IQ1_M remains the smallest and lowest-memory result, with a lower 0.792 score. The official NVFP4 MLX build was functional but much slower in this runtime.
 
