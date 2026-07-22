@@ -423,7 +423,7 @@ class JANGBackend:
             "wired_limit_bytes": self.wired_limit_bytes,
             "fix_mistral_regex": True,
             "jang_version": _version("jang"),
-            "jang_revision": "ca75f0cb6622673f79009f82d25cbedb205931ce",
+            "jang_revision": "801209c13c189ebb8fb4d1596748a336f568da38",
             "mlx_version": _version("mlx"),
             "mlx_lm_version": _version("mlx-lm"),
             "transformers_version": _version("transformers"),

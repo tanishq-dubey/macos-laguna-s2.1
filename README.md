@@ -34,6 +34,7 @@ uv run --frozen laguna-bench chart
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ4_XS` | 0.875 | 0.750 | 1.000 | 51.04 | 54.64 RSS | 54.23s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ4_NL` | 0.875 | 0.750 | 1.000 | 50.75 | 55.74 RSS | 59.05s |
 | `mlx-community/Laguna-S-2.1-oQ4e` | 0.875 | 0.750 | 1.000 | 44.42 | 65.70 | 67.07s |
+| `JANGQ-AI/Laguna-S-2.1-JANG_4M` | 0.875 | 0.750 | 1.000 | 44.88 | 69.76 | 74.36s |
 | `mlx-community/Laguna-S-2.1-oQ2e` | 1.000 | 1.000 | 1.000 | 40.85 | 37.77 | 87.38s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_M` | 0.792 | 0.750 | 0.833 | 57.34 | 34.22 RSS | 78.41s |
 | `mlx-community/Laguna-S-2.1-oQ3e` | 0.625 | 0.417 | 0.833 | 48.58 | 50.69 | 84.79s |
@@ -41,7 +42,7 @@ uv run --frozen laguna-bench chart
 
 Pipenetwork's mixed-precision 2-bit conversion is the best result so far: it matched oQ2e's 38/38 score while improving the fixed decode from 55.06 to 68.49 tok/s. Its standardized profile peaked at 39.90 GB, about 1.4 GB above oQ2e. Unsloth's Q2_K_XL GGUF passed all agentic checks but only two of eight medium-generation assertions, for 0.875 overall and 55.93 tok/s fixed decode. IQ1_M remains the smallest and lowest-memory result, with a lower 0.792 score. The official NVFP4 MLX build was functional but much slower in this runtime.
 
-JANG_2L reproduced its advertised speed class at 49.29 tok/s fixed decode, but scored 0.417 on this suite. Its pinned 2.5.31 runtime also ignored the checkpoint's per-module widths during initial testing; the harness applies those 527 config overrides while loading, without changing the installed package.
+JANG_2L reproduced its advertised speed class at 49.29 tok/s fixed decode, but scored 0.417 on this suite. An earlier 2.5.31 runtime commit ignored the checkpoint's per-module widths; the harness guarded those 527 config overrides while loading. The current pinned commit now derives the widths from the packed tensors and also fixes Laguna's BF16 activation stream.
 
 Pipenetwork's 3-bit conversion is dominated by its 2-bit sibling here: fixed decode fell from 68.49 to 65.31 tok/s, peak profile memory rose from 39.90 to 53.60 GB, and quality fell from 1.000 to 0.875. Both runs use pinned, separately hashed loader files.
 
@@ -52,6 +53,8 @@ IQ3_XXS recovered a perfect agentic score, but its generation score remained 0.4
 Q3_K_M restored the small generation check and matched Q2_K_XL's 0.875 score, but the extra 13.35 GiB did not improve quality. It decoded at 48.87 tok/s with 51.34 GB peak RSS, leaving Q2_K_XL strictly ahead. Q3_K_XL was 0.27 tok/s faster in the fixed decode but regressed the medium agent task to 5/8; the smaller Q2_K_XL still beats it on quality, speed, and memory.
 
 IQ4_XS returned to 0.875, but reproduced Q2_K_XL's task scores exactly. Its 49.36 tok/s fixed decode and 54.64 GB peak RSS make the 53.61 GiB payload strictly dominated by Q2_K_XL. IQ4_NL produced the same task scores, decoded at 48.90 tok/s, and used 55.74 GB, so IQ4_XS also strictly dominates it within the 4-bit pair.
+
+JANG_4M scored 0.875 and passed the 16K retrieval check at 47.05 tok/s fixed decode and 70.42 GB profile peak. Runtime commit `801209c1` is mandatory: the previous pin ran the activation stream in FP16, overflowed late layers, and emitted only UNK tokens. The corrected BF16 path is valid but still dominated by the smaller pipenetwork 2-bit build and Q2_K_XL.
 
 Long-context retrieval also passed at every tested size through 256K tokens on oQ2e:
 
@@ -116,7 +119,7 @@ The stock-loader path uses `mlx-vlm`, even though these are text-only models.
 
 Some newer conversions instead bundle a model definition for MLX-LM. The harness exposes those as the explicit `mlx-lm-custom` engine, pins the Hub revision, records the loader's SHA-256 digest, and never copies remote code into the installed package.
 
-JANG support is locked from the upstream Git repository at commit `ca75f0cb`. Use `--engine jang` with a pinned model revision; uv installs the native MLX runtime from the lockfile.
+JANG support is locked from the upstream Git repository at commit `801209c1`, which includes the Laguna mixed-precision and BF16 activation-stream fixes. Use `--engine jang` with a pinned model revision; uv installs the native MLX runtime from the lockfile.
 
 ## Run
 
@@ -207,8 +210,9 @@ Sizes are repository payloads observed on 2026-07-21 and 2026-07-22 and should b
 15. `unsloth/Laguna-S-2.1-GGUF` UD-IQ4_XS: 53.61 GiB across three shards, dominated by Q2_K_XL
 16. `unsloth/Laguna-S-2.1-GGUF` UD-IQ4_NL: 54.71 GiB across three shards, dominated by IQ4_XS
 17. `mlx-community/Laguna-S-2.1-oQ4e`: 59.73 GiB, tested and dominated by the smaller 2-bit build
-18. `poolside/Laguna-S-2.1-NVFP4-mlx`: 66.97 GiB, official testing-only build; functional but slow on this runtime
-19. `poolside/Laguna-S-2.1-GGUF` Q4_K_M: 70.01 GiB, functional through Poolside's llama.cpp branch
+18. `JANGQ-AI/Laguna-S-2.1-JANG_4M`: 63.42 GiB, valid only with the pinned BF16 activation-stream fix
+19. `poolside/Laguna-S-2.1-NVFP4-mlx`: 66.97 GiB, official testing-only build; functional but slow on this runtime
+20. `poolside/Laguna-S-2.1-GGUF` Q4_K_M: 70.01 GiB, functional through Poolside's llama.cpp branch
 
 The Vontra and pipenetwork 4-bit MLX conversions both fail to load in mlx-vlm 0.6.6, each because of a different router or quantization incompatibility. We did not download their 6-bit derivatives after those failures. The 116.34 GiB 8-bit conversions leave too little headroom for weights, the KV cache, and macOS on a 128 GB machine. The CSV still includes every variant and records each failure or omission explicitly.
 

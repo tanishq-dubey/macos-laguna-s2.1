@@ -676,7 +676,7 @@ wheels = [
 [[package]]
 name = "jang"
 version = "2.5.31"
-source = { git = "https://github.com/jjang-ai/jangq?subdirectory=jang-tools&rev=ca75f0cb6622673f79009f82d25cbedb205931ce#ca75f0cb6622673f79009f82d25cbedb205931ce" }
+source = { git = "https://github.com/jjang-ai/jangq?subdirectory=jang-tools&rev=801209c13c189ebb8fb4d1596748a336f568da38#801209c13c189ebb8fb4d1596748a336f568da38" }
 dependencies = [
     { name = "huggingface-hub" },
     { name = "jinja2" },
@@ -724,7 +724,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "huggingface-hub", specifier = ">=1.0" },
-    { name = "jang", extras = ["mlx"], git = "https://github.com/jjang-ai/jangq?subdirectory=jang-tools&rev=ca75f0cb6622673f79009f82d25cbedb205931ce" },
+    { name = "jang", extras = ["mlx"], git = "https://github.com/jjang-ai/jangq?subdirectory=jang-tools&rev=801209c13c189ebb8fb4d1596748a336f568da38" },
     { name = "mlx-lm", specifier = ">=0.31.3" },
     { name = "mlx-vlm", specifier = ">=0.6.3" },
     { name = "psutil", specifier = ">=7.0" },

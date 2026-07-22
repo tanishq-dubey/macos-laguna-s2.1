@@ -56,101 +56,108 @@
 <text x="985.0" y="220.0" font-size="22" font-weight="500" fill="#f0efed" text-anchor="start">FIXED 256-TOKEN DECODE TOK/S</text>
 <text x="985.0" y="249.0" font-size="13" font-weight="400" fill="#b9b8b4" text-anchor="start">SELECTED QUANTS; MLX-VLM, MLX-LM, JANG, OR LLAMA.CPP; GREEDY</text>
 <line x1="1000.0" y1="474.0" x2="1568.0" y2="474.0" stroke="#666561" stroke-width="1" />
-<rect x="1030.6" y="338.2" width="29.0" height="135.8" rx="3" fill="#74736e" />
-<text x="1045.1" y="325.2" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">55.85</text>
-<text x="1045.1" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_S</text>
-<text x="1045.1" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">65.8%</text>
-<rect x="1070.9" y="321.6" width="29.0" height="152.4" rx="3" fill="#74736e" />
-<text x="1085.3" y="294.6" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">62.68</text>
-<text x="1085.3" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_M</text>
-<text x="1085.3" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">79.2%</text>
-<rect x="1111.1" y="340.2" width="29.0" height="133.8" rx="3" fill="#74736e" />
-<text x="1125.6" y="327.2" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">55.06</text>
-<text x="1125.6" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ2E</text>
-<text x="1125.6" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">100.0%</text>
-<rect x="1151.3" y="307.5" width="29.0" height="166.5" rx="3" fill="#b17ce8" />
-<text x="1165.8" y="280.5" font-size="15" font-weight="500" fill="#b17ce8" text-anchor="middle">68.49</text>
-<text x="1165.8" y="505.0" font-size="10" font-weight="700" fill="#b17ce8" text-anchor="middle">P2B</text>
-<text x="1165.8" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">100.0%</text>
-<rect x="1191.6" y="338.1" width="29.0" height="135.9" rx="3" fill="#74736e" />
-<text x="1206.0" y="325.1" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">55.93</text>
-<text x="1206.0" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">Q2XL</text>
-<text x="1206.0" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
-<rect x="1231.8" y="340.0" width="29.0" height="134.0" rx="3" fill="#74736e" />
-<text x="1246.3" y="313.0" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">55.13</text>
-<text x="1246.3" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">I3XX</text>
-<text x="1246.3" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">70.8%</text>
-<rect x="1272.0" y="354.2" width="29.0" height="119.8" rx="3" fill="#74736e" />
-<text x="1286.5" y="341.2" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">49.29</text>
-<text x="1286.5" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">J2L</text>
-<text x="1286.5" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">41.7%</text>
-<rect x="1312.2" y="326.2" width="29.0" height="147.8" rx="3" fill="#74736e" />
-<text x="1326.7" y="299.2" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">60.83</text>
-<text x="1326.7" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ3E</text>
-<text x="1326.7" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">62.5%</text>
-<rect x="1352.5" y="315.3" width="29.0" height="158.7" rx="3" fill="#74736e" />
-<text x="1367.0" y="302.3" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">65.31</text>
-<text x="1367.0" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">P3B</text>
-<text x="1367.0" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
-<rect x="1392.7" y="355.2" width="29.0" height="118.8" rx="3" fill="#74736e" />
-<text x="1407.2" y="328.2" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">48.87</text>
-<text x="1407.2" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">Q3KM</text>
-<text x="1407.2" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
-<rect x="1432.9" y="354.0" width="29.0" height="120.0" rx="3" fill="#74736e" />
-<text x="1447.4" y="341.0" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">49.36</text>
-<text x="1447.4" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">I4XS</text>
-<text x="1447.4" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
-<rect x="1473.2" y="347.6" width="29.0" height="126.4" rx="3" fill="#74736e" />
-<text x="1487.7" y="320.6" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">52.00</text>
-<text x="1487.7" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ4E</text>
-<text x="1487.7" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
-<rect x="1513.4" y="410.4" width="29.0" height="63.6" rx="3" fill="#74736e" />
-<text x="1527.9" y="397.4" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">26.16</text>
-<text x="1527.9" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">NVFP4</text>
-<text x="1527.9" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
+<rect x="1030.2" y="338.2" width="26.9" height="135.8" rx="3" fill="#74736e" />
+<text x="1043.7" y="325.2" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">55.85</text>
+<text x="1043.7" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_S</text>
+<text x="1043.7" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">65.8%</text>
+<rect x="1067.6" y="321.6" width="26.9" height="152.4" rx="3" fill="#74736e" />
+<text x="1081.0" y="294.6" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">62.68</text>
+<text x="1081.0" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_M</text>
+<text x="1081.0" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">79.2%</text>
+<rect x="1104.9" y="340.2" width="26.9" height="133.8" rx="3" fill="#74736e" />
+<text x="1118.4" y="327.2" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">55.06</text>
+<text x="1118.4" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ2E</text>
+<text x="1118.4" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">100.0%</text>
+<rect x="1142.3" y="307.5" width="26.9" height="166.5" rx="3" fill="#b17ce8" />
+<text x="1155.8" y="280.5" font-size="15" font-weight="500" fill="#b17ce8" text-anchor="middle">68.49</text>
+<text x="1155.8" y="505.0" font-size="10" font-weight="700" fill="#b17ce8" text-anchor="middle">P2B</text>
+<text x="1155.8" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">100.0%</text>
+<rect x="1179.7" y="338.1" width="26.9" height="135.9" rx="3" fill="#74736e" />
+<text x="1193.1" y="325.1" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">55.93</text>
+<text x="1193.1" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">Q2XL</text>
+<text x="1193.1" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
+<rect x="1217.0" y="340.0" width="26.9" height="134.0" rx="3" fill="#74736e" />
+<text x="1230.5" y="313.0" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">55.13</text>
+<text x="1230.5" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">I3XX</text>
+<text x="1230.5" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">70.8%</text>
+<rect x="1254.4" y="354.2" width="26.9" height="119.8" rx="3" fill="#74736e" />
+<text x="1267.8" y="341.2" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">49.29</text>
+<text x="1267.8" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">J2L</text>
+<text x="1267.8" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">41.7%</text>
+<rect x="1291.7" y="326.2" width="26.9" height="147.8" rx="3" fill="#74736e" />
+<text x="1305.2" y="299.2" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">60.83</text>
+<text x="1305.2" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ3E</text>
+<text x="1305.2" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">62.5%</text>
+<rect x="1329.1" y="315.3" width="26.9" height="158.7" rx="3" fill="#74736e" />
+<text x="1342.5" y="302.3" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">65.31</text>
+<text x="1342.5" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">P3B</text>
+<text x="1342.5" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
+<rect x="1366.4" y="355.2" width="26.9" height="118.8" rx="3" fill="#74736e" />
+<text x="1379.9" y="328.2" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">48.87</text>
+<text x="1379.9" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">Q3KM</text>
+<text x="1379.9" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
+<rect x="1403.8" y="354.0" width="26.9" height="120.0" rx="3" fill="#74736e" />
+<text x="1417.2" y="341.0" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">49.36</text>
+<text x="1417.2" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">I4XS</text>
+<text x="1417.2" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
+<rect x="1441.2" y="347.6" width="26.9" height="126.4" rx="3" fill="#74736e" />
+<text x="1454.6" y="320.6" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">52.00</text>
+<text x="1454.6" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ4E</text>
+<text x="1454.6" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
+<rect x="1478.5" y="359.6" width="26.9" height="114.4" rx="3" fill="#74736e" />
+<text x="1492.0" y="346.6" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">47.05</text>
+<text x="1492.0" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">J4M</text>
+<text x="1492.0" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
+<rect x="1515.9" y="410.4" width="26.9" height="63.6" rx="3" fill="#74736e" />
+<text x="1529.3" y="383.4" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">26.16</text>
+<text x="1529.3" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">NVFP4</text>
+<text x="1529.3" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
 <line x1="985.0" y1="575.0" x2="1576.0" y2="575.0" stroke="#666561" stroke-width="1.5" />
 <text x="985.0" y="618.0" font-size="24" font-weight="500" fill="#f0efed" text-anchor="start">PEAK MEMORY (GB)</text>
 <text x="985.0" y="647.0" font-size="14" font-weight="400" fill="#b9b8b4" text-anchor="start">MLX ALLOCATOR PEAK; GGUF PROCESS MAX RSS</text>
 <line x1="1000.0" y1="870.0" x2="1568.0" y2="870.0" stroke="#666561" stroke-width="1" />
-<rect x="1030.6" y="799.0" width="29.0" height="71.0" rx="3" fill="#74736e" />
-<text x="1045.1" y="786.0" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">32.48</text>
-<text x="1045.1" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_S</text>
-<rect x="1070.9" y="795.1" width="29.0" height="74.9" rx="3" fill="#74736e" />
-<text x="1085.3" y="768.1" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">34.22</text>
-<text x="1085.3" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_M</text>
-<rect x="1111.1" y="788.6" width="29.0" height="81.4" rx="3" fill="#74736e" />
-<text x="1125.6" y="775.6" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">37.22</text>
-<text x="1125.6" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ2E</text>
-<rect x="1151.3" y="785.5" width="29.0" height="84.5" rx="3" fill="#b17ce8" />
-<text x="1165.8" y="758.5" font-size="15" font-weight="500" fill="#b17ce8" text-anchor="middle">38.65</text>
-<text x="1165.8" y="901.0" font-size="10" font-weight="700" fill="#b17ce8" text-anchor="middle">P2B</text>
-<rect x="1191.6" y="786.9" width="29.0" height="83.1" rx="3" fill="#74736e" />
-<text x="1206.0" y="773.9" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">37.99</text>
-<text x="1206.0" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">Q2XL</text>
-<rect x="1231.8" y="777.5" width="29.0" height="92.5" rx="3" fill="#74736e" />
-<text x="1246.3" y="750.5" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">42.27</text>
-<text x="1246.3" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">I3XX</text>
-<rect x="1272.0" y="770.9" width="29.0" height="99.1" rx="3" fill="#74736e" />
-<text x="1286.5" y="757.9" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">45.29</text>
-<text x="1286.5" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">J2L</text>
-<rect x="1312.2" y="760.1" width="29.0" height="109.9" rx="3" fill="#74736e" />
-<text x="1326.7" y="733.1" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">50.23</text>
-<text x="1326.7" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ3E</text>
-<rect x="1352.5" y="755.5" width="29.0" height="114.5" rx="3" fill="#74736e" />
-<text x="1367.0" y="742.5" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">52.34</text>
-<text x="1367.0" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">P3B</text>
-<rect x="1392.7" y="757.7" width="29.0" height="112.3" rx="3" fill="#74736e" />
-<text x="1407.2" y="730.7" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">51.34</text>
-<text x="1407.2" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">Q3KM</text>
-<rect x="1432.9" y="750.5" width="29.0" height="119.5" rx="3" fill="#74736e" />
-<text x="1447.4" y="737.5" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">54.64</text>
-<text x="1447.4" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">I4XS</text>
-<rect x="1473.2" y="727.5" width="29.0" height="142.5" rx="3" fill="#74736e" />
-<text x="1487.7" y="700.5" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">65.12</text>
-<text x="1487.7" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ4E</text>
-<rect x="1513.4" y="710.5" width="29.0" height="159.5" rx="3" fill="#74736e" />
-<text x="1527.9" y="697.5" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">72.92</text>
-<text x="1527.9" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">NVFP4</text>
+<rect x="1030.2" y="799.0" width="26.9" height="71.0" rx="3" fill="#74736e" />
+<text x="1043.7" y="786.0" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">32.48</text>
+<text x="1043.7" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_S</text>
+<rect x="1067.6" y="795.1" width="26.9" height="74.9" rx="3" fill="#74736e" />
+<text x="1081.0" y="768.1" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">34.22</text>
+<text x="1081.0" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_M</text>
+<rect x="1104.9" y="788.6" width="26.9" height="81.4" rx="3" fill="#74736e" />
+<text x="1118.4" y="775.6" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">37.22</text>
+<text x="1118.4" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ2E</text>
+<rect x="1142.3" y="785.5" width="26.9" height="84.5" rx="3" fill="#b17ce8" />
+<text x="1155.8" y="758.5" font-size="15" font-weight="500" fill="#b17ce8" text-anchor="middle">38.65</text>
+<text x="1155.8" y="901.0" font-size="10" font-weight="700" fill="#b17ce8" text-anchor="middle">P2B</text>
+<rect x="1179.7" y="786.9" width="26.9" height="83.1" rx="3" fill="#74736e" />
+<text x="1193.1" y="773.9" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">37.99</text>
+<text x="1193.1" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">Q2XL</text>
+<rect x="1217.0" y="777.5" width="26.9" height="92.5" rx="3" fill="#74736e" />
+<text x="1230.5" y="750.5" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">42.27</text>
+<text x="1230.5" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">I3XX</text>
+<rect x="1254.4" y="770.9" width="26.9" height="99.1" rx="3" fill="#74736e" />
+<text x="1267.8" y="757.9" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">45.29</text>
+<text x="1267.8" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">J2L</text>
+<rect x="1291.7" y="760.1" width="26.9" height="109.9" rx="3" fill="#74736e" />
+<text x="1305.2" y="733.1" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">50.23</text>
+<text x="1305.2" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ3E</text>
+<rect x="1329.1" y="755.5" width="26.9" height="114.5" rx="3" fill="#74736e" />
+<text x="1342.5" y="742.5" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">52.34</text>
+<text x="1342.5" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">P3B</text>
+<rect x="1366.4" y="757.7" width="26.9" height="112.3" rx="3" fill="#74736e" />
+<text x="1379.9" y="730.7" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">51.34</text>
+<text x="1379.9" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">Q3KM</text>
+<rect x="1403.8" y="750.5" width="26.9" height="119.5" rx="3" fill="#74736e" />
+<text x="1417.2" y="737.5" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">54.64</text>
+<text x="1417.2" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">I4XS</text>
+<rect x="1441.2" y="727.5" width="26.9" height="142.5" rx="3" fill="#74736e" />
+<text x="1454.6" y="700.5" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">65.12</text>
+<text x="1454.6" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ4E</text>
+<rect x="1478.5" y="718.9" width="26.9" height="151.1" rx="3" fill="#74736e" />
+<text x="1492.0" y="705.9" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">69.09</text>
+<text x="1492.0" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">J4M</text>
+<rect x="1515.9" y="710.5" width="26.9" height="159.5" rx="3" fill="#74736e" />
+<text x="1529.3" y="683.5" font-size="15" font-weight="500" fill="#f0efed" text-anchor="middle">72.92</text>
+<text x="1529.3" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">NVFP4</text>
 <text x="24.0" y="934.0" font-size="13" font-weight="400" fill="#969590" text-anchor="start">POOLSIDE: MODEL CARD, 21 JULY 2026    LOCAL: COMMITTED CSV, FIXED 256-TOKEN DECODE PROFILE</text>
 <text x="24.0" y="965.0" font-size="13" font-weight="500" fill="#b17ce8" text-anchor="start">oQ2e CONTEXT: 64K 32.03 TOK/S, 41.19 GB    |    256K 12.16 TOK/S, 52.87 GB    |    RETRIEVAL PASSED</text>
 <text x="1576.0" y="965.0" font-size="13" font-weight="700" fill="#f0efed" text-anchor="end">MACOS-LAGUNA-S2.1</text>

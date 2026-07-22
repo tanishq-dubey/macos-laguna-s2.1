@@ -5,6 +5,7 @@ Latest complete six-task run per model.
 | Model | Engine | Score | Gen | Agent | Gen tok/s | Peak GB | Memory metric | Load s |
 |---|---|---:|---:|---:|---:|---:|---|---:|
 | JANGQ-AI/Laguna-S-2.1-JANG_2L | jang-mlx | 0.417 | 0.417 | 0.417 | 47.79 | 45.75 | mlx_peak | 1.83 |
+| JANGQ-AI/Laguna-S-2.1-JANG_4M | jang-mlx | 0.875 | 0.750 | 1.000 | 44.88 | 69.76 | mlx_peak | 4.67 |
 | mlx-community/Laguna-S-2.1-oQ2e | mlx-vlm | 1.000 | 1.000 | 1.000 | 40.85 | 37.77 | mlx_peak | 1.50 |
 | mlx-community/Laguna-S-2.1-oQ3e | mlx-vlm | 0.625 | 0.417 | 0.833 | 48.58 | 50.69 | mlx_peak | 2.53 |
 | mlx-community/Laguna-S-2.1-oQ4e | mlx-vlm | 0.875 | 0.750 | 1.000 | 44.42 | 65.70 | mlx_peak | 5.95 |

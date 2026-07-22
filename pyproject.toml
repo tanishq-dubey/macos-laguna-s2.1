@@ -33,4 +33,4 @@ testpaths = ["tests"]
 package = true
 
 [tool.uv.sources]
-jang = { git = "https://github.com/jjang-ai/jangq", rev = "ca75f0cb6622673f79009f82d25cbedb205931ce", subdirectory = "jang-tools" }
+jang = { git = "https://github.com/jjang-ai/jangq", rev = "801209c13c189ebb8fb4d1596748a336f568da38", subdirectory = "jang-tools" }

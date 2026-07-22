@@ -157,6 +157,14 @@ QUANTS = [
         "recommended": False,
     },
     {
+        "model": "JANGQ-AI/Laguna-S-2.1-JANG_4M",
+        "size_gib": 63.42,
+        "bits": "mixed 4/6/8-bit",
+        "engine": "jang-mlx",
+        "status": "tested: 0.875 quality; requires Laguna BF16 runtime fix",
+        "recommended": False,
+    },
+    {
         "model": "Vontra/Laguna-S-2.1-MLX-4bit",
         "size_gib": 61.61,
         "bits": "4",
