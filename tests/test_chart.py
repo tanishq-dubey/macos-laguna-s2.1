@@ -17,6 +17,7 @@ def test_chart_sources_have_expected_laguna_results():
     assert laguna.score == 70.2
     iq1 = next(item for item in local if item.label == "IQ1_M GGUF")
     pipe2 = next(item for item in local if item.label == "PIPE 2-BIT")
+    q2xl = next(item for item in local if item.label == "Q2_K_XL")
     assert oq2e.decode_tps == pytest.approx(55.06, abs=0.005)
     assert oq2e.peak_memory_gb == pytest.approx(37.22, abs=0.005)
     assert oq2e.suite_score == 1.0
@@ -26,6 +27,9 @@ def test_chart_sources_have_expected_laguna_results():
     assert pipe2.decode_tps == pytest.approx(68.49, abs=0.005)
     assert pipe2.peak_memory_gb == pytest.approx(38.65, abs=0.005)
     assert pipe2.suite_score == 1.0
+    assert q2xl.decode_tps == pytest.approx(55.93, abs=0.005)
+    assert q2xl.peak_memory_gb == pytest.approx(37.99, abs=0.005)
+    assert q2xl.suite_score == 0.875
 
 
 def test_chart_renders_standalone_svg(tmp_path):
