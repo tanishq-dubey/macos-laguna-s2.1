@@ -110,6 +110,16 @@ QUANTS = [
         "recommended": False,
     },
     {
+        "model": "unsloth/Laguna-S-2.1-GGUF:UD-Q3_K_M",
+        "repo": "unsloth/Laguna-S-2.1-GGUF",
+        "file": "UD-Q3_K_M/Laguna-S-2.1-UD-Q3_K_M-00001-of-00003.gguf",
+        "size_gib": 50.31,
+        "bits": "UD-Q3_K_M",
+        "engine": "llama.cpp",
+        "status": "tested: 0.875 quality; dominated by Q2_K_XL",
+        "recommended": False,
+    },
+    {
         "model": "mlx-community/Laguna-S-2.1-oQ4e",
         "size_gib": 59.73,
         "bits": "4.60 effective",

@@ -30,6 +30,7 @@ LOCAL_MODELS = {
     "unsloth/Laguna-S-2.1-GGUF:UD-IQ3_S": "I3S",
     "mlx-community/Laguna-S-2.1-oQ3e": "oQ3e",
     "pipenetwork/Laguna-S-2.1-MLX-3bit": "P3B",
+    "unsloth/Laguna-S-2.1-GGUF:UD-Q3_K_M": "Q3KM",
     "mlx-community/Laguna-S-2.1-oQ4e": "oQ4e",
     "poolside/Laguna-S-2.1-NVFP4-mlx": "NVFP4",
 }
