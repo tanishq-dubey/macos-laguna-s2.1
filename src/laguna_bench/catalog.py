@@ -19,6 +19,14 @@ QUANTS = [
         "recommended": True,
     },
     {
+        "model": "pipenetwork/Laguna-S-2.1-MLX-2bit",
+        "size_gib": 35.17,
+        "bits": "mixed 2/4/8-bit",
+        "engine": "mlx-lm-custom",
+        "status": "tested: 1.000 quality; fastest fixed decode",
+        "recommended": True,
+    },
+    {
         "model": "mlx-community/Laguna-S-2.1-oQ3e",
         "size_gib": 45.86,
         "bits": "3.59 effective",
@@ -27,9 +35,9 @@ QUANTS = [
     },
     {
         "model": "mlx-community/Laguna-S-2.1-oQ4e",
-        "size_gib": 0.0,
-        "bits": "4.x effective",
-        "status": "upload incomplete when catalogued",
+        "size_gib": 59.73,
+        "bits": "4.60 effective",
+        "status": "community; upload now complete; queued",
         "recommended": False,
     },
     {

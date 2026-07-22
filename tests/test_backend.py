@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from laguna_bench.backend import _native_tool_call, _openai_messages, _snapshot_metadata
+from laguna_bench.backend import _native_tool_call, _openai_messages, _register_custom_mlx_model, _snapshot_metadata
 
 
 def test_openai_messages_stringify_tool_arguments():
@@ -32,3 +32,17 @@ def test_snapshot_metadata_falls_back_to_cache_ref(monkeypatch, tmp_path: Path):
         "snapshot_path": str(snapshot),
         "model_bytes": 7,
     }
+
+
+def test_register_custom_mlx_model_uses_model_namespace(tmp_path: Path):
+    import sys
+
+    module_name = "mlx_lm.models.test_custom_laguna"
+    (tmp_path / "config.json").write_text('{"model_type":"test_custom_laguna"}')
+    (tmp_path / "laguna.py").write_text("class Model: pass\nclass ModelArgs: pass\n")
+    try:
+        loader = _register_custom_mlx_model(tmp_path, "laguna.py")
+        assert loader == tmp_path / "laguna.py"
+        assert sys.modules[module_name].Model.__module__ == module_name
+    finally:
+        sys.modules.pop(module_name, None)

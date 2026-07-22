@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
 <title id="title">Laguna S 2.1 published capability and local Apple Silicon performance</title>
-<desc id="desc">Poolside published Terminal-Bench 2.1 scores beside locally measured MLX decode speed and peak memory for three Laguna S 2.1 quantizations on an M5 Max.</desc>
+<desc id="desc">Poolside published Terminal-Bench 2.1 scores beside locally measured MLX and llama.cpp decode speed and peak memory for Laguna S 2.1 quantizations on an M5 Max.</desc>
 <rect width="1600" height="1000" fill="#191919" />
 <style>text { font-family: "SFMono-Regular", Consolas, "Liberation Mono", ui-monospace, monospace; }</style>
 <text x="32.0" y="57.0" font-size="34" font-weight="700" fill="#b17ce8" text-anchor="start">LAGUNA S 2.1</text>
 <text x="322.0" y="57.0" font-size="34" font-weight="700" fill="#f0efed" text-anchor="start">ON APPLE SILICON</text>
-<text x="32.0" y="98.0" font-size="23" font-weight="500" fill="#b9b8b4" text-anchor="start">FASTEST TESTED: 62.68 TOK/S, 34.22 GB MAX RSS (IQ1_M GGUF)</text>
+<text x="32.0" y="98.0" font-size="23" font-weight="500" fill="#b9b8b4" text-anchor="start">FASTEST FIXED DECODE: 68.49 TOK/S, 38.65 GB (PIPE 2-BIT)</text>
 <text x="32.0" y="132.0" font-size="15" font-weight="400" fill="#8f8e8a" text-anchor="start">PUBLISHED CAPABILITY AND LOCAL INFERENCE USE DIFFERENT SOURCES AND SCALES</text>
 <line x1="24.0" y1="177.0" x2="950.0" y2="177.0" stroke="#666561" stroke-width="1.5" />
 <text x="24.0" y="220.0" font-size="24" font-weight="500" fill="#f0efed" text-anchor="start">TERMINAL-BENCH 2.1</text>
@@ -54,40 +54,47 @@
 <text x="24.0" y="872.0" font-size="12" font-weight="400" fill="#85847f" text-anchor="start">* POOLSIDE MARKS THIS TERMINAL-BENCH SCORE AS THIRD-PARTY REPORTED</text>
 <line x1="985.0" y1="177.0" x2="1576.0" y2="177.0" stroke="#666561" stroke-width="1.5" />
 <text x="985.0" y="220.0" font-size="22" font-weight="500" fill="#f0efed" text-anchor="start">FIXED 256-TOKEN DECODE TOK/S</text>
-<text x="985.0" y="249.0" font-size="14" font-weight="400" fill="#b9b8b4" text-anchor="start">MLX-VLM OR LLAMA.CPP, GREEDY</text>
+<text x="985.0" y="249.0" font-size="14" font-weight="400" fill="#b9b8b4" text-anchor="start">MLX-VLM, MLX-LM, OR LLAMA.CPP; GREEDY</text>
 <line x1="1000.0" y1="474.0" x2="1568.0" y2="474.0" stroke="#666561" stroke-width="1" />
-<rect x="1048.4" y="305.2" width="84" height="168.8" rx="3" fill="#74736e" />
-<text x="1090.4" y="292.2" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">62.68</text>
-<text x="1090.4" y="505.0" font-size="12" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_M GGUF</text>
-<text x="1090.4" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">79.2% SUITE</text>
-<rect x="1179.1" y="325.8" width="84" height="148.2" rx="3" fill="#b17ce8" />
-<text x="1221.1" y="312.8" font-size="18" font-weight="500" fill="#b17ce8" text-anchor="middle">55.06</text>
-<text x="1221.1" y="505.0" font-size="12" font-weight="700" fill="#b17ce8" text-anchor="middle">OQ2E (2.7-BIT)</text>
-<text x="1221.1" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">100.0% SUITE</text>
-<rect x="1309.9" y="310.2" width="84" height="163.8" rx="3" fill="#74736e" />
-<text x="1351.9" y="297.2" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">60.83</text>
-<text x="1351.9" y="505.0" font-size="12" font-weight="500" fill="#f0efed" text-anchor="middle">OQ3E</text>
-<text x="1351.9" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">62.5% SUITE</text>
-<rect x="1440.6" y="403.6" width="84" height="70.4" rx="3" fill="#74736e" />
-<text x="1482.6" y="390.6" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">26.16</text>
-<text x="1482.6" y="505.0" font-size="12" font-weight="500" fill="#f0efed" text-anchor="middle">NVFP4 MLX</text>
-<text x="1482.6" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">87.5% SUITE</text>
+<rect x="1035.3" y="321.6" width="84" height="152.4" rx="3" fill="#74736e" />
+<text x="1077.3" y="308.6" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">62.68</text>
+<text x="1077.3" y="505.0" font-size="12" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_M GGUF</text>
+<text x="1077.3" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">79.2% SUITE</text>
+<rect x="1139.9" y="340.2" width="84" height="133.8" rx="3" fill="#74736e" />
+<text x="1181.9" y="327.2" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">55.06</text>
+<text x="1181.9" y="505.0" font-size="12" font-weight="500" fill="#f0efed" text-anchor="middle">OQ2E (2.7-BIT)</text>
+<text x="1181.9" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">100.0% SUITE</text>
+<rect x="1244.5" y="307.5" width="84" height="166.5" rx="3" fill="#b17ce8" />
+<text x="1286.5" y="294.5" font-size="18" font-weight="500" fill="#b17ce8" text-anchor="middle">68.49</text>
+<text x="1286.5" y="505.0" font-size="12" font-weight="700" fill="#b17ce8" text-anchor="middle">PIPE 2-BIT</text>
+<text x="1286.5" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">100.0% SUITE</text>
+<rect x="1349.1" y="326.2" width="84" height="147.8" rx="3" fill="#74736e" />
+<text x="1391.1" y="313.2" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">60.83</text>
+<text x="1391.1" y="505.0" font-size="12" font-weight="500" fill="#f0efed" text-anchor="middle">OQ3E</text>
+<text x="1391.1" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">62.5% SUITE</text>
+<rect x="1453.7" y="410.4" width="84" height="63.6" rx="3" fill="#74736e" />
+<text x="1495.7" y="397.4" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">26.16</text>
+<text x="1495.7" y="505.0" font-size="12" font-weight="500" fill="#f0efed" text-anchor="middle">NVFP4 MLX</text>
+<text x="1495.7" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">87.5% SUITE</text>
 <line x1="985.0" y1="575.0" x2="1576.0" y2="575.0" stroke="#666561" stroke-width="1.5" />
 <text x="985.0" y="618.0" font-size="24" font-weight="500" fill="#f0efed" text-anchor="start">PEAK MEMORY (GB)</text>
 <text x="985.0" y="647.0" font-size="14" font-weight="400" fill="#b9b8b4" text-anchor="start">MLX ALLOCATOR PEAK; GGUF PROCESS MAX RSS</text>
 <line x1="1000.0" y1="870.0" x2="1568.0" y2="870.0" stroke="#666561" stroke-width="1" />
-<rect x="1048.4" y="795.1" width="84" height="74.9" rx="3" fill="#74736e" />
-<text x="1090.4" y="782.1" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">34.22</text>
-<text x="1090.4" y="901.0" font-size="12" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_M GGUF</text>
-<rect x="1179.1" y="788.6" width="84" height="81.4" rx="3" fill="#b17ce8" />
-<text x="1221.1" y="775.6" font-size="18" font-weight="500" fill="#b17ce8" text-anchor="middle">37.22</text>
-<text x="1221.1" y="901.0" font-size="12" font-weight="700" fill="#b17ce8" text-anchor="middle">OQ2E (2.7-BIT)</text>
-<rect x="1309.9" y="760.1" width="84" height="109.9" rx="3" fill="#74736e" />
-<text x="1351.9" y="747.1" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">50.23</text>
-<text x="1351.9" y="901.0" font-size="12" font-weight="500" fill="#f0efed" text-anchor="middle">OQ3E</text>
-<rect x="1440.6" y="710.5" width="84" height="159.5" rx="3" fill="#74736e" />
-<text x="1482.6" y="697.5" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">72.92</text>
-<text x="1482.6" y="901.0" font-size="12" font-weight="500" fill="#f0efed" text-anchor="middle">NVFP4 MLX</text>
+<rect x="1035.3" y="795.1" width="84" height="74.9" rx="3" fill="#74736e" />
+<text x="1077.3" y="782.1" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">34.22</text>
+<text x="1077.3" y="901.0" font-size="12" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_M GGUF</text>
+<rect x="1139.9" y="788.6" width="84" height="81.4" rx="3" fill="#74736e" />
+<text x="1181.9" y="775.6" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">37.22</text>
+<text x="1181.9" y="901.0" font-size="12" font-weight="500" fill="#f0efed" text-anchor="middle">OQ2E (2.7-BIT)</text>
+<rect x="1244.5" y="785.5" width="84" height="84.5" rx="3" fill="#b17ce8" />
+<text x="1286.5" y="772.5" font-size="18" font-weight="500" fill="#b17ce8" text-anchor="middle">38.65</text>
+<text x="1286.5" y="901.0" font-size="12" font-weight="700" fill="#b17ce8" text-anchor="middle">PIPE 2-BIT</text>
+<rect x="1349.1" y="760.1" width="84" height="109.9" rx="3" fill="#74736e" />
+<text x="1391.1" y="747.1" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">50.23</text>
+<text x="1391.1" y="901.0" font-size="12" font-weight="500" fill="#f0efed" text-anchor="middle">OQ3E</text>
+<rect x="1453.7" y="710.5" width="84" height="159.5" rx="3" fill="#74736e" />
+<text x="1495.7" y="697.5" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">72.92</text>
+<text x="1495.7" y="901.0" font-size="12" font-weight="500" fill="#f0efed" text-anchor="middle">NVFP4 MLX</text>
 <text x="24.0" y="934.0" font-size="13" font-weight="400" fill="#969590" text-anchor="start">POOLSIDE: MODEL CARD, 21 JULY 2026    LOCAL: COMMITTED CSV, FIXED 256-TOKEN DECODE PROFILE</text>
 <text x="24.0" y="965.0" font-size="13" font-weight="500" fill="#b17ce8" text-anchor="start">oQ2e CONTEXT: 64K 32.03 TOK/S, 41.19 GB    |    256K 12.16 TOK/S, 52.87 GB    |    RETRIEVAL PASSED</text>
 <text x="1576.0" y="965.0" font-size="13" font-weight="700" fill="#f0efed" text-anchor="end">MACOS-LAGUNA-S2.1</text>

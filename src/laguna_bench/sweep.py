@@ -69,8 +69,11 @@ def _render_prompt(backend: MLXBackend, messages: list[dict[str, str]]) -> str:
 
 def _prompt_token_count(backend: MLXBackend, messages: list[dict[str, str]]) -> int:
     prompt = _render_prompt(backend, messages)
-    encoded = backend.tokenizer(prompt, add_special_tokens=True)
-    input_ids = encoded["input_ids"] if isinstance(encoded, dict) else encoded.input_ids
+    if callable(backend.tokenizer):
+        encoded = backend.tokenizer(prompt, add_special_tokens=True)
+        input_ids = encoded["input_ids"] if isinstance(encoded, dict) else encoded.input_ids
+    else:
+        input_ids = backend.tokenizer.encode(prompt, add_special_tokens=True)
     if input_ids and isinstance(input_ids[0], list):
         input_ids = input_ids[0]
     return len(input_ids)

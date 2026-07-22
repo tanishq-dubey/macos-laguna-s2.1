@@ -1,17 +1,20 @@
 # Laguna S 2.1 benchmark results
 
-These results were measured on July 21 and 22, 2026, using a 128 GB Apple M5 Max MacBook Pro with macOS 27.0. The canonical harness ran Python 3.13.12, MLX 0.32.0, and mlx-vlm 0.6.6. It used greedy decoding with seed `20260721` and did not reuse the prompt cache.
+These results were measured on July 21 and 22, 2026, using a 128 GB Apple M5 Max MacBook Pro with macOS 27.0. The canonical harness ran Python 3.13.12, MLX 0.32.0, mlx-vlm 0.6.6, and MLX-LM 0.31.3. It used greedy decoding with seed `20260721` and did not reuse the prompt cache.
 
 ## Quant results
 
 | Quant | Revision | Score | Generation | Agentic | Weighted generation tok/s | Peak GB | Suite wall time |
 |---|---|---:|---:|---:|---:|---:|---:|
+| `pipenetwork/Laguna-S-2.1-MLX-2bit` | `5a67ae47cdc38ec7d16a09f9efb7add1bb631131` | 1.000 | 1.000 | 1.000 | 63.86 | 39.31 | 87.47s |
 | `mlx-community/Laguna-S-2.1-oQ2e` | `777afdcd509a4a2ac9007bb405ea1f97d6b60912` | 1.000 | 1.000 | 1.000 | 40.85 | 37.77 | 87.38s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_M` | `17bf31a6d627ed136f7d1f403cb692ae643debe4` | 0.792 | 0.750 | 0.833 | 57.34 | 34.22 RSS | 78.41s |
 | `mlx-community/Laguna-S-2.1-oQ3e` | `b0a05345ef4ee549a2c1e7b27dbbf8aec8c1b0b3` | 0.625 | 0.417 | 0.833 | 48.58 | 50.69 | 84.79s |
 | `poolside/Laguna-S-2.1-NVFP4-mlx` | `9664772ddf25ea938bbc380b26f7e7110f9f6521` | 0.875 | 0.750 | 1.000 | 7.25 | 73.47 | 301.77s |
 
-The oQ2e run passed every hidden assertion: 19/19 generation checks and 19/19 agentic checks. The IQ1_M GGUF passed 13/19 generation checks and 15/19 agentic checks. It returned tuples instead of required lists in the medium generation task and inverted a unit-order condition in the medium agent task. A repeated run produced the same task scores. oQ3e decoded faster than oQ2e, but made several exact-format and implementation errors. The official, testing-only NVFP4 model failed six of eight medium-generation checks because it returned tuples where the specification required lists. Its other five tasks passed.
+The pipenetwork 2-bit and oQ2e runs both passed every hidden assertion: 19/19 generation checks and 19/19 agentic checks. Pipenetwork's conversion was considerably faster in both the task aggregate and fixed decode. The IQ1_M GGUF passed 13/19 generation checks and 15/19 agentic checks. It returned tuples instead of required lists in the medium generation task and inverted a unit-order condition in the medium agent task. A repeated run produced the same task scores. oQ3e made several exact-format and implementation errors. The official, testing-only NVFP4 model failed six of eight medium-generation checks because it returned tuples where the specification required lists. Its other five tasks passed.
+
+Pipenetwork's repository ships `laguna.py` because MLX-LM 0.31.3 does not include this architecture. The harness imports that reviewed file under `mlx_lm.models.laguna` from the pinned snapshot and records SHA-256 `89b9b3f95ed3f35b3e167bbe7af01bbd36fc3a589d451d171d87e01df682d20c`. It also enables Transformers' Mistral regex correction. No installed package files are patched.
 
 During testing, the Hub advanced the oQ2e repository from the canonical run's `777afd...` revision to `830f68...`. The identities of all seven safetensor blobs are unchanged, as are the inference files. The newer revision completes the repository metadata files. The 256K result records that revision.
 
@@ -20,6 +23,7 @@ Both conventional community MLX 4-bit conversions failed before inference in mlx
 Canonical artifacts:
 
 - `results/20260722T010704Z-mlx-community--Laguna-S-2.1-oQ2e/`
+- `results/20260722T033304Z-pipenetwork--Laguna-S-2.1-MLX-2bit/`
 - `results/20260722T032111Z-unsloth--Laguna-S-2.1-GGUF:UD-IQ1_M/`
 - `results/20260722T013118Z-mlx-community--Laguna-S-2.1-oQ3e/`
 - `results/20260722T005530Z-poolside--Laguna-S-2.1-NVFP4-mlx/`
@@ -30,6 +34,7 @@ Canonical artifacts:
 
 | Quant | 16K prefill tok/s | Fixed 256-token decode tok/s | Profile peak GB |
 |---|---:|---:|---:|
+| Pipenetwork mixed 2-bit | 1247.17 | 68.49 | 39.90 MLX |
 | IQ1_M GGUF | 754.54 | 62.68 | 34.22 RSS |
 | oQ2e | 1613.07 | 55.06 | 38.46 MLX |
 | oQ3e | 1275.11 | 60.83 | 51.47 MLX |
@@ -77,19 +82,20 @@ Uniform 4-bit and 8-bit KV quantization both raise `NotImplementedError: Rotatin
 
 | Engine/path | Model or quant | Measured result | Decision |
 |---|---|---:|---|
-| mlx-vlm 0.6.6, in process | oQ2e | 40.85 weighted tok/s across all generation tiers; 53.01 tok/s on the medium decode in the earlier run | Default: fastest complete, mostly deterministic single-user path |
+| MLX-LM 0.31.3, pinned custom loader | Pipenetwork mixed 2-bit | 63.86 weighted tok/s; 68.49 tok/s fixed decode; 38/38 assertions | Fastest tested high-quality path |
+| mlx-vlm 0.6.6, in process | oQ2e | 40.85 weighted tok/s across all generation tiers; 55.06 tok/s fixed decode | Conservative stock-loader path |
 | oMLX 0.5.2, OpenAI server | oQ2e | 53.9 tok/s warm medium decode; cached agent tiers took 63.87s total versus 53.48s in the original direct run | Useful for concurrent serving, but not faster from start to finish for this serial suite |
 | Poolside llama.cpp `laguna` branch, Metal | Q4_K_M GGUF | 1059.05 prompt tok/s at 512 tokens; 39.68 generation tok/s at 256 tokens | Slower decode than oQ2e through MLX |
 | Poolside llama.cpp DFlash recipe | Q4_K_M plus DFlash draft | 23.0 generation tok/s on the coding probe | Draft overhead/acceptance made it slower on this Mac |
 
-The harness uses direct mlx-vlm as its default inference engine. Experimental MLX prompt-cache reuse remains off. Individual cached turns were faster, but caching changed the greedy agent trajectory: the large task took 14 turns instead of 10. A controlled engine comparison needs exact output parity between the cold and cached paths.
+The helper still defaults to direct mlx-vlm and oQ2e because that path does not execute a repository-supplied model definition. The benchmark CLI now supports the faster conversion through an explicit `mlx-lm-custom` engine. Experimental MLX prompt-cache reuse remains off. Individual cached turns were faster, but caching changed the greedy agent trajectory: the large task took 14 turns instead of 10. A controlled engine comparison needs exact output parity between the cold and cached paths.
 
 These engine results apply to this machine and workload. oMLX remains installed in an isolated cache environment for future concurrent serving tests. The Poolside llama.cpp branch and GGUFs also remain cached for more profiling.
 
 ## Recommended local configuration
 
-- Model: `mlx-community/Laguna-S-2.1-oQ2e`
-- Runtime: in-process mlx-vlm 0.6.6
+- Model: `pipenetwork/Laguna-S-2.1-MLX-2bit` for best tested speed and quality; oQ2e for a stock loader
+- Runtime: in-process MLX-LM 0.31.3 with the pinned loader; mlx-vlm 0.6.6 for oQ2e
 - Sampling: temperature 0, top-p 1, fixed seed for evaluation
 - Prefill step: 2048
 - KV cache: default, unquantized; no prompt-cache reuse for controlled agent tests
@@ -97,4 +103,4 @@ These engine results apply to this machine and workload. oMLX remains installed 
 
 ## Local storage
 
-The retained caches include oQ2e (34 GiB), oQ3e (46 GiB), official NVFP4 MLX (67 GiB), official GGUF (72 GiB), and both broken community 4-bit uploads (62 GiB each). Together they use roughly 343 GiB. About 520 GiB remained free after the run. We kept the broken checkpoints only to make the compatibility failures reproducible. They can be removed after publication to recover disk space.
+The retained caches now also include pipenetwork's 35 GiB mixed 2-bit conversion and Unsloth's 33 GiB IQ1_M GGUF, alongside oQ2e (34 GiB), oQ3e (46 GiB), official NVFP4 MLX (67 GiB), official GGUF (72 GiB), and both broken community 4-bit uploads (62 GiB each). We keep broken checkpoints only to make compatibility failures reproducible; contributors do not need them.

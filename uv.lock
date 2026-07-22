@@ -691,6 +691,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "huggingface-hub" },
+    { name = "mlx-lm" },
     { name = "mlx-vlm" },
     { name = "psutil" },
 ]
@@ -703,6 +704,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "huggingface-hub", specifier = ">=1.0" },
+    { name = "mlx-lm", specifier = ">=0.31.3" },
     { name = "mlx-vlm", specifier = ">=0.6.3" },
     { name = "psutil", specifier = ">=7.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },

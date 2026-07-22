@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import importlib.metadata
+import importlib.util
+import hashlib
 import json
+import sys
 import time
 import urllib.request
 from dataclasses import asdict, dataclass
@@ -121,6 +124,159 @@ class MLXBackend:
             "mlx_vlm_version": _version("mlx-vlm"),
             "transformers_version": _version("transformers"),
         }
+
+
+class MLXLMCustomBackend:
+    """MLX-LM backend for conversions that ship a reviewed model loader.
+
+    The loader is imported from the pinned Hugging Face snapshot without
+    copying it into the installed ``mlx_lm`` package.
+    """
+
+    def __init__(
+        self,
+        model_id: str,
+        revision: str | None = None,
+        loader_file: str = "laguna.py",
+        seed: int = 20260721,
+        temperature: float = 0.0,
+        top_p: float = 1.0,
+    ):
+        from huggingface_hub import snapshot_download
+        from mlx_lm import load
+
+        local_model = Path(model_id)
+        if not local_model.is_dir() and revision is None:
+            raise ValueError("mlx-lm-custom requires --revision for a Hugging Face model")
+        self.model_id = model_id
+        self.revision = revision
+        self.loader_file = loader_file
+        self.seed = seed
+        self.temperature = temperature
+        self.top_p = top_p
+        if local_model.is_dir():
+            loader_snapshot = local_model
+        else:
+            loader_snapshot = Path(
+                snapshot_download(
+                    model_id,
+                    revision=revision,
+                    allow_patterns=["config.json", loader_file],
+                )
+            )
+        loader = _register_custom_mlx_model(loader_snapshot, loader_file)
+        self.loader_sha256 = hashlib.sha256(loader.read_bytes()).hexdigest()
+        started = time.perf_counter()
+        self.model, self.tokenizer, self.config = load(
+            model_id,
+            revision=revision,
+            tokenizer_config={"fix_mistral_regex": True},
+            lazy=False,
+            return_config=True,
+        )
+        self.load_seconds = time.perf_counter() - started
+        self.snapshot = _snapshot_metadata(model_id, revision)
+
+    def generate(
+        self,
+        messages: list[dict[str, Any]],
+        *,
+        max_tokens: int,
+        tools: list[dict[str, Any]] | None = None,
+        prompt_cache_state: Any | None = None,
+        generation_options: dict[str, Any] | None = None,
+    ) -> Generation:
+        import mlx.core as mx
+        from mlx_lm import stream_generate
+        from mlx_lm.sample_utils import make_sampler
+
+        template_args: dict[str, Any] = {
+            "tokenize": False,
+            "add_generation_prompt": True,
+            "enable_thinking": False,
+        }
+        if tools:
+            template_args["tools"] = tools
+        prompt = self.tokenizer.apply_chat_template(messages, **template_args)
+        options = dict(generation_options or {})
+        temperature = options.pop("temperature", self.temperature)
+        top_p = options.pop("top_p", self.top_p)
+        options["sampler"] = make_sampler(temp=temperature, top_p=top_p)
+        if prompt_cache_state is not None:
+            options["prompt_cache"] = prompt_cache_state
+        mx.random.seed(self.seed)
+        started = time.perf_counter()
+        chunks = list(
+            stream_generate(
+                self.model,
+                self.tokenizer,
+                prompt=prompt,
+                max_tokens=max_tokens,
+                **options,
+            )
+        )
+        elapsed = time.perf_counter() - started
+        if not chunks:
+            return Generation(text="", elapsed_seconds=elapsed)
+        final = chunks[-1]
+        return Generation(
+            text="".join(chunk.text for chunk in chunks),
+            prompt_tokens=final.prompt_tokens,
+            generation_tokens=final.generation_tokens,
+            prompt_tps=final.prompt_tps,
+            generation_tps=final.generation_tps,
+            peak_memory_gb=final.peak_memory,
+            finish_reason=final.finish_reason,
+            elapsed_seconds=elapsed,
+        )
+
+    def new_prompt_cache(self):
+        from mlx_lm.models.cache import make_prompt_cache
+
+        return make_prompt_cache(self.model)
+
+    def metadata(self) -> dict[str, Any]:
+        return {
+            "model_id": self.model_id,
+            "engine": "mlx-lm-custom",
+            "requested_revision": self.revision,
+            "temperature": self.temperature,
+            "top_p": self.top_p,
+            **self.snapshot,
+            "load_seconds": self.load_seconds,
+            "model_type": self.config.get("model_type"),
+            "max_position_embeddings": self.config.get("max_position_embeddings"),
+            "quantization": _jsonable(self.config.get("quantization")),
+            "loader_file": self.loader_file,
+            "loader_sha256": self.loader_sha256,
+            "fix_mistral_regex": True,
+            "mlx_version": _version("mlx"),
+            "mlx_lm_version": _version("mlx-lm"),
+            "transformers_version": _version("transformers"),
+        }
+
+
+def _register_custom_mlx_model(snapshot: Path, loader_file: str) -> Path:
+    config = json.loads((snapshot / "config.json").read_text())
+    model_type = config["model_type"]
+    loader = snapshot / loader_file
+    if not loader.is_file():
+        raise FileNotFoundError(f"Custom MLX loader not found: {loader}")
+    module_name = f"mlx_lm.models.{model_type}"
+    spec = importlib.util.spec_from_file_location(module_name, loader)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Cannot import custom MLX loader: {loader}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    try:
+        spec.loader.exec_module(module)
+    except Exception:
+        sys.modules.pop(module_name, None)
+        raise
+    if not hasattr(module, "Model") or not hasattr(module, "ModelArgs"):
+        sys.modules.pop(module_name, None)
+        raise ImportError(f"Custom MLX loader must define Model and ModelArgs: {loader}")
+    return loader
 
 
 def _version(package: str) -> str | None:

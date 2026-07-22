@@ -4,11 +4,11 @@ This repository contains a reproducible local harness for comparing Laguna S 2.1
 
 This work was sponsored by [DWS LLC](https://dws.rip).
 
-On the M5 Max used for these tests, the smallest quant, `mlx-community/Laguna-S-2.1-oQ2e`, running in-process through `mlx-vlm` was the fastest option. It passed all six tasks and finished the suite faster than the tested llama.cpp, DFlash, official NVFP4 MLX, and serial oMLX paths. The measurements are in `BENCHMARK_RESULTS.md`.
+The new leader on the M5 Max is `pipenetwork/Laguna-S-2.1-MLX-2bit` through MLX-LM. It passed all 38 assertions, averaged 63.86 generation tok/s across the three generation tasks, and reached 68.49 tok/s in the fixed 256-token decode. It needs the conversion's bundled Laguna loader, so the harness loads that file from a pinned revision without modifying the installed MLX-LM package. The measurements are in `BENCHMARK_RESULTS.md`.
 
 ## Results at a glance
 
-These results were measured on a 128 GB Apple M5 Max using macOS 27.0, Python 3.13.12, MLX 0.32.0, and mlx-vlm 0.6.6. The score combines three generation tasks and three agentic coding tasks. Throughput is weighted across the generation tasks.
+These results were measured on a 128 GB Apple M5 Max using macOS 27.0, Python 3.13.12, MLX 0.32.0, mlx-vlm 0.6.6, and MLX-LM 0.31.3. The score combines three generation tasks and three agentic coding tasks. Throughput is weighted across the generation tasks.
 
 ![Poolside published Terminal-Bench results alongside local Apple Silicon measurements](charts/laguna-s21-results.svg)
 
@@ -20,12 +20,13 @@ uv run --frozen laguna-bench chart
 
 | Quant | Overall score | Generation | Agentic | Generation tok/s | Peak GB | Suite time |
 |---|---:|---:|---:|---:|---:|---:|
+| `pipenetwork/Laguna-S-2.1-MLX-2bit` | 1.000 | 1.000 | 1.000 | 63.86 | 39.31 | 87.47s |
 | `mlx-community/Laguna-S-2.1-oQ2e` | 1.000 | 1.000 | 1.000 | 40.85 | 37.77 | 87.38s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_M` | 0.792 | 0.750 | 0.833 | 57.34 | 34.22 RSS | 78.41s |
 | `mlx-community/Laguna-S-2.1-oQ3e` | 0.625 | 0.417 | 0.833 | 48.58 | 50.69 | 84.79s |
 | `poolside/Laguna-S-2.1-NVFP4-mlx` | 0.875 | 0.750 | 1.000 | 7.25 | 73.47 | 301.77s |
 
-The oQ2e conversion remains the quality default for this machine. It passed all 38 hidden assertions while using about 38 GB of peak MLX memory. Unsloth's IQ1_M GGUF is smaller and faster, reaching 62.68 tok/s in the fixed decode profile with 34.22 GiB maximum RSS, but it passed only 28 of 38 assertions. The official NVFP4 MLX build was functional but much slower in this runtime.
+Pipenetwork's mixed-precision 2-bit conversion is the best result so far: it matched oQ2e's 38/38 score while improving the fixed decode from 55.06 to 68.49 tok/s. Its standardized profile peaked at 39.90 GB, about 1.4 GB above oQ2e. Unsloth's IQ1_M GGUF remains the smallest and uses the least memory, but it passed only 28 of 38 assertions. The official NVFP4 MLX build was functional but much slower in this runtime.
 
 Long-context retrieval also passed at every tested size through 256K tokens on oQ2e:
 
@@ -37,13 +38,13 @@ Long-context retrieval also passed at every tested size through 256K tokens on o
 | 131,064 | 771.80 | 23.48 | 45.09 | pass |
 | 262,136 | 566.31 | 12.16 | 52.87 | pass |
 
-For a local coding setup, use oQ2e through in-process mlx-vlm with temperature 0, top-p 1, the default unquantized KV cache, and a prefill step of 2048. Staying at or below 64K gives a much better latency balance. The 128K and 256K cases fit and passed retrieval, but decode speed fell sharply.
+For the fastest tested coding path, use pipenetwork's 2-bit build through `--engine mlx-lm-custom` at its pinned revision. For a conversion that needs no bundled Python loader, oQ2e through in-process mlx-vlm remains the conservative default. The longer context and hyperparameter search below still applies to oQ2e; the new 2-bit build has passed the 16K retrieval case and is queued for the full context sweep.
 
 The full [benchmark report](BENCHMARK_RESULTS.md) includes the standardized quant profile, sampling search, KV cache and prefill search, engine bake-off, revisions, and compatibility failures. The machine-readable source is [the combined CSV](results/laguna_s21_full_results.csv).
 
 ## Clone and run
 
-The helper creates the environment and uses the fastest quant from our tests by default:
+The helper creates the environment and defaults to oQ2e, the fastest tested conversion that uses only the stock mlx-vlm loader:
 
 ```bash
 git clone https://github.com/tanishq-dubey/macos-laguna-s2.1.git laguna-s21-bench
@@ -86,7 +87,9 @@ Generation uses greedy decoding (`temperature=0`) with a fixed MLX seed. Each ag
 uv sync --extra dev --python 3.13 --locked
 ```
 
-Laguna support currently comes from `mlx-vlm`, even though these are text-only models.
+The stock-loader path uses `mlx-vlm`, even though these are text-only models.
+
+Some newer conversions instead bundle a model definition for MLX-LM. The harness exposes those as the explicit `mlx-lm-custom` engine, pins the Hub revision, records the loader's SHA-256 digest, and never copies remote code into the installed package.
 
 ## Run
 
@@ -114,6 +117,16 @@ uv run --frozen laguna-bench run \
 ```
 
 Every run creates `results/<timestamp>-<model>/run.json`, a readable `summary.md`, the raw generations, and the final agent workspaces. A failed task counts as a benchmark result and does not cause the CLI itself to fail. A model or runtime failure does.
+
+Run the current fastest quant with its reviewed custom loader:
+
+```bash
+export LAGUNA_MODEL=pipenetwork/Laguna-S-2.1-MLX-2bit
+export LAGUNA_ENGINE=mlx-lm-custom
+export LAGUNA_REVISION=5a67ae47cdc38ec7d16a09f9efb7add1bb631131
+scripts/laguna.sh download
+scripts/laguna.sh bench
+```
 
 Compare the latest complete run for every tested model:
 
@@ -148,13 +161,15 @@ uv run --frozen laguna-bench run \
 
 ## Quant ladder for this 128 GB Mac
 
-Sizes are repository payloads observed on 2026-07-21 and should be refreshed before downloading:
+Sizes are repository payloads observed on 2026-07-21 and 2026-07-22 and should be refreshed before downloading:
 
-1. `unsloth/Laguna-S-2.1-GGUF` UD-IQ1_M: 33.19 GiB, fastest tested decode but lower quality
-2. `mlx-community/Laguna-S-2.1-oQ2e`: 33.74 GiB, calibrated 2.70 bpw and the quality default
-3. `mlx-community/Laguna-S-2.1-oQ3e`: 45.86 GiB, faster decode but lower quality in this suite
-4. `poolside/Laguna-S-2.1-NVFP4-mlx`: 66.97 GiB, official testing-only build; functional but slow on this runtime
-5. `poolside/Laguna-S-2.1-GGUF` Q4_K_M: 70.01 GiB, functional through Poolside's llama.cpp branch
+1. `unsloth/Laguna-S-2.1-GGUF` UD-IQ1_M: 33.19 GiB, smallest and lowest-memory tested build, with lower quality
+2. `mlx-community/Laguna-S-2.1-oQ2e`: 33.74 GiB, calibrated 2.70 bpw and the stock-loader quality default
+3. `pipenetwork/Laguna-S-2.1-MLX-2bit`: 35.17 GiB, mixed 2/4/8-bit and the fastest perfect-score result so far
+4. `mlx-community/Laguna-S-2.1-oQ3e`: 45.86 GiB, lower quality in this suite
+5. `mlx-community/Laguna-S-2.1-oQ4e`: 59.73 GiB, newly completed upload; queued for testing
+6. `poolside/Laguna-S-2.1-NVFP4-mlx`: 66.97 GiB, official testing-only build; functional but slow on this runtime
+7. `poolside/Laguna-S-2.1-GGUF` Q4_K_M: 70.01 GiB, functional through Poolside's llama.cpp branch
 
 The Vontra and pipenetwork 4-bit MLX conversions both fail to load in mlx-vlm 0.6.6, each because of a different router or quantization incompatibility. We did not download their 6-bit derivatives after those failures. The 116.34 GiB 8-bit conversions leave too little headroom for weights, the KV cache, and macOS on a 128 GB machine. The CSV still includes every variant and records each failure or omission explicitly.
 
@@ -178,10 +193,20 @@ scripts/laguna.sh download
 scripts/laguna.sh bench
 ```
 
-To test a different conversion, set `LAGUNA_MODEL` for both commands:
+To test a stock mlx-vlm conversion, set `LAGUNA_MODEL` for both commands:
 
 ```bash
 export LAGUNA_MODEL=mlx-community/Laguna-S-2.1-oQ3e
+scripts/laguna.sh download
+scripts/laguna.sh bench
+```
+
+For a conversion with a reviewed bundled MLX-LM loader, also set its engine and pin its revision:
+
+```bash
+export LAGUNA_MODEL=pipenetwork/Laguna-S-2.1-MLX-2bit
+export LAGUNA_ENGINE=mlx-lm-custom
+export LAGUNA_REVISION=5a67ae47cdc38ec7d16a09f9efb7add1bb631131
 scripts/laguna.sh download
 scripts/laguna.sh bench
 ```

@@ -20,6 +20,7 @@ TASK_IDS = {
 LOCAL_MODELS = {
     "unsloth/Laguna-S-2.1-GGUF:UD-IQ1_M": "IQ1_M GGUF",
     "mlx-community/Laguna-S-2.1-oQ2e": "oQ2e (2.7-bit)",
+    "pipenetwork/Laguna-S-2.1-MLX-2bit": "PIPE 2-BIT",
     "mlx-community/Laguna-S-2.1-oQ3e": "oQ3e",
     "poolside/Laguna-S-2.1-NVFP4-mlx": "NVFP4 MLX",
 }
@@ -145,12 +146,13 @@ def _line(parts: list[str], x1: float, y1: float, x2: float, y2: float, *, strok
 def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Path) -> Path:
     published = load_published_scores(poolside_csv)
     local = load_local_points(results_csv)
+    fastest = max(local, key=lambda point: point.decode_tps)
     destination.parent.mkdir(parents=True, exist_ok=True)
 
     parts = [
         '<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">',
         '<title id="title">Laguna S 2.1 published capability and local Apple Silicon performance</title>',
-        '<desc id="desc">Poolside published Terminal-Bench 2.1 scores beside locally measured MLX decode speed and peak memory for three Laguna S 2.1 quantizations on an M5 Max.</desc>',
+        '<desc id="desc">Poolside published Terminal-Bench 2.1 scores beside locally measured MLX and llama.cpp decode speed and peak memory for Laguna S 2.1 quantizations on an M5 Max.</desc>',
         '<rect width="1600" height="1000" fill="#191919" />',
         '<style>text { font-family: "SFMono-Regular", Consolas, "Liberation Mono", ui-monospace, monospace; }</style>',
     ]
@@ -162,7 +164,7 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
 
     _text(parts, 32, 57, "LAGUNA S 2.1", size=34, weight=700, fill=purple)
     _text(parts, 322, 57, "ON APPLE SILICON", size=34, weight=700, fill=foreground)
-    _text(parts, 32, 98, "FASTEST TESTED: 62.68 TOK/S, 34.22 GB MAX RSS (IQ1_M GGUF)", size=23, weight=500, fill=muted)
+    _text(parts, 32, 98, f"FASTEST FIXED DECODE: {fastest.decode_tps:.2f} TOK/S, {fastest.peak_memory_gb:.2f} GB ({fastest.label})", size=23, weight=500, fill=muted)
     _text(parts, 32, 132, "PUBLISHED CAPABILITY AND LOCAL INFERENCE USE DIFFERENT SOURCES AND SCALES", size=15, fill="#8f8e8a")
 
     # Left panel: Poolside's published Terminal-Bench comparison.
@@ -211,14 +213,14 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
 
     _line(parts, 985, 177, 1576, 177, stroke=rule, width=1.5)
     _text(parts, 985, 220, "FIXED 256-TOKEN DECODE TOK/S", size=22, weight=500, fill=foreground)
-    _text(parts, 985, 249, "MLX-VLM OR LLAMA.CPP, GREEDY", size=14, fill=muted)
+    _text(parts, 985, 249, "MLX-VLM, MLX-LM, OR LLAMA.CPP; GREEDY", size=14, fill=muted)
     decode_base, decode_height = 474.0, 175.0
     _line(parts, local_left - 25, decode_base, local_right + 20, decode_base, stroke=rule)
     for index, point in enumerate(local):
         center = local_left + local_slot * (index + 0.5)
-        height = decode_height * point.decode_tps / 65
+        height = decode_height * point.decode_tps / 72
         y = decode_base - height
-        primary = point.label.startswith("oQ2e")
+        primary = point.model == fastest.model
         color = purple if primary else bar_gray
         text_color = purple if primary else foreground
         parts.append(f'<rect x="{center - 42:.1f}" y="{y:.1f}" width="84" height="{height:.1f}" rx="3" fill="{color}" />')
@@ -235,7 +237,7 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
         center = local_left + local_slot * (index + 0.5)
         height = memory_height * point.peak_memory_gb / 80
         y = memory_base - height
-        primary = point.label.startswith("oQ2e")
+        primary = point.model == fastest.model
         color = purple if primary else bar_gray
         text_color = purple if primary else foreground
         parts.append(f'<rect x="{center - 42:.1f}" y="{y:.1f}" width="84" height="{height:.1f}" rx="3" fill="{color}" />')

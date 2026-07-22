@@ -7,6 +7,7 @@ license = "MIT"
 requires-python = ">=3.11"
 dependencies = [
   "huggingface-hub>=1.0",
+  "mlx-lm>=0.31.3",
   "mlx-vlm>=0.6.3",
   "psutil>=7.0",
 ]

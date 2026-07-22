@@ -1,6 +1,19 @@
 import psutil
 
-from laguna_bench.sweep import _available_memory_gb, sweep_cases
+from laguna_bench.sweep import _available_memory_gb, _prompt_token_count, sweep_cases
+
+
+class _EncodeOnlyTokenizer:
+    def apply_chat_template(self, messages, **kwargs):
+        return "rendered prompt"
+
+    def encode(self, prompt, add_special_tokens=True):
+        return [1, 2, 3]
+
+
+def test_prompt_token_count_supports_mlx_lm_wrapper():
+    backend = type("Backend", (), {"tokenizer": _EncodeOnlyTokenizer()})()
+    assert _prompt_token_count(backend, [{"role": "user", "content": "x"}]) == 3
 
 
 def test_full_sweep_covers_performance_dimensions():
