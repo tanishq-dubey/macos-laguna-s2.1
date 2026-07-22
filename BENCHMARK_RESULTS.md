@@ -8,6 +8,7 @@ These results were measured on July 21 and 22, 2026, using a 128 GB Apple M5 Max
 |---|---|---:|---:|---:|---:|---:|---:|
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_S` | `9b53347e47996dd757a9904fe8bf4db3c54d2224` | 0.658 | 0.317 | 1.000 | 63.00 | 32.48 RSS | 65.24s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-IQ2_XXS` | `9b53347e47996dd757a9904fe8bf4db3c54d2224` | 0.646 | 0.417 | 0.875 | 62.76 | 35.66 RSS | 67.94s |
+| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ2_M` | `9b53347e47996dd757a9904fe8bf4db3c54d2224` | 0.625 | 0.417 | 0.833 | 61.15 | 35.74 RSS | 53.91s |
 | `pipenetwork/Laguna-S-2.1-MLX-2bit` | `5a67ae47cdc38ec7d16a09f9efb7add1bb631131` | 1.000 | 1.000 | 1.000 | 63.86 | 39.31 | 87.47s |
 | `unsloth/Laguna-S-2.1-GGUF` `UD-Q2_K_XL` | `8615cd7d1f90a4e83e13c0954ef6ed543b66f54a` | 0.875 | 0.750 | 1.000 | 60.37 | 37.99 RSS | 40.17s |
 | `JANGQ-AI/Laguna-S-2.1-JANG_2L` | `47e1ba4eef24807751ed229ceeaff293a2bc53d2` | 0.417 | 0.417 | 0.417 | 47.79 | 45.75 | 60.53s |
@@ -32,6 +33,8 @@ IQ1_S appeared after the initial Unsloth inventory. It is the smallest file and 
 
 IQ2_XXS also failed the small exact-order task, passed only 5/8 checks in the medium agent task, and used more memory than IQ1_M. Its 57.35 tok/s fixed decode and 0.646 score leave it dominated by several smaller or similarly sized choices.
 
+IQ2_M produced the same 0/1, 2/8, and 10/10 generation-task scores as IQ2_XXS, and dropped the medium agent task to 4/8. A repeat at the canonical seed reproduced every task score. At 60.29 tok/s fixed decode and 35.74 GB peak RSS, it is larger, slower, and lower-scoring than IQ1_M.
+
 During testing, the Hub advanced the oQ2e repository from the canonical run's `777afd...` revision to `830f68...`. The identities of all seven safetensor blobs are unchanged, as are the inference files. The newer revision completes the repository metadata files. The 256K result records that revision.
 
 Both conventional community MLX 4-bit conversions failed before inference in mlx-vlm 0.6.6. Vontra's checkpoint has a gate quantization shape mismatch. Pipenetwork's checkpoint supplies 141 router parameters that the runtime does not instantiate. The export records the exact exceptions as failure rows. The official Q4_K_M GGUF loads through Poolside's llama.cpp branch.
@@ -46,6 +49,7 @@ Canonical artifacts:
 - `results/20260722T041423Z-mlx-community--Laguna-S-2.1-oQ4e/`
 - `results/20260722T042148Z-unsloth--Laguna-S-2.1-GGUF:UD-IQ1_S/`
 - `results/20260722T042913Z-unsloth--Laguna-S-2.1-GGUF:UD-IQ2_XXS/`
+- `results/20260722T044203Z-unsloth--Laguna-S-2.1-GGUF:UD-IQ2_M/`
 - `results/20260722T032111Z-unsloth--Laguna-S-2.1-GGUF:UD-IQ1_M/`
 - `results/20260722T013118Z-mlx-community--Laguna-S-2.1-oQ3e/`
 - `results/20260722T005530Z-poolside--Laguna-S-2.1-NVFP4-mlx/`
@@ -58,6 +62,7 @@ Canonical artifacts:
 |---|---:|---:|---:|
 | IQ1_S GGUF | 585.94 | 55.85 | 32.48 RSS |
 | IQ2_XXS GGUF | 606.72 | 57.35 | 35.66 RSS |
+| IQ2_M GGUF | 676.27 | 60.29 | 35.74 RSS |
 | Pipenetwork mixed 2-bit | 1247.17 | 68.49 | 39.90 MLX |
 | Q2_K_XL GGUF | 618.25 | 55.93 | 37.99 RSS |
 | JANG_2L | 1259.03 | 49.29 | 46.62 MLX |

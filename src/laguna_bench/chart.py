@@ -22,11 +22,12 @@ LOCAL_MODELS = {
     "unsloth/Laguna-S-2.1-GGUF:UD-IQ1_M": "IQ1_M",
     "mlx-community/Laguna-S-2.1-oQ2e": "oQ2e",
     "unsloth/Laguna-S-2.1-GGUF:UD-IQ2_XXS": "IQ2_XXS",
-    "pipenetwork/Laguna-S-2.1-MLX-2bit": "PIPE 2B",
-    "unsloth/Laguna-S-2.1-GGUF:UD-Q2_K_XL": "Q2_K_XL",
-    "JANGQ-AI/Laguna-S-2.1-JANG_2L": "JANG 2L",
+    "unsloth/Laguna-S-2.1-GGUF:UD-IQ2_M": "IQ2_M",
+    "pipenetwork/Laguna-S-2.1-MLX-2bit": "PIPE2B",
+    "unsloth/Laguna-S-2.1-GGUF:UD-Q2_K_XL": "Q2XL",
+    "JANGQ-AI/Laguna-S-2.1-JANG_2L": "JANG2L",
     "mlx-community/Laguna-S-2.1-oQ3e": "oQ3e",
-    "pipenetwork/Laguna-S-2.1-MLX-3bit": "PIPE 3B",
+    "pipenetwork/Laguna-S-2.1-MLX-3bit": "PIPE3B",
     "mlx-community/Laguna-S-2.1-oQ4e": "oQ4e",
     "poolside/Laguna-S-2.1-NVFP4-mlx": "NVFP4",
 }
@@ -217,6 +218,7 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
     local_left, local_right = 1025.0, 1548.0
     local_slot = (local_right - local_left) / len(local)
     local_bar_width = min(84.0, local_slot * 0.72)
+    local_value_size = 18 if len(local) <= 11 else 16
 
     _line(parts, 985, 177, 1576, 177, stroke=rule, width=1.5)
     _text(parts, 985, 220, "FIXED 256-TOKEN DECODE TOK/S", size=22, weight=500, fill=foreground)
@@ -231,7 +233,7 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
         color = purple if primary else bar_gray
         text_color = purple if primary else foreground
         parts.append(f'<rect x="{center - local_bar_width / 2:.1f}" y="{y:.1f}" width="{local_bar_width:.1f}" height="{height:.1f}" rx="3" fill="{color}" />')
-        _text(parts, center, y - 13, f"{point.decode_tps:.2f}", size=18, weight=500, fill=text_color, anchor="middle")
+        _text(parts, center, y - 13, f"{point.decode_tps:.2f}", size=local_value_size, weight=500, fill=text_color, anchor="middle")
         _text(parts, center, 505, point.label.upper(), size=10, weight=700 if primary else 500, fill=text_color, anchor="middle")
         _text(parts, center, 525, f"{point.suite_score * 100:.1f}%", size=9, fill="#85847f", anchor="middle")
 
@@ -248,7 +250,7 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
         color = purple if primary else bar_gray
         text_color = purple if primary else foreground
         parts.append(f'<rect x="{center - local_bar_width / 2:.1f}" y="{y:.1f}" width="{local_bar_width:.1f}" height="{height:.1f}" rx="3" fill="{color}" />')
-        _text(parts, center, y - 13, f"{point.peak_memory_gb:.2f}", size=18, weight=500, fill=text_color, anchor="middle")
+        _text(parts, center, y - 13, f"{point.peak_memory_gb:.2f}", size=local_value_size, weight=500, fill=text_color, anchor="middle")
         _text(parts, center, 901, point.label.upper(), size=10, weight=700 if primary else 500, fill=text_color, anchor="middle")
 
     _text(parts, 24, 934, "POOLSIDE: MODEL CARD, 21 JULY 2026    LOCAL: COMMITTED CSV, FIXED 256-TOKEN DECODE PROFILE", size=13, fill="#969590")
