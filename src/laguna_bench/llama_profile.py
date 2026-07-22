@@ -8,6 +8,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from .model_files import model_payload_bytes
 from .runner import machine_metadata
 
 
@@ -59,7 +60,7 @@ def run_llama_profile(
         "model_file": model_file.name,
         "engine": f"llama.cpp-{prompt.get('build_commit', 'unknown')}",
         "resolved_revision": revision,
-        "model_bytes": model_file.stat().st_size,
+        "model_bytes": model_payload_bytes(model_file),
         "quantization": prompt.get("model_type"),
     }
     cases = [

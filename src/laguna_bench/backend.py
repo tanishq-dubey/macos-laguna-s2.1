@@ -11,6 +11,8 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
+from .model_files import model_payload_bytes
+
 
 @dataclass
 class Generation:
@@ -586,7 +588,7 @@ class OpenAIBackend:
             "base_url": self.base_url,
             "resolved_revision": self.revision,
             "model_file": self.model_file.name if self.model_file else None,
-            "model_bytes": self.model_file.stat().st_size if self.model_file else None,
+            "model_bytes": model_payload_bytes(self.model_file) if self.model_file else None,
             "load_seconds": self.load_seconds,
         }
 
