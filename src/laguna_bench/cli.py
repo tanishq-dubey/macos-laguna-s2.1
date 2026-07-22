@@ -7,6 +7,7 @@ from pathlib import Path
 
 from .backend import MLXBackend, OpenAIBackend
 from .catalog import QUANTS
+from .chart import render_results_chart
 from .csv_export import export_csv
 from .failures import record_failure
 from .runner import run_suite
@@ -23,6 +24,10 @@ def build_parser() -> argparse.ArgumentParser:
     compare.add_argument("--output", type=Path, default=Path("results"))
     export = sub.add_parser("export", help="export all task and performance records to one tidy CSV")
     export.add_argument("--output", type=Path, default=Path("results"))
+    chart = sub.add_parser("chart", help="render the published and local results chart")
+    chart.add_argument("--results", type=Path, default=Path("results/laguna_s21_full_results.csv"))
+    chart.add_argument("--poolside", type=Path, default=Path("charts/poolside_terminal_bench_2_1.csv"))
+    chart.add_argument("--output", type=Path, default=Path("charts/laguna-s21-results.svg"))
     sweep = sub.add_parser("sweep", help="run context, decode, sampling, and KV-cache performance cases")
     sweep.add_argument("--model", required=True, help="Hugging Face model ID or local snapshot path")
     sweep.add_argument("--revision")
@@ -71,6 +76,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "export":
         path, rows = export_csv(args.output)
         print(f"CSV: {path} ({rows} row(s))")
+        return 0
+    if args.command == "chart":
+        path = render_results_chart(args.results, args.poolside, args.output)
+        print(f"Chart: {path}")
         return 0
     try:
         if args.command == "sweep":

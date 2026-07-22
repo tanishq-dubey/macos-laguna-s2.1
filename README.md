@@ -10,6 +10,14 @@ On the M5 Max used for these tests, the smallest quant, `mlx-community/Laguna-S-
 
 These results were measured on a 128 GB Apple M5 Max using macOS 27.0, Python 3.13.12, MLX 0.32.0, and mlx-vlm 0.6.6. The score combines three generation tasks and three agentic coding tasks. Throughput is weighted across the generation tasks.
 
+![Poolside published Terminal-Bench results alongside local Apple Silicon measurements](charts/laguna-s21-results.svg)
+
+The left panel reproduces the Terminal-Bench 2.1 figures in [Poolside's model card](https://huggingface.co/poolside/Laguna-S-2.1#benchmark-results). The right panel comes from this repository's committed CSV. They use separate scales and are not the same evaluation. Regenerate the SVG with:
+
+```bash
+uv run --frozen laguna-bench chart
+```
+
 | Quant | Overall score | Generation | Agentic | Generation tok/s | Peak MLX GB | Suite time |
 |---|---:|---:|---:|---:|---:|---:|
 | `mlx-community/Laguna-S-2.1-oQ2e` | 1.000 | 1.000 | 1.000 | 40.85 | 37.77 | 87.38s |

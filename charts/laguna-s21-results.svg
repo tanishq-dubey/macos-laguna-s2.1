@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">Laguna S 2.1 published capability and local Apple Silicon performance</title>
+<desc id="desc">Poolside published Terminal-Bench 2.1 scores beside locally measured MLX decode speed and peak memory for three Laguna S 2.1 quantizations.</desc>
+<rect width="1600" height="900" fill="#090e1a" />
+<style>text { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }</style>
+<text x="64.0" y="70.0" font-size="34" font-weight="700" fill="#f6f8ff" text-anchor="start">Laguna S 2.1: published capability, measured Mac performance</text>
+<text x="64.0" y="105.0" font-size="18" font-weight="400" fill="#8fa2c9" text-anchor="start">Separate sources and scales. The local suite is not Terminal-Bench.</text>
+<rect x="50" y="135" width="760" height="650" rx="20" fill="#111a2d" stroke="#263554" />
+<text x="82.0" y="182.0" font-size="15" font-weight="700" fill="#62d6b3" text-anchor="start">Poolside published</text>
+<text x="82.0" y="215.0" font-size="25" font-weight="700" fill="#f6f8ff" text-anchor="start">Terminal-Bench 2.1</text>
+<text x="82.0" y="242.0" font-size="15" font-weight="400" fill="#8fa2c9" text-anchor="start">Resolved tasks (%)</text>
+<line x1="360.0" y1="262.0" x2="360.0" y2="713.0" stroke="#263554" stroke-width="1" />
+<text x="360.0" y="252.0" font-size="13" font-weight="400" fill="#7183a7" text-anchor="middle">0</text>
+<line x1="457.5" y1="262.0" x2="457.5" y2="713.0" stroke="#263554" stroke-width="1" />
+<text x="457.5" y="252.0" font-size="13" font-weight="400" fill="#7183a7" text-anchor="middle">25</text>
+<line x1="555.0" y1="262.0" x2="555.0" y2="713.0" stroke="#263554" stroke-width="1" />
+<text x="555.0" y="252.0" font-size="13" font-weight="400" fill="#7183a7" text-anchor="middle">50</text>
+<line x1="652.5" y1="262.0" x2="652.5" y2="713.0" stroke="#263554" stroke-width="1" />
+<text x="652.5" y="252.0" font-size="13" font-weight="400" fill="#7183a7" text-anchor="middle">75</text>
+<line x1="750.0" y1="262.0" x2="750.0" y2="713.0" stroke="#263554" stroke-width="1" />
+<text x="750.0" y="252.0" font-size="13" font-weight="400" fill="#7183a7" text-anchor="middle">100</text>
+<text x="82.0" y="300.0" font-size="16" font-weight="500" fill="#dbe6ff" text-anchor="start">Kimi K3</text>
+<text x="82.0" y="319.0" font-size="12" font-weight="400" fill="#7183a7" text-anchor="start">2.8T-A50B</text>
+<rect x="360.0" y="280.0" width="344.4" height="28" rx="6" fill="#5774b8" />
+<text x="695.4" y="300.0" font-size="14" font-weight="700" fill="#09111d" text-anchor="end">88.3</text>
+<text x="82.0" y="349.0" font-size="16" font-weight="500" fill="#dbe6ff" text-anchor="start">Claude Fable 5</text>
+<rect x="360.0" y="329.0" width="343.2" height="28" rx="6" fill="#5774b8" />
+<text x="694.2" y="349.0" font-size="14" font-weight="700" fill="#09111d" text-anchor="end">88</text>
+<text x="82.0" y="398.0" font-size="16" font-weight="500" fill="#dbe6ff" text-anchor="start">Muse Spark 1.1</text>
+<rect x="360.0" y="378.0" width="312.0" height="28" rx="6" fill="#5774b8" />
+<text x="663.0" y="398.0" font-size="14" font-weight="700" fill="#09111d" text-anchor="end">80</text>
+<text x="82.0" y="447.0" font-size="16" font-weight="500" fill="#dbe6ff" text-anchor="start">Qwen 3.7 Max</text>
+<rect x="360.0" y="427.0" width="290.6" height="28" rx="6" fill="#5774b8" />
+<text x="641.5" y="447.0" font-size="14" font-weight="700" fill="#09111d" text-anchor="end">74.5*</text>
+<text x="82.0" y="496.0" font-size="16" font-weight="500" fill="#dbe6ff" text-anchor="start">Tencent HY3</text>
+<text x="82.0" y="515.0" font-size="12" font-weight="400" fill="#7183a7" text-anchor="start">295B-A21B</text>
+<rect x="360.0" y="476.0" width="279.6" height="28" rx="6" fill="#5774b8" />
+<text x="630.6" y="496.0" font-size="14" font-weight="700" fill="#09111d" text-anchor="end">71.7</text>
+<text x="82.0" y="545.0" font-size="16" font-weight="700" fill="#f6f8ff" text-anchor="start">Laguna S 2.1</text>
+<text x="82.0" y="564.0" font-size="12" font-weight="400" fill="#7183a7" text-anchor="start">118B-A8B</text>
+<rect x="360.0" y="525.0" width="273.8" height="28" rx="6" fill="#62d6b3" />
+<text x="624.8" y="545.0" font-size="14" font-weight="700" fill="#09111d" text-anchor="end">70.2</text>
+<text x="82.0" y="594.0" font-size="16" font-weight="500" fill="#dbe6ff" text-anchor="start">DeepSeek-V4-Pro Max</text>
+<text x="82.0" y="613.0" font-size="12" font-weight="400" fill="#7183a7" text-anchor="start">1.6T-A49B</text>
+<rect x="360.0" y="574.0" width="249.6" height="28" rx="6" fill="#5774b8" />
+<text x="600.6" y="594.0" font-size="14" font-weight="700" fill="#09111d" text-anchor="end">64*</text>
+<text x="82.0" y="643.0" font-size="16" font-weight="500" fill="#dbe6ff" text-anchor="start">Inkling</text>
+<text x="82.0" y="662.0" font-size="12" font-weight="400" fill="#7183a7" text-anchor="start">975B-A41B</text>
+<rect x="360.0" y="623.0" width="248.8" height="28" rx="6" fill="#5774b8" />
+<text x="599.8" y="643.0" font-size="14" font-weight="700" fill="#09111d" text-anchor="end">63.8</text>
+<text x="82.0" y="692.0" font-size="16" font-weight="500" fill="#dbe6ff" text-anchor="start">Nemotron 3 Ultra</text>
+<text x="82.0" y="711.0" font-size="12" font-weight="400" fill="#7183a7" text-anchor="start">550B-A55B</text>
+<rect x="360.0" y="672.0" width="220.0" height="28" rx="6" fill="#5774b8" />
+<text x="571.0" y="692.0" font-size="14" font-weight="700" fill="#09111d" text-anchor="end">56.4</text>
+<text x="82.0" y="756.0" font-size="13" font-weight="400" fill="#7183a7" text-anchor="start">* Poolside marks this Terminal-Bench score as third-party reported.</text>
+<rect x="835" y="135" width="715" height="650" rx="20" fill="#111a2d" stroke="#263554" />
+<text x="867.0" y="182.0" font-size="15" font-weight="700" fill="#7bb8ff" text-anchor="start">Measured locally</text>
+<text x="867.0" y="215.0" font-size="25" font-weight="700" fill="#f6f8ff" text-anchor="start">MLX quant profile at 16K</text>
+<text x="867.0" y="242.0" font-size="15" font-weight="400" fill="#8fa2c9" text-anchor="start">128 GB M5 Max, mlx-vlm 0.6.6, greedy decoding</text>
+<line x1="930.0" y1="300.0" x2="930.0" y2="600.0" stroke="#263554" stroke-width="1" />
+<text x="930.0" y="627.0" font-size="13" font-weight="400" fill="#7183a7" text-anchor="middle">30</text>
+<line x1="1042.0" y1="300.0" x2="1042.0" y2="600.0" stroke="#263554" stroke-width="1" />
+<text x="1042.0" y="627.0" font-size="13" font-weight="400" fill="#7183a7" text-anchor="middle">40</text>
+<line x1="1154.0" y1="300.0" x2="1154.0" y2="600.0" stroke="#263554" stroke-width="1" />
+<text x="1154.0" y="627.0" font-size="13" font-weight="400" fill="#7183a7" text-anchor="middle">50</text>
+<line x1="1266.0" y1="300.0" x2="1266.0" y2="600.0" stroke="#263554" stroke-width="1" />
+<text x="1266.0" y="627.0" font-size="13" font-weight="400" fill="#7183a7" text-anchor="middle">60</text>
+<line x1="1378.0" y1="300.0" x2="1378.0" y2="600.0" stroke="#263554" stroke-width="1" />
+<text x="1378.0" y="627.0" font-size="13" font-weight="400" fill="#7183a7" text-anchor="middle">70</text>
+<line x1="1490.0" y1="300.0" x2="1490.0" y2="600.0" stroke="#263554" stroke-width="1" />
+<text x="1490.0" y="627.0" font-size="13" font-weight="400" fill="#7183a7" text-anchor="middle">80</text>
+<line x1="930.0" y1="562.5" x2="1490.0" y2="562.5" stroke="#263554" stroke-width="1" />
+<text x="916.0" y="567.5" font-size="13" font-weight="400" fill="#7183a7" text-anchor="end">30</text>
+<line x1="930.0" y1="487.5" x2="1490.0" y2="487.5" stroke="#263554" stroke-width="1" />
+<text x="916.0" y="492.5" font-size="13" font-weight="400" fill="#7183a7" text-anchor="end">40</text>
+<line x1="930.0" y1="412.5" x2="1490.0" y2="412.5" stroke="#263554" stroke-width="1" />
+<text x="916.0" y="417.5" font-size="13" font-weight="400" fill="#7183a7" text-anchor="end">50</text>
+<line x1="930.0" y1="337.5" x2="1490.0" y2="337.5" stroke="#263554" stroke-width="1" />
+<text x="916.0" y="342.5" font-size="13" font-weight="400" fill="#7183a7" text-anchor="end">60</text>
+<text x="1210.0" y="647.0" font-size="15" font-weight="400" fill="#8fa2c9" text-anchor="middle">Peak MLX memory (GB)</text>
+<text x="870.0" y="455.0" font-size="15" font-weight="400" fill="#8fa2c9" text-anchor="start">Decode tok/s</text>
+<circle cx="1024.8" cy="393.9" r="11" fill="#62d6b3" stroke="#f6f8ff" stroke-width="2" />
+<text x="1038.8" y="375.9" font-size="16" font-weight="700" fill="#f6f8ff" text-anchor="start">oQ2e (2.7-bit)</text>
+<text x="1038.8" y="395.9" font-size="12" font-weight="400" fill="#8fa2c9" text-anchor="start">52.48 tok/s, 38.46 GB, 100.0% suite</text>
+<circle cx="1170.5" cy="374.2" r="11" fill="#7bb8ff" stroke="#f6f8ff" stroke-width="2" />
+<text x="1184.5" y="405.2" font-size="16" font-weight="700" fill="#f6f8ff" text-anchor="start">oQ3e</text>
+<text x="1184.5" y="425.2" font-size="12" font-weight="400" fill="#8fa2c9" text-anchor="start">55.10 tok/s, 51.47 GB, 62.5% suite</text>
+<circle cx="1425.2" cy="533.5" r="11" fill="#7bb8ff" stroke="#f6f8ff" stroke-width="2" />
+<text x="1411.2" y="515.5" font-size="16" font-weight="700" fill="#f6f8ff" text-anchor="end">NVFP4 MLX</text>
+<text x="1411.2" y="535.5" font-size="12" font-weight="400" fill="#8fa2c9" text-anchor="end">33.87 tok/s, 74.21 GB, 87.5% suite</text>
+<rect x="867" y="680" width="651" height="74" rx="12" fill="#17243c" />
+<text x="891.0" y="709.0" font-size="15" font-weight="700" fill="#62d6b3" text-anchor="start">oQ2e context scaling</text>
+<text x="891.0" y="737.0" font-size="14" font-weight="400" fill="#dbe6ff" text-anchor="start">64K: 32.03 tok/s, 41.19 GB    |    256K: 12.16 tok/s, 52.87 GB    |    retrieval passed</text>
+<text x="64.0" y="835.0" font-size="15" font-weight="400" fill="#8fa2c9" text-anchor="start">Published scores: Poolside Laguna S 2.1 model card, benchmark table dated 21 July 2026.</text>
+<text x="64.0" y="866.0" font-size="15" font-weight="400" fill="#8fa2c9" text-anchor="start">Local results: committed CSV. 16K points use fixed-length generation; suite scores cover six coding tasks.</text>
+<text x="1536.0" y="866.0" font-size="14" font-weight="700" fill="#62d6b3" text-anchor="end">macos-laguna-s2.1</text>
+</svg>

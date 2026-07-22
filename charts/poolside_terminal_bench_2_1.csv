@@ -1,0 +1,10 @@
+model,size,terminal_bench_2_1,third_party
+Laguna S 2.1,118B-A8B,70.2,false
+Tencent HY3,295B-A21B,71.7,false
+Inkling,975B-A41B,63.8,false
+Nemotron 3 Ultra,550B-A55B,56.4,false
+DeepSeek-V4-Pro Max,1.6T-A49B,64.0,true
+Kimi K3,2.8T-A50B,88.3,false
+Qwen 3.7 Max,,74.5,true
+Muse Spark 1.1,,80.0,false
+Claude Fable 5,,88.0,false
