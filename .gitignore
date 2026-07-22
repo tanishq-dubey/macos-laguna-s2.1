@@ -1,0 +1,16 @@
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+__pycache__/
+*.pyc
+.DS_Store
+results/*
+!results/.gitkeep
+!results/comparison.md
+!results/laguna_s21_full_results.csv
