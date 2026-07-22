@@ -56,66 +56,73 @@
 <text x="985.0" y="220.0" font-size="22" font-weight="500" fill="#f0efed" text-anchor="start">FIXED 256-TOKEN DECODE TOK/S</text>
 <text x="985.0" y="249.0" font-size="14" font-weight="400" fill="#b9b8b4" text-anchor="start">MLX-VLM, MLX-LM, JANG, OR LLAMA.CPP; GREEDY</text>
 <line x1="1000.0" y1="474.0" x2="1568.0" y2="474.0" stroke="#666561" stroke-width="1" />
-<rect x="1034.2" y="321.6" width="47.1" height="152.4" rx="3" fill="#74736e" />
-<text x="1057.7" y="308.6" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">62.68</text>
-<text x="1057.7" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_M</text>
-<text x="1057.7" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">79.2% SUITE</text>
-<rect x="1099.5" y="340.2" width="47.1" height="133.8" rx="3" fill="#74736e" />
-<text x="1123.1" y="327.2" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">55.06</text>
-<text x="1123.1" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ2E</text>
-<text x="1123.1" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">100.0% SUITE</text>
-<rect x="1164.9" y="307.5" width="47.1" height="166.5" rx="3" fill="#b17ce8" />
-<text x="1188.4" y="294.5" font-size="18" font-weight="500" fill="#b17ce8" text-anchor="middle">68.49</text>
-<text x="1188.4" y="505.0" font-size="10" font-weight="700" fill="#b17ce8" text-anchor="middle">PIPE 2B</text>
-<text x="1188.4" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">100.0% SUITE</text>
-<rect x="1230.3" y="338.1" width="47.1" height="135.9" rx="3" fill="#74736e" />
-<text x="1253.8" y="325.1" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">55.93</text>
-<text x="1253.8" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">Q2_K_XL</text>
-<text x="1253.8" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">87.5% SUITE</text>
-<rect x="1295.7" y="354.2" width="47.1" height="119.8" rx="3" fill="#74736e" />
-<text x="1319.2" y="341.2" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">49.29</text>
-<text x="1319.2" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">JANG 2L</text>
-<text x="1319.2" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">41.7% SUITE</text>
-<rect x="1361.0" y="326.2" width="47.1" height="147.8" rx="3" fill="#74736e" />
-<text x="1384.6" y="313.2" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">60.83</text>
-<text x="1384.6" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ3E</text>
-<text x="1384.6" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">62.5% SUITE</text>
-<rect x="1426.4" y="315.3" width="47.1" height="158.7" rx="3" fill="#74736e" />
-<text x="1449.9" y="302.3" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">65.31</text>
-<text x="1449.9" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">PIPE 3B</text>
-<text x="1449.9" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">87.5% SUITE</text>
-<rect x="1491.8" y="410.4" width="47.1" height="63.6" rx="3" fill="#74736e" />
-<text x="1515.3" y="397.4" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">26.16</text>
-<text x="1515.3" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">NVFP4</text>
-<text x="1515.3" y="525.0" font-size="10" font-weight="400" fill="#85847f" text-anchor="middle">87.5% SUITE</text>
+<rect x="1033.1" y="321.6" width="41.8" height="152.4" rx="3" fill="#74736e" />
+<text x="1054.1" y="308.6" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">62.68</text>
+<text x="1054.1" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_M</text>
+<text x="1054.1" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">79.2%</text>
+<rect x="1091.2" y="340.2" width="41.8" height="133.8" rx="3" fill="#74736e" />
+<text x="1112.2" y="327.2" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">55.06</text>
+<text x="1112.2" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ2E</text>
+<text x="1112.2" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">100.0%</text>
+<rect x="1149.4" y="307.5" width="41.8" height="166.5" rx="3" fill="#b17ce8" />
+<text x="1170.3" y="294.5" font-size="18" font-weight="500" fill="#b17ce8" text-anchor="middle">68.49</text>
+<text x="1170.3" y="505.0" font-size="10" font-weight="700" fill="#b17ce8" text-anchor="middle">PIPE 2B</text>
+<text x="1170.3" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">100.0%</text>
+<rect x="1207.5" y="338.1" width="41.8" height="135.9" rx="3" fill="#74736e" />
+<text x="1228.4" y="325.1" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">55.93</text>
+<text x="1228.4" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">Q2_K_XL</text>
+<text x="1228.4" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
+<rect x="1265.6" y="354.2" width="41.8" height="119.8" rx="3" fill="#74736e" />
+<text x="1286.5" y="341.2" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">49.29</text>
+<text x="1286.5" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">JANG 2L</text>
+<text x="1286.5" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">41.7%</text>
+<rect x="1323.7" y="326.2" width="41.8" height="147.8" rx="3" fill="#74736e" />
+<text x="1344.6" y="313.2" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">60.83</text>
+<text x="1344.6" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ3E</text>
+<text x="1344.6" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">62.5%</text>
+<rect x="1381.8" y="315.3" width="41.8" height="158.7" rx="3" fill="#74736e" />
+<text x="1402.7" y="302.3" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">65.31</text>
+<text x="1402.7" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">PIPE 3B</text>
+<text x="1402.7" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
+<rect x="1439.9" y="347.6" width="41.8" height="126.4" rx="3" fill="#74736e" />
+<text x="1460.8" y="334.6" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">52.00</text>
+<text x="1460.8" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ4E</text>
+<text x="1460.8" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
+<rect x="1498.0" y="410.4" width="41.8" height="63.6" rx="3" fill="#74736e" />
+<text x="1518.9" y="397.4" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">26.16</text>
+<text x="1518.9" y="505.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">NVFP4</text>
+<text x="1518.9" y="525.0" font-size="9" font-weight="400" fill="#85847f" text-anchor="middle">87.5%</text>
 <line x1="985.0" y1="575.0" x2="1576.0" y2="575.0" stroke="#666561" stroke-width="1.5" />
 <text x="985.0" y="618.0" font-size="24" font-weight="500" fill="#f0efed" text-anchor="start">PEAK MEMORY (GB)</text>
 <text x="985.0" y="647.0" font-size="14" font-weight="400" fill="#b9b8b4" text-anchor="start">MLX ALLOCATOR PEAK; GGUF PROCESS MAX RSS</text>
 <line x1="1000.0" y1="870.0" x2="1568.0" y2="870.0" stroke="#666561" stroke-width="1" />
-<rect x="1034.2" y="795.1" width="47.1" height="74.9" rx="3" fill="#74736e" />
-<text x="1057.7" y="782.1" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">34.22</text>
-<text x="1057.7" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_M</text>
-<rect x="1099.5" y="788.6" width="47.1" height="81.4" rx="3" fill="#74736e" />
-<text x="1123.1" y="775.6" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">37.22</text>
-<text x="1123.1" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ2E</text>
-<rect x="1164.9" y="785.5" width="47.1" height="84.5" rx="3" fill="#b17ce8" />
-<text x="1188.4" y="772.5" font-size="18" font-weight="500" fill="#b17ce8" text-anchor="middle">38.65</text>
-<text x="1188.4" y="901.0" font-size="10" font-weight="700" fill="#b17ce8" text-anchor="middle">PIPE 2B</text>
-<rect x="1230.3" y="786.9" width="47.1" height="83.1" rx="3" fill="#74736e" />
-<text x="1253.8" y="773.9" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">37.99</text>
-<text x="1253.8" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">Q2_K_XL</text>
-<rect x="1295.7" y="770.9" width="47.1" height="99.1" rx="3" fill="#74736e" />
-<text x="1319.2" y="757.9" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">45.29</text>
-<text x="1319.2" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">JANG 2L</text>
-<rect x="1361.0" y="760.1" width="47.1" height="109.9" rx="3" fill="#74736e" />
-<text x="1384.6" y="747.1" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">50.23</text>
-<text x="1384.6" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ3E</text>
-<rect x="1426.4" y="755.5" width="47.1" height="114.5" rx="3" fill="#74736e" />
-<text x="1449.9" y="742.5" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">52.34</text>
-<text x="1449.9" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">PIPE 3B</text>
-<rect x="1491.8" y="710.5" width="47.1" height="159.5" rx="3" fill="#74736e" />
-<text x="1515.3" y="697.5" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">72.92</text>
-<text x="1515.3" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">NVFP4</text>
+<rect x="1033.1" y="795.1" width="41.8" height="74.9" rx="3" fill="#74736e" />
+<text x="1054.1" y="782.1" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">34.22</text>
+<text x="1054.1" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">IQ1_M</text>
+<rect x="1091.2" y="788.6" width="41.8" height="81.4" rx="3" fill="#74736e" />
+<text x="1112.2" y="775.6" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">37.22</text>
+<text x="1112.2" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ2E</text>
+<rect x="1149.4" y="785.5" width="41.8" height="84.5" rx="3" fill="#b17ce8" />
+<text x="1170.3" y="772.5" font-size="18" font-weight="500" fill="#b17ce8" text-anchor="middle">38.65</text>
+<text x="1170.3" y="901.0" font-size="10" font-weight="700" fill="#b17ce8" text-anchor="middle">PIPE 2B</text>
+<rect x="1207.5" y="786.9" width="41.8" height="83.1" rx="3" fill="#74736e" />
+<text x="1228.4" y="773.9" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">37.99</text>
+<text x="1228.4" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">Q2_K_XL</text>
+<rect x="1265.6" y="770.9" width="41.8" height="99.1" rx="3" fill="#74736e" />
+<text x="1286.5" y="757.9" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">45.29</text>
+<text x="1286.5" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">JANG 2L</text>
+<rect x="1323.7" y="760.1" width="41.8" height="109.9" rx="3" fill="#74736e" />
+<text x="1344.6" y="747.1" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">50.23</text>
+<text x="1344.6" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ3E</text>
+<rect x="1381.8" y="755.5" width="41.8" height="114.5" rx="3" fill="#74736e" />
+<text x="1402.7" y="742.5" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">52.34</text>
+<text x="1402.7" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">PIPE 3B</text>
+<rect x="1439.9" y="727.5" width="41.8" height="142.5" rx="3" fill="#74736e" />
+<text x="1460.8" y="714.5" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">65.12</text>
+<text x="1460.8" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">OQ4E</text>
+<rect x="1498.0" y="710.5" width="41.8" height="159.5" rx="3" fill="#74736e" />
+<text x="1518.9" y="697.5" font-size="18" font-weight="500" fill="#f0efed" text-anchor="middle">72.92</text>
+<text x="1518.9" y="901.0" font-size="10" font-weight="500" fill="#f0efed" text-anchor="middle">NVFP4</text>
 <text x="24.0" y="934.0" font-size="13" font-weight="400" fill="#969590" text-anchor="start">POOLSIDE: MODEL CARD, 21 JULY 2026    LOCAL: COMMITTED CSV, FIXED 256-TOKEN DECODE PROFILE</text>
 <text x="24.0" y="965.0" font-size="13" font-weight="500" fill="#b17ce8" text-anchor="start">oQ2e CONTEXT: 64K 32.03 TOK/S, 41.19 GB    |    256K 12.16 TOK/S, 52.87 GB    |    RETRIEVAL PASSED</text>
 <text x="1576.0" y="965.0" font-size="13" font-weight="700" fill="#f0efed" text-anchor="end">MACOS-LAGUNA-S2.1</text>

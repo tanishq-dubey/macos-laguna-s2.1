@@ -63,7 +63,7 @@ QUANTS = [
         "model": "mlx-community/Laguna-S-2.1-oQ4e",
         "size_gib": 59.73,
         "bits": "4.60 effective",
-        "status": "community; upload now complete; queued",
+        "status": "tested: 0.875 quality; dominated by pipenetwork 2-bit",
         "recommended": False,
     },
     {

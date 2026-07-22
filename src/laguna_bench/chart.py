@@ -25,6 +25,7 @@ LOCAL_MODELS = {
     "JANGQ-AI/Laguna-S-2.1-JANG_2L": "JANG 2L",
     "mlx-community/Laguna-S-2.1-oQ3e": "oQ3e",
     "pipenetwork/Laguna-S-2.1-MLX-3bit": "PIPE 3B",
+    "mlx-community/Laguna-S-2.1-oQ4e": "oQ4e",
     "poolside/Laguna-S-2.1-NVFP4-mlx": "NVFP4",
 }
 
@@ -230,7 +231,7 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
         parts.append(f'<rect x="{center - local_bar_width / 2:.1f}" y="{y:.1f}" width="{local_bar_width:.1f}" height="{height:.1f}" rx="3" fill="{color}" />')
         _text(parts, center, y - 13, f"{point.decode_tps:.2f}", size=18, weight=500, fill=text_color, anchor="middle")
         _text(parts, center, 505, point.label.upper(), size=10, weight=700 if primary else 500, fill=text_color, anchor="middle")
-        _text(parts, center, 525, f"{point.suite_score * 100:.1f}% SUITE", size=10, fill="#85847f", anchor="middle")
+        _text(parts, center, 525, f"{point.suite_score * 100:.1f}%", size=9, fill="#85847f", anchor="middle")
 
     _line(parts, 985, 575, 1576, 575, stroke=rule, width=1.5)
     _text(parts, 985, 618, "PEAK MEMORY (GB)", size=24, weight=500, fill=foreground)
