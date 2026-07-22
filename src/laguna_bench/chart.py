@@ -18,6 +18,7 @@ TASK_IDS = {
 }
 
 LOCAL_MODELS = {
+    "unsloth/Laguna-S-2.1-GGUF:UD-IQ1_M": "IQ1_M GGUF",
     "mlx-community/Laguna-S-2.1-oQ2e": "oQ2e (2.7-bit)",
     "mlx-community/Laguna-S-2.1-oQ3e": "oQ3e",
     "poolside/Laguna-S-2.1-NVFP4-mlx": "NVFP4 MLX",
@@ -94,7 +95,7 @@ def load_local_points(path: Path) -> list[LocalPoint]:
             row["record_type"] == "performance"
             and model in LOCAL_MODELS
             and row["chip"] == REFERENCE_CHIP
-            and row["case_id"] == "context-16384"
+            and row["case_id"] == "decode-256"
             and row["status"] == "ok"
         ):
             current = performance.get(model)
@@ -161,7 +162,7 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
 
     _text(parts, 32, 57, "LAGUNA S 2.1", size=34, weight=700, fill=purple)
     _text(parts, 322, 57, "ON APPLE SILICON", size=34, weight=700, fill=foreground)
-    _text(parts, 32, 98, "52.48 TOK/S AT 38.46 GB PEAK ON AN M5 MAX", size=23, weight=500, fill=muted)
+    _text(parts, 32, 98, "FASTEST TESTED: 62.68 TOK/S, 34.22 GB MAX RSS (IQ1_M GGUF)", size=23, weight=500, fill=muted)
     _text(parts, 32, 132, "PUBLISHED CAPABILITY AND LOCAL INFERENCE USE DIFFERENT SOURCES AND SCALES", size=15, fill="#8f8e8a")
 
     # Left panel: Poolside's published Terminal-Bench comparison.
@@ -209,8 +210,8 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
     local_slot = (local_right - local_left) / len(local)
 
     _line(parts, 985, 177, 1576, 177, stroke=rule, width=1.5)
-    _text(parts, 985, 220, "16K DECODE TOK/S", size=24, weight=500, fill=foreground)
-    _text(parts, 985, 249, "MLX-VLM 0.6.6, GREEDY", size=14, fill=muted)
+    _text(parts, 985, 220, "FIXED 256-TOKEN DECODE TOK/S", size=22, weight=500, fill=foreground)
+    _text(parts, 985, 249, "MLX-VLM OR LLAMA.CPP, GREEDY", size=14, fill=muted)
     decode_base, decode_height = 474.0, 175.0
     _line(parts, local_left - 25, decode_base, local_right + 20, decode_base, stroke=rule)
     for index, point in enumerate(local):
@@ -226,8 +227,8 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
         _text(parts, center, 525, f"{point.suite_score * 100:.1f}% SUITE", size=10, fill="#85847f", anchor="middle")
 
     _line(parts, 985, 575, 1576, 575, stroke=rule, width=1.5)
-    _text(parts, 985, 618, "PEAK MLX MEMORY (GB)", size=24, weight=500, fill=foreground)
-    _text(parts, 985, 647, "128 GB M5 MAX, 16K PROFILE", size=14, fill=muted)
+    _text(parts, 985, 618, "PEAK MEMORY (GB)", size=24, weight=500, fill=foreground)
+    _text(parts, 985, 647, "MLX ALLOCATOR PEAK; GGUF PROCESS MAX RSS", size=14, fill=muted)
     memory_base, memory_height = 870.0, 175.0
     _line(parts, local_left - 25, memory_base, local_right + 20, memory_base, stroke=rule)
     for index, point in enumerate(local):
@@ -241,7 +242,7 @@ def render_results_chart(results_csv: Path, poolside_csv: Path, destination: Pat
         _text(parts, center, y - 13, f"{point.peak_memory_gb:.2f}", size=18, weight=500, fill=text_color, anchor="middle")
         _text(parts, center, 901, point.label.upper(), size=12, weight=700 if primary else 500, fill=text_color, anchor="middle")
 
-    _text(parts, 24, 934, "POOLSIDE: MODEL CARD, 21 JULY 2026    LOCAL: COMMITTED CSV, FIXED-LENGTH 16K PROFILE", size=13, fill="#969590")
+    _text(parts, 24, 934, "POOLSIDE: MODEL CARD, 21 JULY 2026    LOCAL: COMMITTED CSV, FIXED 256-TOKEN DECODE PROFILE", size=13, fill="#969590")
     _text(parts, 24, 965, "oQ2e CONTEXT: 64K 32.03 TOK/S, 41.19 GB    |    256K 12.16 TOK/S, 52.87 GB    |    RETRIEVAL PASSED", size=13, weight=500, fill=purple)
     _text(parts, 1576, 965, "MACOS-LAGUNA-S2.1", size=13, weight=700, fill=foreground, anchor="end")
     parts.append("</svg>\n")

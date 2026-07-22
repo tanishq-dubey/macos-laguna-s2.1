@@ -4,13 +4,14 @@ These results were measured on July 21 and 22, 2026, using a 128 GB Apple M5 Max
 
 ## Quant results
 
-| Quant | Revision | Score | Generation | Agentic | Weighted generation tok/s | Peak MLX GB | Suite wall time |
+| Quant | Revision | Score | Generation | Agentic | Weighted generation tok/s | Peak GB | Suite wall time |
 |---|---|---:|---:|---:|---:|---:|---:|
 | `mlx-community/Laguna-S-2.1-oQ2e` | `777afdcd509a4a2ac9007bb405ea1f97d6b60912` | 1.000 | 1.000 | 1.000 | 40.85 | 37.77 | 87.38s |
+| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_M` | `17bf31a6d627ed136f7d1f403cb692ae643debe4` | 0.792 | 0.750 | 0.833 | 57.34 | 34.22 RSS | 78.41s |
 | `mlx-community/Laguna-S-2.1-oQ3e` | `b0a05345ef4ee549a2c1e7b27dbbf8aec8c1b0b3` | 0.625 | 0.417 | 0.833 | 48.58 | 50.69 | 84.79s |
 | `poolside/Laguna-S-2.1-NVFP4-mlx` | `9664772ddf25ea938bbc380b26f7e7110f9f6521` | 0.875 | 0.750 | 1.000 | 7.25 | 73.47 | 301.77s |
 
-The oQ2e run passed every hidden assertion: 19/19 generation checks and 19/19 agentic checks. oQ3e decoded faster, but made several exact-format and implementation errors. In this case, the higher bit rate did not produce the better conversion. The official, testing-only NVFP4 model failed six of eight medium-generation checks because it returned tuples where the specification required lists. Its other five tasks passed.
+The oQ2e run passed every hidden assertion: 19/19 generation checks and 19/19 agentic checks. The IQ1_M GGUF passed 13/19 generation checks and 15/19 agentic checks. It returned tuples instead of required lists in the medium generation task and inverted a unit-order condition in the medium agent task. A repeated run produced the same task scores. oQ3e decoded faster than oQ2e, but made several exact-format and implementation errors. The official, testing-only NVFP4 model failed six of eight medium-generation checks because it returned tuples where the specification required lists. Its other five tasks passed.
 
 During testing, the Hub advanced the oQ2e repository from the canonical run's `777afd...` revision to `830f68...`. The identities of all seven safetensor blobs are unchanged, as are the inference files. The newer revision completes the repository metadata files. The 256K result records that revision.
 
@@ -19,6 +20,7 @@ Both conventional community MLX 4-bit conversions failed before inference in mlx
 Canonical artifacts:
 
 - `results/20260722T010704Z-mlx-community--Laguna-S-2.1-oQ2e/`
+- `results/20260722T032111Z-unsloth--Laguna-S-2.1-GGUF:UD-IQ1_M/`
 - `results/20260722T013118Z-mlx-community--Laguna-S-2.1-oQ3e/`
 - `results/20260722T005530Z-poolside--Laguna-S-2.1-NVFP4-mlx/`
 - `results/comparison.md`
@@ -26,13 +28,14 @@ Canonical artifacts:
 
 ## Standardized quant performance profile
 
-| Quant | 16K prefill tok/s | 16K decode tok/s | 16K peak GB | 1K/256 decode tok/s | Decode peak GB |
-|---|---:|---:|---:|---:|---:|
-| oQ2e | 1613.07 | 52.48 | 38.46 | 55.06 | 37.22 |
-| oQ3e | 1275.11 | 55.10 | 51.47 | 60.83 | 50.23 |
-| Official NVFP4 MLX | 1646.40 | 33.87 | 74.21 | 26.16 | 72.92 |
+| Quant | 16K prefill tok/s | Fixed 256-token decode tok/s | Profile peak GB |
+|---|---:|---:|---:|
+| IQ1_M GGUF | 754.54 | 62.68 | 34.22 RSS |
+| oQ2e | 1613.07 | 55.06 | 38.46 MLX |
+| oQ3e | 1275.11 | 60.83 | 51.47 MLX |
+| Official NVFP4 MLX | 1646.40 | 26.16 | 74.21 MLX |
 
-The standardized profile measures prefill and a fixed-length decode separately from task-dependent early stopping. This explains why the older NVFP4 task aggregate looked especially slow: overhead dominated its short, variable generations.
+The standardized profile measures prefill and a fixed-length decode separately from task-dependent early stopping. The MLX decode cases use a 1K prompt; llama-bench reports its 256-token generation test separately from the 16K prefill test. The memory methods also differ: MLX reports its allocator peak, while the GGUF row uses the process maximum RSS reported by macOS. This explains why the older NVFP4 task aggregate looked especially slow: overhead dominated its short, variable generations.
 
 ## Context-length sweep on oQ2e
 

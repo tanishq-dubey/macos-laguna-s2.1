@@ -15,9 +15,13 @@ def test_chart_sources_have_expected_laguna_results():
     laguna = next(item for item in published if item.model == "Laguna S 2.1")
     oq2e = next(item for item in local if item.label.startswith("oQ2e"))
     assert laguna.score == 70.2
-    assert oq2e.decode_tps == pytest.approx(52.48, abs=0.005)
-    assert oq2e.peak_memory_gb == pytest.approx(38.46, abs=0.005)
+    iq1 = next(item for item in local if item.label == "IQ1_M GGUF")
+    assert oq2e.decode_tps == pytest.approx(55.06, abs=0.005)
+    assert oq2e.peak_memory_gb == pytest.approx(37.22, abs=0.005)
     assert oq2e.suite_score == 1.0
+    assert iq1.decode_tps == pytest.approx(62.68, abs=0.005)
+    assert iq1.peak_memory_gb == pytest.approx(34.22, abs=0.005)
+    assert iq1.suite_score == pytest.approx(0.792, abs=0.001)
 
 
 def test_chart_renders_standalone_svg(tmp_path):
@@ -30,4 +34,4 @@ def test_chart_renders_standalone_svg(tmp_path):
     svg = destination.read_text()
     assert svg.startswith("<svg")
     assert "Laguna S 2.1" in svg
-    assert "52.48 TOK/S" in svg
+    assert "62.68 TOK/S" in svg

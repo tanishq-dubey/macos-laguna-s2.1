@@ -10,6 +10,7 @@ from .catalog import QUANTS
 from .chart import render_results_chart
 from .csv_export import export_csv
 from .failures import record_failure
+from .llama_profile import run_llama_profile
 from .runner import run_suite
 from .reporting import build_comparison
 from .sweep import SweepCase, run_sweep
@@ -28,6 +29,14 @@ def build_parser() -> argparse.ArgumentParser:
     chart.add_argument("--results", type=Path, default=Path("results/laguna_s21_full_results.csv"))
     chart.add_argument("--poolside", type=Path, default=Path("charts/poolside_terminal_bench_2_1.csv"))
     chart.add_argument("--output", type=Path, default=Path("charts/laguna-s21-results.svg"))
+    llama = sub.add_parser("llama-profile", help="run the standardized quant profile with llama-bench")
+    llama.add_argument("--executable", type=Path, required=True, help="path to llama-bench")
+    llama.add_argument("--model-file", type=Path, required=True, help="path to one GGUF file")
+    llama.add_argument("--model", required=True, help="stable model and quant identifier for result rows")
+    llama.add_argument("--revision", help="Hugging Face repository revision")
+    llama.add_argument("--prompt-tokens", type=int, default=16384)
+    llama.add_argument("--generation-tokens", type=int, default=256)
+    llama.add_argument("--output", type=Path, default=Path("results"))
     sweep = sub.add_parser("sweep", help="run context, decode, sampling, and KV-cache performance cases")
     sweep.add_argument("--model", required=True, help="Hugging Face model ID or local snapshot path")
     sweep.add_argument("--revision")
@@ -42,6 +51,7 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--base-url", default="http://127.0.0.1:8080/v1", help="OpenAI endpoint when --engine=openai")
     run.add_argument("--api-key", help="API key for a local OpenAI-compatible endpoint")
     run.add_argument("--revision")
+    run.add_argument("--model-file", type=Path, help="local model file used by an OpenAI-compatible server")
     run.add_argument("--task", action="append", dest="tasks", help="task ID; repeat to select multiple")
     run.add_argument("--kind", action="append", choices=["generation", "agentic"])
     run.add_argument("--tier", action="append", choices=["small", "medium", "large"])
@@ -66,7 +76,7 @@ def main(argv: list[str] | None = None) -> int:
         print("\nQuant ladder:")
         for quant in QUANTS:
             marker = "*" if quant["recommended"] else " "
-            model = quant["model"]
+            model = quant.get("repo", quant["model"])
             if quant.get("file"):
                 model = f"{model} :: {quant['file']}"
             engine = f" [{quant['engine']}]" if quant.get("engine") else ""
@@ -86,6 +96,24 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Chart: {path}")
         return 0
     try:
+        if args.command == "llama-profile":
+            path, record = run_llama_profile(
+                executable=args.executable,
+                model_file=args.model_file,
+                model_id=args.model,
+                revision=args.revision,
+                output_root=args.output,
+                prompt_tokens=args.prompt_tokens,
+                generation_tokens=args.generation_tokens,
+            )
+            for case in record["cases"]:
+                print(
+                    f"{case['id']}: pp={case['prompt_tps']:.2f} tg={case['generation_tps']:.2f} "
+                    f"peak={case['peak_memory_gb']:.2f}GB ({case['memory_metric']})"
+                )
+            csv_path, _ = export_csv(args.output)
+            print(f"Profile: {path}\nCSV: {csv_path}")
+            return 0
         if args.command == "sweep":
             print(f"Loading {args.model} with mlx-vlm ...", flush=True)
             backend = MLXBackend(args.model, revision=args.revision, seed=args.seed)
@@ -120,7 +148,14 @@ def main(argv: list[str] | None = None) -> int:
             )
             print(f"Loaded in {backend.load_seconds:.2f}s; running {len(tasks)} task(s) ...", flush=True)
         else:
-            backend = OpenAIBackend(args.model, args.base_url, seed=args.seed, api_key=args.api_key)
+            backend = OpenAIBackend(
+                args.model,
+                args.base_url,
+                seed=args.seed,
+                api_key=args.api_key,
+                revision=args.revision,
+                model_file=args.model_file,
+            )
             print(f"Connected to {args.base_url}; running {len(tasks)} task(s) ...", flush=True)
         run_dir, record = run_suite(
             backend,

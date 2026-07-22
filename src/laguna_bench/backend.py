@@ -178,11 +178,21 @@ def _snapshot_metadata(model_id: str, revision: str | None) -> dict[str, Any]:
 class OpenAIBackend:
     """Backend for llama-server and other local OpenAI-compatible engines."""
 
-    def __init__(self, model_id: str, base_url: str, seed: int = 20260721, api_key: str | None = None):
+    def __init__(
+        self,
+        model_id: str,
+        base_url: str,
+        seed: int = 20260721,
+        api_key: str | None = None,
+        revision: str | None = None,
+        model_file: Path | None = None,
+    ):
         self.model_id = model_id
         self.base_url = base_url.rstrip("/")
         self.seed = seed
         self.api_key = api_key
+        self.revision = revision
+        self.model_file = model_file
         self.load_seconds = 0.0
         self._request("GET", "/models")
 
@@ -237,6 +247,9 @@ class OpenAIBackend:
             "model_id": self.model_id,
             "engine": "openai-compatible",
             "base_url": self.base_url,
+            "resolved_revision": self.revision,
+            "model_file": self.model_file.name if self.model_file else None,
+            "model_bytes": self.model_file.stat().st_size if self.model_file else None,
             "load_seconds": self.load_seconds,
         }
 

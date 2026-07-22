@@ -18,13 +18,14 @@ The left panel reproduces the Terminal-Bench 2.1 figures in [Poolside's model ca
 uv run --frozen laguna-bench chart
 ```
 
-| Quant | Overall score | Generation | Agentic | Generation tok/s | Peak MLX GB | Suite time |
+| Quant | Overall score | Generation | Agentic | Generation tok/s | Peak GB | Suite time |
 |---|---:|---:|---:|---:|---:|---:|
 | `mlx-community/Laguna-S-2.1-oQ2e` | 1.000 | 1.000 | 1.000 | 40.85 | 37.77 | 87.38s |
+| `unsloth/Laguna-S-2.1-GGUF` `UD-IQ1_M` | 0.792 | 0.750 | 0.833 | 57.34 | 34.22 RSS | 78.41s |
 | `mlx-community/Laguna-S-2.1-oQ3e` | 0.625 | 0.417 | 0.833 | 48.58 | 50.69 | 84.79s |
 | `poolside/Laguna-S-2.1-NVFP4-mlx` | 0.875 | 0.750 | 1.000 | 7.25 | 73.47 | 301.77s |
 
-The oQ2e conversion was the clear default for this machine. It passed all 38 hidden assertions while using about 38 GB of peak MLX memory. oQ3e decoded faster in the controlled profile, but its exact-format and implementation errors lowered its task score. The official NVFP4 MLX build was functional but much slower in this runtime.
+The oQ2e conversion remains the quality default for this machine. It passed all 38 hidden assertions while using about 38 GB of peak MLX memory. Unsloth's IQ1_M GGUF is smaller and faster, reaching 62.68 tok/s in the fixed decode profile with 34.22 GiB maximum RSS, but it passed only 28 of 38 assertions. The official NVFP4 MLX build was functional but much slower in this runtime.
 
 Long-context retrieval also passed at every tested size through 256K tokens on oQ2e:
 
@@ -149,10 +150,11 @@ uv run --frozen laguna-bench run \
 
 Sizes are repository payloads observed on 2026-07-21 and should be refreshed before downloading:
 
-1. `mlx-community/Laguna-S-2.1-oQ2e`: 33.74 GiB, calibrated 2.70 bpw
-2. `mlx-community/Laguna-S-2.1-oQ3e`: 45.86 GiB, faster decode but lower quality in this suite
-3. `poolside/Laguna-S-2.1-NVFP4-mlx`: 66.97 GiB, official testing-only build; functional but slow on this runtime
-4. `poolside/Laguna-S-2.1-GGUF` Q4_K_M: 70.01 GiB, functional through Poolside's llama.cpp branch
+1. `unsloth/Laguna-S-2.1-GGUF` UD-IQ1_M: 33.19 GiB, fastest tested decode but lower quality
+2. `mlx-community/Laguna-S-2.1-oQ2e`: 33.74 GiB, calibrated 2.70 bpw and the quality default
+3. `mlx-community/Laguna-S-2.1-oQ3e`: 45.86 GiB, faster decode but lower quality in this suite
+4. `poolside/Laguna-S-2.1-NVFP4-mlx`: 66.97 GiB, official testing-only build; functional but slow on this runtime
+5. `poolside/Laguna-S-2.1-GGUF` Q4_K_M: 70.01 GiB, functional through Poolside's llama.cpp branch
 
 The Vontra and pipenetwork 4-bit MLX conversions both fail to load in mlx-vlm 0.6.6, each because of a different router or quantization incompatibility. We did not download their 6-bit derivatives after those failures. The 116.34 GiB 8-bit conversions leave too little headroom for weights, the KV cache, and macOS on a 128 GB machine. The CSV still includes every variant and records each failure or omission explicitly.
 

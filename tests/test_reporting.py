@@ -25,6 +25,36 @@ def test_comparison_uses_complete_runs(tmp_path):
     assert rows[0]["score"] == 1.0
 
 
+def test_comparison_uses_sweep_memory_for_server_runs(tmp_path):
+    run = tmp_path / "run-a"
+    run.mkdir()
+    tasks = []
+    for task in TASKS:
+        metrics = {"generation_tokens": 10, "elapsed_seconds": 2, "peak_memory_gb": 0}
+        item = {"id": task.id, "kind": task.kind, "grade": {"score": 1.0}}
+        item["metrics" if task.kind == "generation" else "agent"] = (
+            metrics if task.kind == "generation" else {"metrics": metrics}
+        )
+        tasks.append(item)
+    (run / "run.json").write_text(
+        json.dumps({"backend": {"model_id": "server/model", "engine": "openai-compatible"}, "tasks": tasks})
+    )
+    sweeps = tmp_path / "sweeps"
+    sweeps.mkdir()
+    (sweeps / "profile.json").write_text(
+        json.dumps(
+            {
+                "backend": {"model_id": "server/model"},
+                "cases": [{"peak_memory_gb": 34.22, "memory_metric": "process_max_rss"}],
+            }
+        )
+    )
+
+    _, rows = build_comparison(tmp_path)
+    assert rows[0]["peak_memory_gb"] == 34.22
+    assert rows[0]["memory_metric"] == "process_max_rss"
+
+
 def test_csv_export_includes_catalog_and_task_rows(tmp_path):
     run = tmp_path / "run-a"
     run.mkdir()
@@ -85,10 +115,11 @@ def test_csv_export_merges_existing_community_results_without_duplicates(tmp_pat
 def test_csv_export_keeps_multiple_files_from_one_quant_repository(tmp_path):
     destination, _ = export_csv(tmp_path)
     rows = list(csv.DictReader(destination.open()))
-    unsloth = [row for row in rows if row["model_id"] == "unsloth/Laguna-S-2.1-GGUF"]
+    unsloth = [row for row in rows if row["model_id"] == "unsloth/Laguna-S-2.1-GGUF:UD-IQ1_M"]
 
     assert len(unsloth) == 1
     assert unsloth[0]["model_file"] == "Laguna-S-2.1-UD-IQ1_M.gguf"
+    assert unsloth[0]["source_repo"] == "unsloth/Laguna-S-2.1-GGUF"
     assert unsloth[0]["engine"] == "llama.cpp"
 
 
